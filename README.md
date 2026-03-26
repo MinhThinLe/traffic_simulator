@@ -42,7 +42,25 @@ Trên Windows (lệnh dưới đây chưa được thử nghiệm)
 
 Và tạo một pull request với đầy đủ mô tả
 
-*Chú ý:* Đừng bao giờ commit trực tiếp lên `main`, sở dĩ `main` luôn luôn phải
+**Chú ý:** Đừng bao giờ commit trực tiếp lên `main`, sở dĩ `main` luôn luôn phải
 là một trạng thái hoạt động của project. Việc này đảm bảo nếu việc thêm tính
 năng/sửa lỗi có xảy ra sai sót và bạn muốn bắt đầu lại từ đầu, nhánh `main` sẽ
-luôn là một điểm an toàn để quay về. Chi tiết: [Trunk based development](https://trunkbaseddevelopment.com/)
+luôn là một điểm an toàn để quay về. Chi tiết: [Trunk based development](https://trunkbaseddevelopment.com/).
+Tất nhiên là cũng có ngoại lệ, chẳng hạn: những thay đổi nhỏ/không liên quan
+đến code (cập nhật README.md).
+
+## Quy tắc đặt tên
+
+- Với biến/hàm, dùng quy chuẩn [camelCase](https://en.wikipedia.org/wiki/Camel_case)
+- Với tên đối tượng/interface, dùng quy chuẩn [PascalCase](https://pascal-case.com/)
+- Với hằng số, dùng quy chuẩn [SCREAMING_SNAKE_CASE](https://en.wikipedia.org/wiki/Snake_case) 
+- Với tên module, dùng quy chuẩn [flatcase](https://text-case.com/guides/flat-case-guide)
+
+Về cơ bản, đặt tên theo quy chuẩn của [Java](https://en.wikipedia.org/wiki/Naming_convention_(programming)#Java) 
+
+## Lưu ý khi đặt tên
+
+- Tên nên ngắn gọn, súc tích
+- Tên nên phản ánh đúng mục đích
+- Nên tránh dùng các tên 1 ký tự (a, i, j), trừ khi nó là đối tượng tạm
+  thời/không quan trọng
