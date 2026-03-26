@@ -23,7 +23,6 @@
         {
             devShells.${system}.default = pkgs.mkShell {
                 packages = with pkgs; [
-                    godot
                     openjdk21
                     jdt-language-server
                     gradle
