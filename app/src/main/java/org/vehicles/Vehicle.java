@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 
 public abstract class Vehicle implements Comparable<Vehicle> {
+    static final int COUNTER_CLOCKWISE = 1;
     static int DEFAULT_PRIORITY = 0;
     static float SPEED = 1;
     static float WIDTH = 10;
@@ -54,14 +55,17 @@ public abstract class Vehicle implements Comparable<Vehicle> {
     }
 
     public void primitiveDraw(ShapeRenderer shapeRenderer, BitmapFont font) {
+        // Creates a polygon with 0, 0 as center 
         Polygon vehicle = new Polygon(new float[] {
             - WIDTH / 2, - HEIGHT / 2,
-            + WIDTH / 2, - HEIGHT / 2,
-            + WIDTH / 2, + HEIGHT / 2,
-            - WIDTH / 2, + HEIGHT / 2
+              WIDTH / 2, - HEIGHT / 2,
+              WIDTH / 2,   HEIGHT / 2,
+            - WIDTH / 2,   HEIGHT / 2
         });
 
-        Vector2 offset = new Vector2(this.direction).rotate90(1).setLength(20);
+        Vector2 offset = new Vector2(this.direction)
+            .rotate90(COUNTER_CLOCKWISE)
+            .setLength(Road.RADIUS);
 
         vehicle.rotate(offset.angleDeg());
         vehicle.translate(this.position.x, this.position.y);
