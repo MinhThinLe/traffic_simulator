@@ -11,13 +11,13 @@ import org.vehicles.*;
 public class Road {
     private static final int MAX_VEHICLES = 2;
     private static final int RADIUS = 20;
-    private PriorityQueue<Vehicles> priorityQueue;
-    private Vehicles[] vehicles;
+    private PriorityQueue<Vehicle> priorityQueue;
+    private Vehicle[] vehicles;
     private Vector2 position;
     
     public Road(Vector2 position) {
-        this.priorityQueue = new PriorityQueue<Vehicles>();
-        this.vehicles = new Vehicles[MAX_VEHICLES];
+        this.priorityQueue = new PriorityQueue<Vehicle>();
+        this.vehicles = new Vehicle[MAX_VEHICLES];
         this.position = position;
     }
 
