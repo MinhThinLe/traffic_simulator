@@ -1,8 +1,13 @@
 package org;
 
+import java.util.ArrayList;
+
+import org.vehicles.Bicycle;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +26,7 @@ public class Main {
 class Game implements ApplicationListener {
     FitViewport viewport;
     private SpriteBatch spriteBatch;
-    // private BitmapFont font; // Uncomment this later
+    private BitmapFont font;
     private MutableGraph<Road> roadGraph;
 
     private ShapeRenderer shapeRenderer;
@@ -51,8 +56,16 @@ class Game implements ApplicationListener {
         
     }
 
+    private void update() {
+        var roadIter = this.roadGraph.nodes().iterator();
+        while (roadIter.hasNext()) {
+            roadIter.next().update();
+        }
+    }
+
     @Override
     public void render() {
+        update();
         ScreenUtils.clear(1f, 1f, 1f, 1f);
         spriteBatch.begin();
         shapeRenderer.begin();
@@ -73,7 +86,7 @@ class Game implements ApplicationListener {
     public void create() {
         viewport = new FitViewport(16, 9);
         spriteBatch = new SpriteBatch();
-        // font = new BitmapFont(); // Uncomment this later
+        font = new BitmapFont();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
@@ -81,6 +94,11 @@ class Game implements ApplicationListener {
 
         Road roadNode1 = new Road(new Vector2(100, 50));
         Road roadNode2 = new Road(new Vector2(200, 100));
+
+        ArrayList<Road> vehiclePath = new ArrayList<>();
+        vehiclePath.add(roadNode2);
+        roadNode1.addVehicle(new Bicycle(vehiclePath));
+
         roadGraph.addNode(roadNode1);
         roadGraph.addNode(roadNode2);
         roadGraph.putEdge(roadNode1, roadNode2);
@@ -90,12 +108,13 @@ class Game implements ApplicationListener {
         var nodes = roadGraph.nodes().iterator();
 
         while (nodes.hasNext()) {
-            nodes.next().draw(DrawMode.PRIMITIVE, shapeRenderer);
+            nodes.next().draw(DrawMode.PRIMITIVE, shapeRenderer, font);
         }
     }
     
     private static final int DOMINANT_SIDE = 90; // change to -90 if you want to drive on the left side of the road
     private static final int ROAD_SPACING = 20;
+
     private void drawEdges() {
         var edges = roadGraph.edges().iterator();
 

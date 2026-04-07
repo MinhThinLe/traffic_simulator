@@ -1,8 +1,10 @@
 package org;
 
 import java.util.PriorityQueue;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -12,23 +14,24 @@ public class Road {
     private static final int MAX_VEHICLES = 2;
     private static final int RADIUS = 20;
     private PriorityQueue<Vehicle> priorityQueue;
-    private Vehicle[] vehicles;
+    private ArrayList<Vehicle> vehicles;
     private Vector2 position;
     
     public Road(Vector2 position) {
-        this.priorityQueue = new PriorityQueue<Vehicle>();
-        this.vehicles = new Vehicle[MAX_VEHICLES];
+        this.priorityQueue = new PriorityQueue<Vehicle>(
+                (Vehicle vehicle1, Vehicle vehicle2) -> vehicle1.compareTo(vehicle2));
+        this.vehicles = new ArrayList<>();
         this.position = position;
     }
 
-    public void draw(DrawMode drawMode, ShapeRenderer shapeRenderer) {
+    public void draw(DrawMode drawMode, ShapeRenderer shapeRenderer, BitmapFont font) {
         switch (drawMode) {
             case DrawMode.GRAPHICAL:
                 graphicalDraw();
                 break;
 
             case DrawMode.PRIMITIVE:
-                primitiveDraw(shapeRenderer);
+                primitiveDraw(shapeRenderer, font);
                 break;
 
             default:
@@ -40,13 +43,40 @@ public class Road {
         // TODO: Implement graphical draw
     }
 
-    public void primitiveDraw(ShapeRenderer shapeRenderer) {
+    public void primitiveDraw(ShapeRenderer shapeRenderer, BitmapFont font) {
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.circle(position.x, position.y, RADIUS);
+
+        for (int i = 0; i < vehicles.size(); i++) {
+            System.out.println(i);
+            vehicles.get(i).primitiveDraw(shapeRenderer, font);
+        }
     }
 
     public Vector2 getPosition() {
         return new Vector2(position);
+    }
+
+    public void addVehicle(Vehicle vehicle) {
+        this.priorityQueue.add(vehicle);
+    }
+
+    private void circulateVehicles() {
+        if (this.vehicles.size() >= MAX_VEHICLES) {
+            return;
+        }
+
+        // TODO: Add more constraints later
+
+        this.vehicles.add(this.priorityQueue.poll());
+    }
+
+    public void update() {
+        circulateVehicles();
+        System.out.println(vehicles);
+        for (int i = 0; i < vehicles.size(); i++) {
+            vehicles.get(i).update(this.getPosition());
+        }
     }
 }
 
