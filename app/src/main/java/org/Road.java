@@ -12,7 +12,8 @@ import org.vehicles.*;
 
 public class Road {
     private static final int MAX_VEHICLES = 2;
-    private static final int RADIUS = 20;
+    public static final int RADIUS = 20;
+
     private PriorityQueue<Vehicle> priorityQueue;
     private ArrayList<Vehicle> vehicles;
     private Vector2 position;
@@ -48,7 +49,6 @@ public class Road {
         shapeRenderer.circle(position.x, position.y, RADIUS);
 
         for (int i = 0; i < vehicles.size(); i++) {
-            System.out.println(i);
             vehicles.get(i).primitiveDraw(shapeRenderer, font);
         }
     }
@@ -65,17 +65,33 @@ public class Road {
         if (this.vehicles.size() >= MAX_VEHICLES) {
             return;
         }
+        if (this.priorityQueue.isEmpty()) {
+            return;
+        }
 
         // TODO: Add more constraints later
-
         this.vehicles.add(this.priorityQueue.poll());
     }
 
     public void update() {
         circulateVehicles();
-        System.out.println(vehicles);
+
+        if (this.priorityQueue.size() != 0) {
+            System.out.println("Queue not empty!");
+        }
+
         for (int i = 0; i < vehicles.size(); i++) {
-            vehicles.get(i).update(this.getPosition());
+            var currentVehicle = vehicles.get(i);
+            if (currentVehicle.shouldFree()) {
+                if (currentVehicle.nextDestination() != null) {
+                    currentVehicle.nextDestination().addVehicle(currentVehicle);
+                    currentVehicle.popDestination();
+                }
+                this.vehicles.remove(i);
+                continue;
+            }
+
+            currentVehicle.update(getPosition());
         }
     }
 }

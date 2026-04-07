@@ -12,21 +12,33 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Vehicle implements Comparable<Vehicle> {
     static int DEFAULT_PRIORITY = 0;
-    static float SPEED = 10;
+    static float SPEED = 1;
     static float WIDTH = 10;
     static float HEIGHT = 20;
 
-    Vector2 position;
+    Vector2 position = Vector2.Zero;
     Vector2 direction;
 
     ArrayList<Road> path;
 
+    public Vehicle(Vector2 initialPosition) {
+        this.position = initialPosition;
+    }
+
     public Road nextDestination() {
-        return this.path.getFirst();
+        try {
+            return this.path.getFirst();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public Road nexNextDestination() {
-        return this.path.get(1);
+        try {
+            return this.path.get(1);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public int getVehiclePriority() {
@@ -37,15 +49,23 @@ public abstract class Vehicle implements Comparable<Vehicle> {
 
     }
 
+    public void popDestination() {
+        this.path.removeFirst();
+    }
+
     public void primitiveDraw(ShapeRenderer shapeRenderer, BitmapFont font) {
         Polygon vehicle = new Polygon(new float[] {
-            position.x - WIDTH / 2, position.y - HEIGHT / 2,
-            position.x + WIDTH / 2, position.y - HEIGHT / 2,
-            position.x + WIDTH / 2, position.y + HEIGHT / 2,
-            position.x - WIDTH / 2, position.y + HEIGHT / 2
+            - WIDTH / 2, - HEIGHT / 2,
+            + WIDTH / 2, - HEIGHT / 2,
+            + WIDTH / 2, + HEIGHT / 2,
+            - WIDTH / 2, + HEIGHT / 2
         });
-        vehicle.rotate(this.direction.angleDeg());
-        shapeRenderer.rect(position.x, position.y, WIDTH, HEIGHT);
+
+        Vector2 direction = new Vector2(this.direction).rotateDeg(90).scl(20);
+        vehicle.rotate(this.direction.angleDeg() + 90);
+        vehicle.translate(this.position.x, this.position.y);
+        vehicle.translate(-direction.x, -direction.y);
+
         shapeRenderer.polygon(vehicle.getTransformedVertices());
     }
 
@@ -58,9 +78,17 @@ public abstract class Vehicle implements Comparable<Vehicle> {
         this.position.add(new Vector2(direction).scl(SPEED));
     }
 
-
     @Override
     public int compareTo(Vehicle otherVehicle) {
         return Integer.compare(this.getVehiclePriority(), otherVehicle.getVehiclePriority());
+    }
+
+    public boolean shouldFree() {
+        if (nextDestination() == null) {
+            return true;
+        }
+        Vector2 nextPosition = nextDestination().getPosition();
+
+        return (this.position.dst2(nextPosition) - Road.RADIUS < 0.001);
     }
 }

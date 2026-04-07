@@ -94,14 +94,34 @@ class Game implements ApplicationListener {
 
         Road roadNode1 = new Road(new Vector2(100, 50));
         Road roadNode2 = new Road(new Vector2(200, 100));
+        Road roadNode3 = new Road(new Vector2(300, 75));
 
         ArrayList<Road> vehiclePath = new ArrayList<>();
+
+        vehiclePath.add(roadNode3);
         vehiclePath.add(roadNode2);
-        roadNode1.addVehicle(new Bicycle(vehiclePath));
+        vehiclePath.add(roadNode1);
+        vehiclePath.add(roadNode3);
+        vehiclePath.add(roadNode2);
+        vehiclePath.add(roadNode1);
+        vehiclePath.add(roadNode3);
+        vehiclePath.add(roadNode2);
+        vehiclePath.add(roadNode1);
+        vehiclePath.add(roadNode3);
+        vehiclePath.add(roadNode2);
+        vehiclePath.add(roadNode1);
+        
+        Bicycle bike = new Bicycle(vehiclePath, roadNode1.getPosition());
+
+        roadNode1.addVehicle(bike);
 
         roadGraph.addNode(roadNode1);
         roadGraph.addNode(roadNode2);
-        roadGraph.putEdge(roadNode1, roadNode2);
+        roadGraph.addNode(roadNode3);
+
+        roadGraph.putEdge(roadNode2, roadNode1);
+        roadGraph.putEdge(roadNode1, roadNode3);
+        roadGraph.putEdge(roadNode3, roadNode2);
     }
 
     private void drawNodes() {
