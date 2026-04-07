@@ -61,10 +61,11 @@ public abstract class Vehicle implements Comparable<Vehicle> {
             - WIDTH / 2, + HEIGHT / 2
         });
 
-        Vector2 direction = new Vector2(this.direction).rotateDeg(90).scl(20);
-        vehicle.rotate(this.direction.angleDeg() + 90);
+        Vector2 offset = new Vector2(this.direction).rotate90(1).setLength(20);
+
+        vehicle.rotate(offset.angleDeg());
         vehicle.translate(this.position.x, this.position.y);
-        vehicle.translate(-direction.x, -direction.y);
+        vehicle.translate(-offset.x, -offset.y);
 
         shapeRenderer.polygon(vehicle.getTransformedVertices());
     }
