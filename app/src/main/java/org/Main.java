@@ -133,7 +133,6 @@ class Game implements ApplicationListener {
     }
     
     private static final int DOMINANT_SIDE = 90; // change to -90 if you want to drive on the left side of the road
-    private static final int ROAD_SPACING = 20;
 
     private void drawEdges() {
         var edges = roadGraph.edges().iterator();
@@ -144,7 +143,7 @@ class Game implements ApplicationListener {
             Vector2 from = currentNode.nodeU().getPosition();
             Vector2 to = currentNode.nodeV().getPosition();
 
-            Vector2 direction = new Vector2(from).sub(to).rotateDeg(DOMINANT_SIDE).nor().scl(ROAD_SPACING);
+            Vector2 direction = new Vector2(from).sub(to).rotateDeg(DOMINANT_SIDE).nor().scl(Road.RADIUS);
 
             from.add(direction);
             to.add(direction);

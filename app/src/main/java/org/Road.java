@@ -82,12 +82,18 @@ public class Road {
 
         for (int i = 0; i < vehicles.size(); i++) {
             var currentVehicle = vehicles.get(i);
+
             if (currentVehicle.shouldFree()) {
-                if (currentVehicle.nextDestination() != null) {
-                    currentVehicle.nextDestination().addVehicle(currentVehicle);
-                    currentVehicle.popDestination();
-                }
                 this.vehicles.remove(i);
+
+                if (currentVehicle.nextDestination() == null) {
+                    continue;
+                }
+
+                // Reroutes the vehicle 
+                currentVehicle.nextDestination().addVehicle(currentVehicle);
+                currentVehicle.popDestination();
+
                 continue;
             }
 
