@@ -3,24 +3,24 @@
   hướng
 - Mỗi đỉnh nên cách nhau nhiều nhất 5m (có thể cho khoảng cách ngắn hơn để việc
   chờ đèn đỏ trông thực tế hơn)
-- Để tránh va chạm, mỗi đỉnh chỉ nên chứa nhiều nhất 2 phương tiện và 2 phương
-  tiện này phải ngược chiều nhau
+- Để tránh va chạm, mỗi đỉnh chỉ nên chứa nhiều nhất 1 phương tiện
 - Mỗi đỉnh có một hàng đợi ưu tiên giúp kiểm soát lượng xe vào
 - Với ngã 3/4/5, hàng đợi này kết hợp với độ ưu tiên của phương tiện sẽ giúp
   việc ra/vào không gây va chạm 
-- Phương thức `tryTraverse` dùng để thử đi qua đỉnh tiếp theo. Điều này sẽ giúp
-  việc xe dừng đèn đỏ khả thi
 - Việc sử dụng đồ thị cũng làm cho việc tìm đường dễ dàng hơn với các thuật
   toán tìm đường trên đồ thị (A*/Dijkstra)
+- Sau khi phương tiện đã dành đủ thời gian cần chờ ở 1 đỉnh (mô phỏng tốc độ).
+  Đỉnh hiện tại sẽ giữ trách nhiệm kiểm tra xem phương tiện có thể vào được
+  đỉnh tiếp theo hay không. Sau khi đã xác nhận chuyển giao phụ trách phương
+  tiện cho đỉnh tiếp theo, đỉnh hiện tại sẽ xóa phương tiện hiện tại và nhận
+  phương tiện mới vào từ hàng đợi. 
 
 Ví dụ định nghĩa lớp Đỉnh
     private PriorityQueue<Vehicle> queue;           // Hàng đợi ưu tiên chứa danh
                                                     // sách các phương tiện muốn
                                                     // vào đỉnh này
-    private Vehicle[] vehicles;                     // Các phương tiện đang ở trong
+    private Vehicle vehicle;                        // Phương tiện đang ở trong
                                                     // đỉnh này 
-    private Vertex[] vertices;                      // Các đỉnh khác mà từ đỉnh này
-                                                    // có thể đi tới
     private Optional<TrafficLight> trafficLight;    // Đèn giao thông, quyết định 
                                                     // xe có thể đi vào đỉnh này hay không
 
