@@ -11,15 +11,15 @@ import com.badlogic.gdx.math.Vector2;
 import org.vehicles.*;
 
 public class Road {
-    private static final int MAX_VEHICLES = 2;
     private static final int RADIUS = 20;
+
     private PriorityQueue<Vehicles> priorityQueue;
-    private Vehicles[] vehicles;
+    private Vehicles vehicle;
     private Vector2 position;
+    private boolean sentVehicle;
     
     public Road(Vector2 position) {
         this.priorityQueue = new PriorityQueue<Vehicles>();
-        this.vehicles = new Vehicles[MAX_VEHICLES];
         this.position = position;
     }
 
@@ -36,6 +36,9 @@ public class Road {
             default:
                 break;
         }
+        if (vehicle != null) {
+            vehicle.draw(drawMode);
+        }
     }
 
     public void graphicalDraw() {
@@ -50,5 +53,25 @@ public class Road {
     public Vector2 getPosition() {
         return new Vector2(position);
     }
-}
 
+    public void circulate() {
+        if (vehicle == null) {
+            // TODO: accept new vehicles into this node
+            return;
+        }
+        Vector2 vehiclePosition = this.vehicle.getPosition();
+        Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
+        // This means that the vehicle hasn't reached its destination
+        if (vehiclePosition.dst2(vehicleDestination) > RADIUS) {
+            this.vehicle.moveToward(vehicleDestination);
+            return;
+        }
+
+        // Make a request to send the vehicle to its next node
+        if (!sentVehicle) {
+            Road nextNode = this.vehicle.nextDestination();
+            nextNode.priorityQueue.add(this.vehicle);
+            sentVehicle = true;
+        }
+    }
+}
