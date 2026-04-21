@@ -1,6 +1,6 @@
 package org.vehicles;
 
-import org.Road;
+import org.road.Road;
 
 // TODO: Add classes that implement this interface
 public interface Vehicles {
