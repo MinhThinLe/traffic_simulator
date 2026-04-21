@@ -16,7 +16,6 @@ public class RoadNetwork {
 
     public RoadNetwork() {
         roadGraph = GraphBuilder.directed().build();
-
         Road roadNode1 = new Road(new Vector2(100, 50));
         Road roadNode2 = new Road(new Vector2(200, 100));
 

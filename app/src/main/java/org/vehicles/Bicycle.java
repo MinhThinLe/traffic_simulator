@@ -42,7 +42,7 @@ public class Bicycle extends Vehicle {
 
         float angle = direction.angleDeg();
         Polygon polygon = new Polygon(polygonMesh);
-        polygon.rotate(angle);
+        polygon.rotate(angle - 90);
         polygon.translate(position.x, position.y);
 
         shapeRenderer.setColor(Color.BLACK);
