@@ -5,12 +5,10 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import com.google.common.graph.GraphBuilder;
-import com.google.common.graph.MutableGraph;
+import org.road.RoadNetwork;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,9 +20,9 @@ class Game implements ApplicationListener {
     FitViewport viewport;
     private SpriteBatch spriteBatch;
     // private BitmapFont font; // Uncomment this later
-    private MutableGraph<Road> roadGraph;
-
+    private RoadNetwork roadNetwork;
     private ShapeRenderer shapeRenderer;
+    private DrawMode drawMode;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
@@ -57,8 +55,8 @@ class Game implements ApplicationListener {
         spriteBatch.begin();
         shapeRenderer.begin();
 
-        drawNodes();
-        drawEdges();
+        roadNetwork.drawNodes(this.drawMode, shapeRenderer);
+        roadNetwork.drawEdges(this.drawMode, shapeRenderer);
 
         spriteBatch.end();
         shapeRenderer.end();
@@ -77,40 +75,8 @@ class Game implements ApplicationListener {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
-        roadGraph = GraphBuilder.directed().build();
+        roadNetwork = new RoadNetwork();
 
-        Road roadNode1 = new Road(new Vector2(100, 50));
-        Road roadNode2 = new Road(new Vector2(200, 100));
-        roadGraph.addNode(roadNode1);
-        roadGraph.addNode(roadNode2);
-        roadGraph.putEdge(roadNode1, roadNode2);
-    }
-
-    private void drawNodes() {
-        var nodes = roadGraph.nodes().iterator();
-
-        while (nodes.hasNext()) {
-            nodes.next().draw(DrawMode.PRIMITIVE, shapeRenderer);
-        }
-    }
-    
-    private static final int DOMINANT_SIDE = 90; // change to -90 if you want to drive on the left side of the road
-    private static final int ROAD_SPACING = 20;
-    private void drawEdges() {
-        var edges = roadGraph.edges().iterator();
-
-        while (edges.hasNext()) {
-            var currentNode = edges.next();
-            
-            Vector2 from = currentNode.nodeU().getPosition();
-            Vector2 to = currentNode.nodeV().getPosition();
-
-            Vector2 direction = new Vector2(from).sub(to).rotateDeg(DOMINANT_SIDE).nor().scl(ROAD_SPACING);
-
-            from.add(direction);
-            to.add(direction);
-
-            shapeRenderer.line(from, to);
-        }
+        drawMode = DrawMode.PRIMITIVE;
     }
 }
