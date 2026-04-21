@@ -36,7 +36,6 @@ public class Bicycle extends Vehicle {
 
     @Override
     protected void primitiveDraw(ShapeRenderer shapeRenderer) {
-        System.out.println(position);
         Vector2 destination = nextDestination().getPosition();
         Vector2 direction = destination.sub(position);
 

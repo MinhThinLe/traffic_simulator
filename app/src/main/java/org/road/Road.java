@@ -58,12 +58,7 @@ public class Road {
         if (vehicle == null) {
             acceptVehicle();
         }
-
-        // Deletes the vehicle if it has nowhere left to go
-        if (vehicle != null && vehicle.nextDestination() == null) {
-            this.vehicle = null;
-        }
-
+        // Because vehicle could still be null after calling acceptVehicle
         if (vehicle == null) {
             return;
         }
@@ -95,7 +90,10 @@ public class Road {
         }
         
         vehiclePacket.vehicle.popDestination();
-        this.vehicle = vehiclePacket.vehicle;
+        // Only accepts vehicles that still have somewhere left to go
+        if (vehiclePacket.vehicle.nextDestination() != null) {
+            this.vehicle = vehiclePacket.vehicle;
+        }
 
         if (vehiclePacket.packetSender != null) {
             vehiclePacket.packetSender.removeCurrentVehicle();
