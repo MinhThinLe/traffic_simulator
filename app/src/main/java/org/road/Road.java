@@ -13,13 +13,13 @@ import org.vehicles.*;
 public class Road {
     private static final int RADIUS = 20;
 
-    private PriorityQueue<Vehicles> priorityQueue;
-    private Vehicles vehicle;
+    private PriorityQueue<VehiclePacket> priorityQueue;
+    private Vehicle vehicle;
     private Vector2 position;
     private boolean sentVehicle;
     
     public Road(Vector2 position) {
-        this.priorityQueue = new PriorityQueue<Vehicles>();
+        this.priorityQueue = new PriorityQueue<VehiclePacket>();
         this.position = position;
     }
 
@@ -37,7 +37,7 @@ public class Road {
                 break;
         }
         if (vehicle != null) {
-            vehicle.draw(drawMode);
+            vehicle.draw(drawMode, shapeRenderer);
         }
     }
 
@@ -56,9 +56,18 @@ public class Road {
 
     public void circulate() {
         if (vehicle == null) {
-            // TODO: accept new vehicles into this node
+            acceptVehicle();
+        }
+
+        // Deletes the vehicle if it has nowhere left to go
+        if (vehicle != null && vehicle.nextDestination() == null) {
+            this.vehicle = null;
+        }
+
+        if (vehicle == null) {
             return;
         }
+
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
@@ -70,8 +79,31 @@ public class Road {
         // Make a request to send the vehicle to its next node
         if (!sentVehicle) {
             Road nextNode = this.vehicle.nextDestination();
-            nextNode.priorityQueue.add(this.vehicle);
+            nextNode.addVehicle(new VehiclePacket(this.vehicle, this));
             sentVehicle = true;
         }
+    }
+
+    public void addVehicle(VehiclePacket vehiclePacket) {
+        this.priorityQueue.add(vehiclePacket);
+    }
+
+    private void acceptVehicle() {
+        VehiclePacket vehiclePacket = this.priorityQueue.poll();
+        if (vehiclePacket == null) {
+            return;
+        }
+        
+        vehiclePacket.vehicle.popDestination();
+        this.vehicle = vehiclePacket.vehicle;
+
+        if (vehiclePacket.packetSender != null) {
+            vehiclePacket.packetSender.removeCurrentVehicle();
+        }
+    }
+
+    private void removeCurrentVehicle() {
+        this.vehicle = null;
+        this.sentVehicle = false;
     }
 }
