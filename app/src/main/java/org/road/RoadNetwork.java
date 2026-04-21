@@ -1,6 +1,10 @@
 package org.road;
 
+import java.util.ArrayList;
+
 import org.DrawMode;
+import org.vehicles.Bicycle;
+import org.vehicles.VehiclePacket;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -12,9 +16,15 @@ public class RoadNetwork {
 
     public RoadNetwork() {
         roadGraph = GraphBuilder.directed().build();
-
         Road roadNode1 = new Road(new Vector2(100, 50));
         Road roadNode2 = new Road(new Vector2(200, 100));
+
+        ArrayList<Road> path = new ArrayList<>();
+        path.add(roadNode1);
+        path.add(roadNode2);
+        Bicycle bike = new Bicycle(path, roadNode1.getPosition());
+
+        roadNode1.addVehicle(new VehiclePacket(bike, null));
 
         roadGraph.addNode(roadNode1);
         roadGraph.addNode(roadNode2);
@@ -45,6 +55,14 @@ public class RoadNetwork {
             to.sub(direction);
 
             shapeRenderer.line(from, to);
+        }
+    }
+
+    public void circulateTraffic() {
+        var nodes = roadGraph.nodes().iterator();
+
+        while (nodes.hasNext()) {
+            nodes.next().circulate();
         }
     }
 }

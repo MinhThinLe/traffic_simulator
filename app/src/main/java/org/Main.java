@@ -51,15 +51,8 @@ class Game implements ApplicationListener {
 
     @Override
     public void render() {
-        ScreenUtils.clear(1f, 1f, 1f, 1f);
-        spriteBatch.begin();
-        shapeRenderer.begin();
-
-        roadNetwork.drawNodes(this.drawMode, shapeRenderer);
-        roadNetwork.drawEdges(this.drawMode, shapeRenderer);
-
-        spriteBatch.end();
-        shapeRenderer.end();
+        tick();
+        draw();
     }
 
     @Override
@@ -78,5 +71,21 @@ class Game implements ApplicationListener {
         roadNetwork = new RoadNetwork();
 
         drawMode = DrawMode.PRIMITIVE;
+    }
+
+    private void draw() {
+        ScreenUtils.clear(1f, 1f, 1f, 1f);
+        spriteBatch.begin();
+        shapeRenderer.begin();
+
+        roadNetwork.drawNodes(this.drawMode, shapeRenderer);
+        roadNetwork.drawEdges(this.drawMode, shapeRenderer);
+
+        spriteBatch.end();
+        shapeRenderer.end();
+    }
+
+    private void tick() {
+        roadNetwork.circulateTraffic();
     }
 }
