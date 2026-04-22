@@ -1,6 +1,7 @@
 package org.road;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,13 +15,36 @@ import com.google.common.graph.GraphBuilder;
 public class RoadNetworkLoader {
     public static RoadNetwork readFromFile(String filePath) {
         Document document = readDocument(filePath);
-        var nodes = document.getElementsByTagName("node");
-        
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
+
+        var nodes = document.getElementsByTagName("node");
+        HashMap<String, Road> roadMap = new HashMap<>();
+
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
-            roadGraph.addNode(readRoadNode(currentNode));
+
+            NamedNodeMap attributes = currentNode.getAttributes();
+            // nodes should only have 1 ID
+            assert attributes.getLength() == 1;
+
+            Road parsedRoadNode = readRoadNode(currentNode);
+
+            roadMap.put(attributes.item(0).getTextContent(), parsedRoadNode);
+            roadGraph.addNode(parsedRoadNode);
         }
+
+        var edges = document.getElementsByTagName("edge");
+        var edgeList = readEdgeList(edges);
+        
+        for (int i = 0; i < edgeList.size(); i++) {
+            Edge currentEdge = edgeList.get(i);
+
+            Road from = roadMap.get(currentEdge.source);
+            Road to = roadMap.get(currentEdge.target);
+    
+            roadGraph.putEdge(from, to);
+        }
+
         return new RoadNetwork(roadGraph);
     }
 
@@ -31,17 +55,14 @@ public class RoadNetworkLoader {
             Document document = builder.parse(filePath);
 
             return document;
-        } catch (Exception e) {
-            System.out.println("For fucks sake");
-            System.exit(1);
-        }
+        } catch (Exception e) {}
 
         // This should be unreachable
         return null;
     }
 
     private static Road readRoadNode(Node node) {
-        HashMap<String, String> attributes = readAttributesMap(node);
+        HashMap<String, String> attributes = readChildrenAttributeMap(node);
         System.out.println(attributes);
 
         float x = Float.parseFloat(attributes.get("x"));
@@ -51,7 +72,7 @@ public class RoadNetworkLoader {
         return roadNode;
     }
 
-    private static HashMap<String, String> readAttributesMap(Node node) {
+    private static HashMap<String, String> readChildrenAttributeMap(Node node) {
         HashMap<String, String> attributeMap = new HashMap<>();
         var childNodes = node.getChildNodes();
 
@@ -70,5 +91,46 @@ public class RoadNetworkLoader {
         }
 
         return attributeMap;
+    }
+
+    private static ArrayList<Edge> readEdgeList(NodeList edges) {
+        ArrayList<Edge> edgeList = new ArrayList<>();
+        for (int i = 0; i < edges.getLength(); i++) {
+            Node currentEdge = edges.item(i);
+
+            var attributes = currentEdge.getAttributes();
+            
+            String from = null;
+            String to = null;
+            for (int j = 0; j < attributes.getLength(); j++) {
+                Node currentAttribute = attributes.item(j);
+
+                if (currentAttribute.getNodeName() == "source") {
+                    from = currentAttribute.getTextContent();
+                }
+                if (currentAttribute.getNodeName() == "target") {
+                    to = currentAttribute.getTextContent();
+                }
+            }
+
+            if (from == null || to == null) {
+                continue;
+            }
+
+            Edge edge = new Edge(from, to);
+            edgeList.add(edge);
+        }
+
+        return edgeList;
+    }
+}
+
+class Edge {
+    String source;
+    String target;
+
+    Edge(String source, String target) {
+        this.source = source;
+        this.target = target;
     }
 }

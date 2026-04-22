@@ -10,44 +10,49 @@
     <key attr.name="size" attr.type="float" for="node" id="size"/>
     <graph edgedefault="directed">
         <node id="0">
-            <data key="size">10.0</data>
+            <data key="label">0</data>
+            <data key="size">20.0</data>
             <data key="r">255</data>
             <data key="g">0</data>
             <data key="b">0</data>
-            <data key="x">17.46579</data>
-            <data key="y">248.15749</data>
+            <data key="x">176.32855</data>
+            <data key="y">22.080536</data>
         </node>
         <node id="1">
-            <data key="size">10.0</data>
+            <data key="label">1</data>
+            <data key="size">20.0</data>
             <data key="r">0</data>
             <data key="g">0</data>
             <data key="b">0</data>
-            <data key="x">132.80205</data>
-            <data key="y">-119.81344</data>
+            <data key="x">155.15158</data>
+            <data key="y">154.68314</data>
         </node>
         <node id="2">
-            <data key="size">10.0</data>
+            <data key="label">2</data>
+            <data key="size">20.0</data>
             <data key="r">255</data>
             <data key="g">0</data>
             <data key="b">0</data>
-            <data key="x">-501.4202</data>
-            <data key="y">360.23785</data>
+            <data key="x">6.850611</data>
+            <data key="y">84.16731</data>
         </node>
         <node id="3">
-            <data key="size">10.0</data>
+            <data key="label">3</data>
+            <data key="size">20.0</data>
             <data key="r">255</data>
             <data key="g">0</data>
             <data key="b">0</data>
-            <data key="x">-484.64502</data>
-            <data key="y">-136.99988</data>
+            <data key="x">33.980766</data>
+            <data key="y">18.734184</data>
         </node>
         <node id="4">
-            <data key="size">10.0</data>
+            <data key="label">4</data>
+            <data key="size">20.0</data>
             <data key="r">255</data>
             <data key="g">0</data>
             <data key="b">0</data>
-            <data key="x">-300.8737</data>
-            <data key="y">312.68124</data>
+            <data key="x">39.424824</data>
+            <data key="y">160.1395</data>
         </node>
         <edge id="0" source="0" target="1">
             <data key="weight">1.0</data>
