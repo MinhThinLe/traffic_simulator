@@ -8,7 +8,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.net.URL;
+
+import org.road.Road;
 import org.road.RoadNetwork;
+import org.road.RoadNetworkLoader;
 
 public class Main {
     public static void main(String[] args) {
@@ -68,7 +72,8 @@ class Game implements ApplicationListener {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
-        roadNetwork = new RoadNetwork();
+        URL resource = Road.class.getResource("simple.graphml");
+        roadNetwork = RoadNetworkLoader.readFromFile(resource.getPath()); 
 
         drawMode = DrawMode.PRIMITIVE;
     }

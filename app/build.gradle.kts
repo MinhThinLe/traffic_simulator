@@ -48,3 +48,7 @@ application {
     // Define the main class for the application.
     mainClass = "org.Main"
 }
+
+tasks.named<JavaExec>("run") {
+    enableAssertions = true
+}
