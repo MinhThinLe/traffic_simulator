@@ -17,7 +17,8 @@ public class RoadNetworkLoader {
         Document document = readDocument(filePath);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
 
-        var nodes = document.getElementsByTagName("node");
+        // Read nodes from the file
+        NodeList nodes = document.getElementsByTagName("node");
         HashMap<String, Road> roadMap = new HashMap<>();
 
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -33,8 +34,9 @@ public class RoadNetworkLoader {
             roadGraph.addNode(parsedRoadNode);
         }
 
-        var edges = document.getElementsByTagName("edge");
-        var edgeList = readEdgeList(edges);
+        // Read edges from the file
+        NodeList edges = document.getElementsByTagName("edge");
+        ArrayList<Edge> edgeList = readEdgeList(edges);
         
         for (int i = 0; i < edgeList.size(); i++) {
             Edge currentEdge = edgeList.get(i);
@@ -63,7 +65,6 @@ public class RoadNetworkLoader {
 
     private static Road readRoadNode(Node node) {
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
-        System.out.println(attributes);
 
         float x = Float.parseFloat(attributes.get("x"));
         float y = Float.parseFloat(attributes.get("y"));
@@ -74,18 +75,18 @@ public class RoadNetworkLoader {
 
     private static HashMap<String, String> readChildrenAttributeMap(Node node) {
         HashMap<String, String> attributeMap = new HashMap<>();
-        var childNodes = node.getChildNodes();
+        NodeList childNodes = node.getChildNodes();
 
         for (int i = 0; i < childNodes.getLength(); i++) {
-            var currentNode = childNodes.item(i);
-            var attributes = currentNode.getAttributes();
+            Node currentNode = childNodes.item(i);
+            NamedNodeMap attributes = currentNode.getAttributes();
 
             if (attributes == null) {
                 continue;
             }
 
             assert attributes.getLength() == 1;
-            var attribute = attributes.item(0);
+            Node attribute = attributes.item(0);
 
             attributeMap.put(attribute.getTextContent(), currentNode.getTextContent());
         }
@@ -98,7 +99,7 @@ public class RoadNetworkLoader {
         for (int i = 0; i < edges.getLength(); i++) {
             Node currentEdge = edges.item(i);
 
-            var attributes = currentEdge.getAttributes();
+            NamedNodeMap attributes = currentEdge.getAttributes();
             
             String from = null;
             String to = null;
