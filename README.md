@@ -6,11 +6,11 @@ phỏng giao thông đô thị.
 # Chạy
 
 Để chạy project, bạn cần:
-- Java 21(+):
+- Java 21(-24):
     - [Windows](https://adoptium.net/download?link=https%3A%2F%2Fgithub.com%2Fadoptium%2Ftemurin21-binaries%2Freleases%2Fdownload%2Fjdk-21.0.10%252B7%2FOpenJDK21U-jdk_x64_windows_hotspot_21.0.10_7.msi&vendor=Adoptium)
     - Linux: Sử dụng trình quản lý gói của distro của bạn
     - NixOS: Chạy `nix develop`
-- Gradle (tùy chọn?)
+- Gradle (tùy chọn)
     - [Windows](https://docs.gradle.org/current/userguide/installation.html#windows_installation) (Ai mà biết cái này hoạt động thế nào)
     - Linux: Sử dụng trình quản lý gói của distro của bạn
     - NixOS: Chạy `nix develop`
@@ -29,16 +29,19 @@ Hoặc nếu bạn không có gradle, thay thế lệnh trên bằng
 ./gradlew run
 ```
 
-Trên Windows (lệnh dưới đây chưa được thử nghiệm)
+hoặc nếu bạn dùng Windows
 ```batch
 .\gradlew.bat run
 ```
 
 # Đóng góp
 
-Để đóng góp cho dự án này, hãy tạo một branch mới và đặt tên theo quy tắc sau:
+Để đóng góp cho dự án này, trước hết, hãy đọc file `tasks.md` và xem bạn có thể
+đóng góp gì. Sau đó, hãy tạo một branch mới và đặt tên theo quy tắc sau:
 - feature/<Tên tính năng (chú ý ngắn gọn)> với những đóng góp tính năng
 - fix/<Tên lỗi giải quyết (chú ý ngắn gọn)> với những đóng góp sửa lỗi
+- meta/<Tên cải thiện (chú ý ngắn gọn)> với những đóng góp mang tính cải thiện
+  về cách vận hành dự án
 
 Và tạo một pull request với đầy đủ mô tả
 
