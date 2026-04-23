@@ -11,6 +11,8 @@ val gdxVersion = "1.14.0"
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    java
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 repositories {
