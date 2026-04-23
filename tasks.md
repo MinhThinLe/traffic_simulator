@@ -3,8 +3,8 @@
 Đây là danh sách các tính năng cần thêm vào dự án. Các tính năng được sắp xếp
 theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần sau đó. 
 
-- [ ] Di chuyển camera
-    - [ ] Bằng phím WASD
+- [-] Di chuyển camera
+    - [x] Bằng phím WASD
     - [ ] Bằng cách di chuyển chuột ra cạnh cửa sổ
     - [ ] Thu phóng camera bằng con lăn chuột
 
