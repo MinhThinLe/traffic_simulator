@@ -8,20 +8,24 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class Camera {
-    private static final float CAMERA_SPEED = 0.1f;
+    private static final float CAMERA_SPEED = 7f;
+    private static final float ZOOM_SPEED = 1f;
+    private static final float MIN_ZOOM = 0.0001f;
+    private static final float MAX_ZOOM = 100f;
+    private static final float DEFAULT_ZOOM = 50f;
 
     private OrthographicCamera camera;
     
     public Camera(OrthographicCamera camera) {
         this.camera = camera;
-        this.camera.zoom = 50;
+        this.camera.zoom = DEFAULT_ZOOM;
     }
     
     public Matrix4 getCameraProjection() {
         return this.camera.combined;
     }
 
-    private void handleKeyboardMovement() {
+    private void handleKeyboardMovement(float deltaTime) {
         Vector2 translation = new Vector2();
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -41,27 +45,27 @@ public class Camera {
             return;
         }
 
-        translation.setLength(CAMERA_SPEED * this.camera.zoom);
+        translation.setLength(CAMERA_SPEED * this.camera.zoom * deltaTime);
         camera.translate(translation);
     }
 
-    private void zoom() {
+    private void zoom(float deltaTime) {
         if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-            this.camera.zoom += 0.02 * this.camera.zoom;
+            this.camera.zoom += (ZOOM_SPEED * this.camera.zoom) * deltaTime;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-            this.camera.zoom -= 0.02 * this.camera.zoom;
+            this.camera.zoom -= (ZOOM_SPEED * this.camera.zoom) * deltaTime;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
             System.out.println("Location: " + this.camera.position + " Zoom: " + this.camera.zoom);
         }
         
-        this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, 0.00001, 100);
+        this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, MIN_ZOOM, MAX_ZOOM);
     }
 
-    public void update() {
-        handleKeyboardMovement();
-        zoom();
+    public void update(float deltaTime) {
+        handleKeyboardMovement(deltaTime);
+        zoom(deltaTime);
         camera.update();
     }
 }

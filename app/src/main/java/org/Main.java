@@ -1,6 +1,7 @@
 package org;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -101,7 +102,9 @@ class Game implements ApplicationListener {
     }
 
     private void tick() {
-        camera.update();
+        // So that the simulation could be easily sped up later;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        camera.update(deltaTime);
         roadNetwork.circulateTraffic();
     }
 }
