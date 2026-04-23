@@ -34,6 +34,30 @@ hoặc nếu bạn dùng Windows
 .\gradlew.bat run
 ```
 
+# Biên dịch
+
+Để biên dịch dự án này thành 1 file jar có thể thực thi, chạy tác vụ shadowJar với gradle
+
+Nếu bạn đã cài đặt gradle
+```sh
+gradle shadowJar
+```
+
+Nếu bạn chưa cài đặt gradle và dùng *nix
+```sh
+./gradlew shadowJar
+```
+
+Nếu bạn dùng Windows
+```
+.\gradlew.bat shadowJar
+```
+
+Sau khi chạy 1 trong 3 câu lệnh trên, file jar hoàn chỉnh sẽ được đặt tại
+`app/build/libs/app-all.jar`. Sao chép và đổi tên nó và bạn đã có file thực thi
+hoàn chỉnh và nên chạy ở mọi nơi có một môi trường JRE phù hợp (Đã thử nghiệm
+biên dịch trên NixOS và chạy trên Windows).
+
 # Đóng góp
 
 Để đóng góp cho dự án này, trước hết, hãy đọc file `tasks.md` và xem bạn có thể

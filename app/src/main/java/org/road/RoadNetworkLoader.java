@@ -2,6 +2,7 @@ package org.road;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,8 +14,8 @@ import com.google.common.graph.MutableGraph;
 import com.google.common.graph.GraphBuilder;
 
 public class RoadNetworkLoader {
-    public static RoadNetwork readFromFile(String filePath) {
-        Document document = readDocument(filePath);
+    public static RoadNetwork readFromStream(InputStream XMLStream) {
+        Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
 
         // Read nodes from the file
@@ -50,11 +51,11 @@ public class RoadNetworkLoader {
         return new RoadNetwork(roadGraph);
     }
 
-    private static Document readDocument(String filePath) {
+    private static Document readDocument(InputStream XMLStream) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(filePath);
+            Document document = builder.parse(XMLStream);
 
             return document;
         } catch (Exception e) {}
