@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.net.URL;
+import java.io.InputStream;
 
 import org.road.Road;
 import org.road.RoadNetwork;
@@ -72,8 +72,8 @@ class Game implements ApplicationListener {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
-        URL resource = Road.class.getResource("simple.graphml");
-        roadNetwork = RoadNetworkLoader.readFromFile(resource.getPath()); 
+        InputStream resource = Road.class.getResourceAsStream("simple.graphml");
+        roadNetwork = RoadNetworkLoader.readFromStream(resource); 
 
         drawMode = DrawMode.PRIMITIVE;
     }
