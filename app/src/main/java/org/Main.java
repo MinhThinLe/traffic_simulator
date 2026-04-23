@@ -3,6 +3,7 @@ package org;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -27,6 +28,7 @@ class Game implements ApplicationListener {
     private RoadNetwork roadNetwork;
     private ShapeRenderer shapeRenderer;
     private DrawMode drawMode;
+    private Camera camera;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
@@ -75,11 +77,19 @@ class Game implements ApplicationListener {
         URL resource = Road.class.getResource("simple.graphml");
         roadNetwork = RoadNetworkLoader.readFromFile(resource.getPath()); 
 
+        OrthographicCamera camera = new OrthographicCamera();
+        viewport.setCamera(camera);
+        this.camera = new Camera(camera);
+
         drawMode = DrawMode.PRIMITIVE;
     }
 
     private void draw() {
+        spriteBatch.setProjectionMatrix(camera.getCameraProjection());
+        shapeRenderer.setProjectionMatrix(camera.getCameraProjection());
+
         ScreenUtils.clear(1f, 1f, 1f, 1f);
+
         spriteBatch.begin();
         shapeRenderer.begin();
 
@@ -91,6 +101,7 @@ class Game implements ApplicationListener {
     }
 
     private void tick() {
+        camera.update();
         roadNetwork.circulateTraffic();
     }
 }
