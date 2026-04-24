@@ -2,12 +2,21 @@ package org;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-public class Camera {
+class ScrollWheel extends InputAdapter {
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        System.out.println("Scrolled Y: " + amountY);
+        return super.scrolled(amountX, amountY);
+    }
+}
+
+public class Camera extends InputAdapter {
     private static final float CAMERA_SPEED = 7f;
     private static final float ZOOM_SPEED = 1f;
     private static final float MIN_ZOOM = 0.0001f;
@@ -17,6 +26,7 @@ public class Camera {
     private OrthographicCamera camera;
     
     public Camera(OrthographicCamera camera) {
+        Gdx.input.setInputProcessor(new ScrollWheel());
         this.camera = camera;
         this.camera.zoom = DEFAULT_ZOOM;
     }
@@ -91,6 +101,12 @@ public class Camera {
         }
         
         this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, MIN_ZOOM, MAX_ZOOM);
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        this.camera.zoom += ZOOM_SPEED * this.camera.zoom * amountY * 0.1;
+        return true;
     }
 
     public void update(float deltaTime) {

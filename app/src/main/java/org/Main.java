@@ -80,7 +80,12 @@ class Game implements ApplicationListener {
 
         OrthographicCamera camera = new OrthographicCamera();
         viewport.setCamera(camera);
-        this.camera = new Camera(camera);
+
+        Camera cameraManager = new Camera(camera); 
+        // Refactor this into InputMultiplexor if another need arises
+        Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
+
+        this.camera = cameraManager;
 
         drawMode = DrawMode.PRIMITIVE;
     }
