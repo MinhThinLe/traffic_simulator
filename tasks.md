@@ -5,7 +5,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [-] Di chuyển camera
     - [x] Bằng phím WASD
-    - [ ] Bằng cách di chuyển chuột ra cạnh cửa sổ
+    - [x] Bằng cách di chuyển chuột ra cạnh cửa sổ
     - [ ] Thu phóng camera bằng con lăn chuột
 
 - [ ] Sinh phương tiện vào bản đồ
