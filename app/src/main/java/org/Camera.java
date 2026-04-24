@@ -29,16 +29,16 @@ public class Camera {
         Vector2 translation = new Vector2();
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            translation.y = 1;
+            translation.y += 1;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            translation.x = -1;
+            translation.x -= 1;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            translation.y = -1;
+            translation.y -= 1;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            translation.x = 1;
+            translation.x += 1;
         }
 
         if (translation.len2() < 1) {
