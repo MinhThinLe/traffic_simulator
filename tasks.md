@@ -3,10 +3,10 @@
 Đây là danh sách các tính năng cần thêm vào dự án. Các tính năng được sắp xếp
 theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần sau đó. 
 
-- [-] Di chuyển camera
+- [x] Di chuyển camera
     - [x] Bằng phím WASD
     - [x] Bằng cách di chuyển chuột ra cạnh cửa sổ
-    - [ ] Thu phóng camera bằng con lăn chuột
+    - [x] Thu phóng camera bằng con lăn chuột
 
 - [ ] Sinh phương tiện vào bản đồ
 
