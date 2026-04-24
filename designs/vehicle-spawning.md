@@ -13,7 +13,7 @@ class VehicleSpawner {
     private ArrayList<Road> sinks;              // Danh sách các đỉnh đích
     private ArrayList<Vehicle> vehicleTypes;    // Danh sách các loại phương tiện có thể sinh
     private float timer;                        // Bộ đếm giờ để điều khiển lưu lượng phương tiện qua lại
-    private MutableGraph<Road>                  // Mạng lưới đường đi
+    private MutableGraph<Road> roadGraph;       // Mạng lưới đường đi
 
     public VehicleSpawner();                    
     public void addVehicleType(Class<? extends Vehicle> vehicleType);
@@ -21,4 +21,6 @@ class VehicleSpawner {
 }
 ```
 
-`VehicleSpawner` cần là một thành viên của `RoadNetwork` để có thể truy cập và
+`VehicleSpawner` nên là một thành viên của `RoadNetwork` và `roadGraph` phải
+trỏ đến cùng vị trí với thành viên `roadGraph` của `RoadNetwork` để việc sinh
+phương tiện khả thi.
