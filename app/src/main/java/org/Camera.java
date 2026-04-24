@@ -49,6 +49,38 @@ public class Camera {
         camera.translate(translation);
     }
 
+    private static final float SCREEN_BORDER_RATIO = 0.1f;
+    private static final float MOUSE_MOVEMENT_SPEED = 2.5f;
+    private void windowBorderMovement(float deltaTime) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float borderSize = Float.min(screenWidth * SCREEN_BORDER_RATIO, screenHeight * SCREEN_BORDER_RATIO);
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.input.getY();
+
+        Vector2 movementVector = new Vector2();
+
+        if (mouseX < borderSize) {
+            movementVector.x -= 1 - (mouseX / borderSize);
+        }
+        if (mouseY < borderSize) {
+            movementVector.y += 1 - (mouseY / borderSize);
+        }
+        if (mouseX > screenWidth - borderSize) {
+            mouseX -= screenWidth - borderSize;
+            movementVector.x += mouseX / borderSize;
+        }
+        if (mouseY > screenHeight - borderSize) {
+            mouseY -= screenHeight - borderSize;
+            movementVector.y -= mouseY / borderSize;
+        }
+
+        movementVector.scl(MOUSE_MOVEMENT_SPEED * MOUSE_MOVEMENT_SPEED);
+        camera.translate(movementVector);
+    }
+
     private void zoom(float deltaTime) {
         if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             this.camera.zoom += (ZOOM_SPEED * this.camera.zoom) * deltaTime;
@@ -56,15 +88,13 @@ public class Camera {
         if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
             this.camera.zoom -= (ZOOM_SPEED * this.camera.zoom) * deltaTime;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            System.out.println("Location: " + this.camera.position + " Zoom: " + this.camera.zoom);
-        }
         
         this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, MIN_ZOOM, MAX_ZOOM);
     }
 
     public void update(float deltaTime) {
         handleKeyboardMovement(deltaTime);
+        windowBorderMovement(deltaTime);
         zoom(deltaTime);
         camera.update();
     }
