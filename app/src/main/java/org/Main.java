@@ -1,8 +1,10 @@
 package org;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -27,6 +29,7 @@ class Game implements ApplicationListener {
     private RoadNetwork roadNetwork;
     private ShapeRenderer shapeRenderer;
     private DrawMode drawMode;
+    private Camera camera;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
@@ -75,11 +78,24 @@ class Game implements ApplicationListener {
         InputStream resource = Road.class.getResourceAsStream("simple.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource); 
 
+        OrthographicCamera camera = new OrthographicCamera();
+        viewport.setCamera(camera);
+
+        Camera cameraManager = new Camera(camera); 
+        // Refactor this into InputMultiplexor if another need arises
+        Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
+
+        this.camera = cameraManager;
+
         drawMode = DrawMode.PRIMITIVE;
     }
 
     private void draw() {
+        spriteBatch.setProjectionMatrix(camera.getCameraProjection());
+        shapeRenderer.setProjectionMatrix(camera.getCameraProjection());
+
         ScreenUtils.clear(1f, 1f, 1f, 1f);
+
         spriteBatch.begin();
         shapeRenderer.begin();
 
@@ -91,6 +107,9 @@ class Game implements ApplicationListener {
     }
 
     private void tick() {
+        // So that the simulation could be easily sped up later;
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        camera.update(deltaTime);
         roadNetwork.circulateTraffic();
     }
 }
