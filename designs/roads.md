@@ -16,6 +16,8 @@
   phương tiện mới vào từ hàng đợi. 
 
 Ví dụ định nghĩa lớp Đỉnh
+```java
+class Road {
     private PriorityQueue<Vehicle> queue;           // Hàng đợi ưu tiên chứa danh
                                                     // sách các phương tiện muốn
                                                     // vào đỉnh này
@@ -23,6 +25,8 @@ Ví dụ định nghĩa lớp Đỉnh
                                                     // đỉnh này 
     private Optional<TrafficLight> trafficLight;    // Đèn giao thông, quyết định 
                                                     // xe có thể đi vào đỉnh này hay không
+}
+```
 
 - Với các phương tiện phóng nhanh/ưu tiên, đơn giản là tăng chỉ số ưu tiên của
   phương tiện đó trong hàng đợi ưu tiên. 
