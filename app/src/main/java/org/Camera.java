@@ -82,11 +82,12 @@ public class Camera {
     }
 
     private void zoom(float deltaTime) {
+        float zoomAmount = ZOOM_SPEED * this.camera.zoom * deltaTime;
         if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-            this.camera.zoom += (ZOOM_SPEED * this.camera.zoom) * deltaTime;
+            this.camera.zoom += zoomAmount;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-            this.camera.zoom -= (ZOOM_SPEED * this.camera.zoom) * deltaTime;
+            this.camera.zoom -= zoomAmount;
         }
         
         this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, MIN_ZOOM, MAX_ZOOM);
