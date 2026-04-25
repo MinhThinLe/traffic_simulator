@@ -37,10 +37,10 @@ public class RoadNetworkLoader {
 
         // Read edges from the file
         NodeList edges = document.getElementsByTagName("edge");
-        ArrayList<Edge> edgeList = readEdgeList(edges);
+        ArrayList<ParserEdge> edgeList = readEdgeList(edges);
         
         for (int i = 0; i < edgeList.size(); i++) {
-            Edge currentEdge = edgeList.get(i);
+            ParserEdge currentEdge = edgeList.get(i);
 
             Road from = roadMap.get(currentEdge.source);
             Road to = roadMap.get(currentEdge.target);
@@ -95,8 +95,8 @@ public class RoadNetworkLoader {
         return attributeMap;
     }
 
-    private static ArrayList<Edge> readEdgeList(NodeList edges) {
-        ArrayList<Edge> edgeList = new ArrayList<>();
+    private static ArrayList<ParserEdge> readEdgeList(NodeList edges) {
+        ArrayList<ParserEdge> edgeList = new ArrayList<>();
         for (int i = 0; i < edges.getLength(); i++) {
             Node currentEdge = edges.item(i);
 
@@ -119,7 +119,7 @@ public class RoadNetworkLoader {
                 continue;
             }
 
-            Edge edge = new Edge(from, to);
+            ParserEdge edge = new ParserEdge(from, to);
             edgeList.add(edge);
         }
 
@@ -127,11 +127,11 @@ public class RoadNetworkLoader {
     }
 }
 
-class Edge {
+class ParserEdge {
     String source;
     String target;
 
-    Edge(String source, String target) {
+    ParserEdge(String source, String target) {
         this.source = source;
         this.target = target;
     }
