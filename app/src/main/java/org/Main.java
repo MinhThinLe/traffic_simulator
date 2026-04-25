@@ -15,6 +15,7 @@ import java.io.InputStream;
 import org.road.Road;
 import org.road.RoadNetwork;
 import org.road.RoadNetworkLoader;
+import org.vehicles.BicycleFactory;
 
 public class Main {
     public static void main(String[] args) {
@@ -77,6 +78,7 @@ class Game implements ApplicationListener {
 
         InputStream resource = Road.class.getResourceAsStream("simple.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource); 
+        roadNetwork.addVehicleFactory(new BicycleFactory());
 
         OrthographicCamera camera = new OrthographicCamera();
         viewport.setCamera(camera);
@@ -110,6 +112,6 @@ class Game implements ApplicationListener {
         // So that the simulation could be easily sped up later;
         float deltaTime = Gdx.graphics.getDeltaTime();
         camera.update(deltaTime);
-        roadNetwork.circulateTraffic();
+        roadNetwork.circulateTraffic(deltaTime);
     }
 }

@@ -14,6 +14,8 @@ import com.google.common.graph.MutableGraph;
 import com.google.common.graph.GraphBuilder;
 
 public class RoadNetworkLoader {
+    private static final int SOURCE_NODE = 1;
+    private static final int SINK_NODE = -1;
     public static RoadNetwork readFromStream(InputStream XMLStream) {
         Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
@@ -22,6 +24,9 @@ public class RoadNetworkLoader {
         NodeList nodes = document.getElementsByTagName("node");
         HashMap<String, Road> roadMap = new HashMap<>();
 
+        ArrayList<Road> sources = new ArrayList<>();
+        ArrayList<Road> sinks = new ArrayList<>();
+
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
 
@@ -29,18 +34,24 @@ public class RoadNetworkLoader {
             // nodes should only have 1 ID
             assert attributes.getLength() == 1;
 
-            Road parsedRoadNode = readRoadNode(currentNode);
+            RoadPackage roadPackage = readRoadNode(currentNode);
+            if (roadPackage.nodeType == SOURCE_NODE) {
+                sources.add(roadPackage.content);
+            }
+            if (roadPackage.nodeType == SINK_NODE) {
+                sinks.add(roadPackage.content);
+            }
 
-            roadMap.put(attributes.item(0).getTextContent(), parsedRoadNode);
-            roadGraph.addNode(parsedRoadNode);
+            roadMap.put(attributes.item(0).getTextContent(), roadPackage.content);
+            roadGraph.addNode(roadPackage.content);
         }
 
         // Read edges from the file
         NodeList edges = document.getElementsByTagName("edge");
-        ArrayList<Edge> edgeList = readEdgeList(edges);
+        ArrayList<ParserEdge> edgeList = readEdgeList(edges);
         
         for (int i = 0; i < edgeList.size(); i++) {
-            Edge currentEdge = edgeList.get(i);
+            ParserEdge currentEdge = edgeList.get(i);
 
             Road from = roadMap.get(currentEdge.source);
             Road to = roadMap.get(currentEdge.target);
@@ -48,7 +59,7 @@ public class RoadNetworkLoader {
             roadGraph.putEdge(from, to);
         }
 
-        return new RoadNetwork(roadGraph);
+        return new RoadNetwork(roadGraph, sources, sinks);
     }
 
     private static Document readDocument(InputStream XMLStream) {
@@ -64,14 +75,19 @@ public class RoadNetworkLoader {
         return null;
     }
 
-    private static Road readRoadNode(Node node) {
+    private static RoadPackage readRoadNode(Node node) {
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
 
         float x = Float.parseFloat(attributes.get("x"));
         float y = Float.parseFloat(attributes.get("y"));
+        int nodeType = 0;
+        if (attributes.containsKey("node_type")) {
+            nodeType = Integer.parseInt(attributes.get("node_type"));
+        }
         
         Road roadNode = new Road(new Vector2(x, y));
-        return roadNode;
+
+        return new RoadPackage(roadNode, nodeType);
     }
 
     private static HashMap<String, String> readChildrenAttributeMap(Node node) {
@@ -95,8 +111,8 @@ public class RoadNetworkLoader {
         return attributeMap;
     }
 
-    private static ArrayList<Edge> readEdgeList(NodeList edges) {
-        ArrayList<Edge> edgeList = new ArrayList<>();
+    private static ArrayList<ParserEdge> readEdgeList(NodeList edges) {
+        ArrayList<ParserEdge> edgeList = new ArrayList<>();
         for (int i = 0; i < edges.getLength(); i++) {
             Node currentEdge = edges.item(i);
 
@@ -119,7 +135,7 @@ public class RoadNetworkLoader {
                 continue;
             }
 
-            Edge edge = new Edge(from, to);
+            ParserEdge edge = new ParserEdge(from, to);
             edgeList.add(edge);
         }
 
@@ -127,12 +143,22 @@ public class RoadNetworkLoader {
     }
 }
 
-class Edge {
+class ParserEdge {
     String source;
     String target;
 
-    Edge(String source, String target) {
+    ParserEdge(String source, String target) {
         this.source = source;
         this.target = target;
+    }
+}
+
+class RoadPackage {
+    Road content;
+    int nodeType;
+
+    RoadPackage(Road content, int nodeType) {
+        this.content = content;
+        this.nodeType = nodeType;
     }
 }
