@@ -57,6 +57,9 @@ public class PathFinderTest {
         assert expected[1] == result.get(1);
         assert expected[2] == result.get(2);
         assert expected[3] == result.get(3);
-    }
 
+        result = PathFinder.breathFirstSearch(roadGraph, roadNode4, roadNode1);
+
+        assert result == null;
+    }
 }
