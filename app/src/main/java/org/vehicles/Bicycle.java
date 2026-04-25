@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bicycle extends Vehicle {
+    private static final float DEFAULT_BICYCLE_SPEED = 50;
     private static final float WIDTH = 10;
     private static final float HEIGHT = 20;
     private static final float[] polygonMesh = new float[] {
@@ -20,7 +21,7 @@ public class Bicycle extends Vehicle {
     };
 
     public Bicycle(ArrayList<Road> path, Vector2 position) {
-        super(path, position, DrivingMode.NORMAL, 0.5f);
+        super(path, position, DrivingMode.NORMAL, DEFAULT_BICYCLE_SPEED);
     }
 
     @Override

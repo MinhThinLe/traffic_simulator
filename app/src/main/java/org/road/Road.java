@@ -54,7 +54,7 @@ public class Road {
         return new Vector2(position);
     }
 
-    public void circulate() {
+    public void circulate(float deltaTime) {
         if (vehicle == null) {
             acceptVehicle();
         }
@@ -67,7 +67,7 @@ public class Road {
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
         if (vehiclePosition.dst2(vehicleDestination) > RADIUS) {
-            this.vehicle.moveToward(vehicleDestination);
+            this.vehicle.moveToward(vehicleDestination, deltaTime);
             return;
         }
 

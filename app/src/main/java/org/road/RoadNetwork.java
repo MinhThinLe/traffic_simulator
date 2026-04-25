@@ -55,7 +55,7 @@ public class RoadNetwork {
         var nodes = roadGraph.nodes().iterator();
 
         while (nodes.hasNext()) {
-            nodes.next().circulate();
+            nodes.next().circulate(deltaTime);
         }
     }
 }
