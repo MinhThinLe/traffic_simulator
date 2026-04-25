@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -34,14 +33,30 @@ public class PathFinderTest {
 
         List<Road> result = PathFinder.breathFirstSearch(roadGraph, roadNode1, roadNode5);
 
-        ArrayList<Road> expected = new ArrayList<>();
-        expected.add(roadNode1);
-        expected.add(roadNode4);
-        expected.add(roadNode5);
+        Road[] expected = new Road[] {
+            roadNode1,
+            roadNode4,
+            roadNode5,
+        };
 
-        assert expected.get(0) == result.get(0);
-        assert expected.get(1) == result.get(1);
-        assert expected.get(2) == result.get(2);
+        // Because JUnit would NOT FUCKING ALLOW printing for some FUCKING reason
+        assert expected[0] == result.get(0);
+        assert expected[1] == result.get(1);
+        assert expected[2] == result.get(2);
+
+        result = PathFinder.breathFirstSearch(roadGraph, roadNode4, roadNode3);
+
+        expected = new Road[] {
+            roadNode4,
+            roadNode5,
+            roadNode2,
+            roadNode3
+        };
+
+        assert expected[0] == result.get(0);
+        assert expected[1] == result.get(1);
+        assert expected[2] == result.get(2);
+        assert expected[3] == result.get(3);
     }
 
 }
