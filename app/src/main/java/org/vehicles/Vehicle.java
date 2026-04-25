@@ -41,9 +41,9 @@ public abstract class Vehicle {
         return new Vector2(this.position);
     }
 
-    public void moveToward(Vector2 newPosition) {
+    public void moveToward(Vector2 newPosition, float deltaTime) {
         Vector2 direction = newPosition.sub(this.position);
-        this.position.add(direction.setLength(this.speed));
+        this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
     public final void draw(DrawMode drawMode, ShapeRenderer shapeRenderer) {
