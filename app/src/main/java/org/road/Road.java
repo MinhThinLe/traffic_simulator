@@ -1,6 +1,6 @@
 package org.road;
 
-import org.DrawMode;
+import org.render.*;
 
 import java.util.PriorityQueue;
 
@@ -23,21 +23,21 @@ public class Road {
         this.position = position;
     }
 
-    public void draw(DrawMode drawMode, ShapeRenderer shapeRenderer) {
+    public void draw(DrawMode drawMode) {
         switch (drawMode) {
             case DrawMode.GRAPHICAL:
                 graphicalDraw();
                 break;
 
             case DrawMode.PRIMITIVE:
-                primitiveDraw(shapeRenderer);
+                primitiveDraw();
                 break;
 
             default:
                 break;
         }
         if (vehicle != null) {
-            vehicle.draw(drawMode, shapeRenderer);
+            vehicle.draw(drawMode);
         }
     }
 
@@ -45,9 +45,11 @@ public class Road {
         // TODO: Implement graphical draw
     }
 
-    public void primitiveDraw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.circle(position.x, position.y, RADIUS);
+    public void primitiveDraw() {
+        ShapeRenderer renderer = Renderer.primitiveRenderer;
+        
+        renderer.setColor(Color.BLACK);
+        renderer.circle(position.x, position.y, RADIUS);
     }
 
     public Vector2 getPosition() {

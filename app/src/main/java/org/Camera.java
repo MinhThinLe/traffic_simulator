@@ -8,14 +8,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-class ScrollWheel extends InputAdapter {
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        System.out.println("Scrolled Y: " + amountY);
-        return super.scrolled(amountX, amountY);
-    }
-}
-
 public class Camera extends InputAdapter {
     private static final float CAMERA_SPEED = 7f;
     private static final float ZOOM_SPEED = 1f;
@@ -26,7 +18,6 @@ public class Camera extends InputAdapter {
     private OrthographicCamera camera;
     
     public Camera(OrthographicCamera camera) {
-        Gdx.input.setInputProcessor(new ScrollWheel());
         this.camera = camera;
         this.camera.zoom = DEFAULT_ZOOM;
     }

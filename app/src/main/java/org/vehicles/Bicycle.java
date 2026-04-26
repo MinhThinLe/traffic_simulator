@@ -1,5 +1,6 @@
 package org.vehicles;
 
+import org.render.Renderer;
 import org.road.Road;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class Bicycle extends Vehicle {
     }
 
     @Override
-    protected void primitiveDraw(ShapeRenderer shapeRenderer) {
+    protected void primitiveDraw() {
         Vector2 destination = nextDestination().getPosition();
         Vector2 direction = destination.sub(position);
 
@@ -44,6 +45,8 @@ public class Bicycle extends Vehicle {
         Polygon polygon = new Polygon(polygonMesh);
         polygon.rotate(angle - 90);
         polygon.translate(position.x, position.y);
+
+        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
 
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.polygon(polygon.getTransformedVertices());

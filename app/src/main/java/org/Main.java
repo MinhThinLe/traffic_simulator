@@ -5,16 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.io.InputStream;
 
-import org.road.Road;
-import org.road.RoadNetwork;
-import org.road.RoadNetworkLoader;
+import org.render.*;
+import org.road.*;
 import org.vehicles.BicycleFactory;
 
 public class Main {
@@ -24,11 +20,8 @@ public class Main {
 }
 
 class Game implements ApplicationListener {
-    FitViewport viewport;
-    private SpriteBatch spriteBatch;
-    // private BitmapFont font; // Uncomment this later
+    private FitViewport viewport;
     private RoadNetwork roadNetwork;
-    private ShapeRenderer shapeRenderer;
     private DrawMode drawMode;
     private Camera camera;
 
@@ -71,10 +64,6 @@ class Game implements ApplicationListener {
     @Override
     public void create() {
         viewport = new FitViewport(16, 9);
-        spriteBatch = new SpriteBatch();
-        // font = new BitmapFont(); // Uncomment this later
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
 
         InputStream resource = Road.class.getResourceAsStream("simple.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource); 
@@ -93,19 +82,16 @@ class Game implements ApplicationListener {
     }
 
     private void draw() {
-        spriteBatch.setProjectionMatrix(camera.getCameraProjection());
-        shapeRenderer.setProjectionMatrix(camera.getCameraProjection());
+        // Because wonky shits happen when you try to wrap this in a method
+        Renderer.graphicalRenderer.setProjectionMatrix(camera.getCameraProjection());
+        Renderer.primitiveRenderer.setProjectionMatrix(camera.getCameraProjection());
 
-        ScreenUtils.clear(1f, 1f, 1f, 1f);
+        Renderer.startBatch();
 
-        spriteBatch.begin();
-        shapeRenderer.begin();
+        roadNetwork.drawNodes(this.drawMode);
+        roadNetwork.drawEdges(this.drawMode);
 
-        roadNetwork.drawNodes(this.drawMode, shapeRenderer);
-        roadNetwork.drawEdges(this.drawMode, shapeRenderer);
-
-        spriteBatch.end();
-        shapeRenderer.end();
+        Renderer.endBatch();
     }
 
     private void tick() {
