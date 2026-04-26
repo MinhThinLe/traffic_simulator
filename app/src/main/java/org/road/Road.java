@@ -1,7 +1,6 @@
 package org.road;
 
-import org.render.DrawMode;
-import org.render.Renderer;
+import org.render.*;
 
 import java.util.PriorityQueue;
 

@@ -9,11 +9,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.io.InputStream;
 
-import org.render.DrawMode;
-import org.render.Renderer;
-import org.road.Road;
-import org.road.RoadNetwork;
-import org.road.RoadNetworkLoader;
+import org.render.*;
+import org.road.*;
 import org.vehicles.BicycleFactory;
 
 public class Main {
