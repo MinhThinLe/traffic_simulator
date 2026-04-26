@@ -3,7 +3,6 @@ package org.vehicles;
 import org.render.DrawMode;
 import org.road.Road;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -46,10 +45,10 @@ public abstract class Vehicle {
         this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
-    public final void draw(DrawMode drawMode, ShapeRenderer shapeRenderer) {
+    public final void draw(DrawMode drawMode) {
         switch (drawMode) {
             case DrawMode.PRIMITIVE:
-                primitiveDraw(shapeRenderer);
+                primitiveDraw();
                 break;
             default:
                 graphicalDraw();
@@ -62,6 +61,6 @@ public abstract class Vehicle {
     }
 
     public abstract int getVehiclePriority();
-    protected abstract void primitiveDraw(ShapeRenderer shapeRenderer);
+    protected abstract void primitiveDraw();
     protected abstract void graphicalDraw();
 }

@@ -1,4 +1,4 @@
-package org;
+package org.render;
 
 public enum DrawMode {
     GRAPHICAL,

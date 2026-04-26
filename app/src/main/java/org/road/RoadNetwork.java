@@ -3,9 +3,9 @@ package org.road;
 import java.util.ArrayList;
 
 import org.render.DrawMode;
+import org.render.Renderer;
 import org.vehicles.VehicleFactory;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.graph.MutableGraph;
 
@@ -24,15 +24,15 @@ public class RoadNetwork {
         vehicleManager.addVehicleFactory(vehicleFactory);
     }
 
-    public void drawNodes(DrawMode drawMode, ShapeRenderer shapeRenderer) {
+    public void drawNodes(DrawMode drawMode) {
         var nodes = roadGraph.nodes().iterator();
 
         while (nodes.hasNext()) {
-            nodes.next().draw(drawMode, shapeRenderer);
+            nodes.next().draw(drawMode);
         }
     }
 
-    public void drawEdges(DrawMode drawMode, ShapeRenderer shapeRenderer) {
+    public void drawEdges(DrawMode drawMode) {
         var edges = roadGraph.edges().iterator();
 
         while (edges.hasNext()) {
@@ -46,7 +46,7 @@ public class RoadNetwork {
             from.add(direction);
             to.sub(direction);
 
-            shapeRenderer.line(from, to);
+            Renderer.primitiveRenderer.line(from, to);
         }
     }
 
