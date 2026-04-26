@@ -2,7 +2,7 @@ package org.road;
 
 import java.util.ArrayList;
 
-import org.DrawMode;
+import org.render.DrawMode;
 import org.vehicles.VehicleFactory;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

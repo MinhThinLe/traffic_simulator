@@ -1,6 +1,6 @@
 package org.vehicles;
 
-import org.DrawMode;
+import org.render.DrawMode;
 import org.road.Road;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
