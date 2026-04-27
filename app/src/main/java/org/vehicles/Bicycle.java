@@ -17,6 +17,7 @@ public class Bicycle extends Vehicle {
     private static final float DEFAULT_BICYCLE_SPEED = 50;
     private static final float WIDTH = 20;
     private static final float HEIGHT = 10;
+    private static final String VEHICLE_NAME = "Bicycle";
     private static final float[] polygonMesh = new float[] {
         -WIDTH / 2, -HEIGHT / 2,
          WIDTH / 2, -HEIGHT / 2,
@@ -41,17 +42,7 @@ public class Bicycle extends Vehicle {
 
     @Override
     protected void primitiveDraw() {
-        float angle = getDirection();
-        Polygon polygon = new Polygon(polygonMesh);
-
-        polygon.rotate(angle);
-        polygon.translate(position.x, position.y);
-
-        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
-
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.polygon(polygon.getTransformedVertices());
-
+        drawBody();
         drawText();
     }
 
@@ -62,9 +53,22 @@ public class Bicycle extends Vehicle {
         return direction.angleDeg();
     }
 
+    private void drawBody() {
+        float angle = getDirection();
+        Polygon polygon = new Polygon(polygonMesh);
+
+        polygon.rotate(angle);
+        polygon.translate(position.x, position.y);
+
+        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
+
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.polygon(polygon.getTransformedVertices());
+    }
+
     private void drawText() {
         LabelStyle style = new LabelStyle(Renderer.textRenderer, Color.RED);
-        Label text = new Label("Bicycle", style);
+        Label text = new Label(VEHICLE_NAME , style);
 
         Container<Label> container = new Container<>(text);
 
