@@ -8,7 +8,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Bằng cách di chuyển chuột ra cạnh cửa sổ
     - [x] Thu phóng camera bằng con lăn chuột
 
-- [ ] Sinh phương tiện vào bản đồ
+- [x] Sinh phương tiện vào bản đồ
 
 - [ ] Thêm phương tiện
     - [ ] Xe cứu thương 
