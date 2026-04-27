@@ -23,9 +23,10 @@
         {
             devShells.${system}.default = pkgs.mkShell {
                 packages = with pkgs; [
-                    openjdk21
-                    jdt-language-server
+                    google-java-format
                     gradle
+                    jdt-language-server
+                    openjdk21
                 ];
                 shellHook = ''
                     export LD_LIBRARY_PATH=${runtimeLibs}:$LD_LIBRARY_PATH
