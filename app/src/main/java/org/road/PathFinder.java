@@ -3,8 +3,8 @@ package org.road;
 import com.google.common.graph.MutableGraph;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 
 public class PathFinder {
     public static List<Road> breathFirstSearch(MutableGraph<Road> roadGraph, Road start, Road end) {
@@ -42,7 +42,7 @@ public class PathFinder {
         if (edges.getLast().target != end) {
             return null;
         }
-        
+
         return recoverPath(edges).reversed();
     }
 
@@ -59,7 +59,7 @@ public class PathFinder {
 
         return path;
     }
-    
+
     private static RoadEdge findEdgeWithTarget(ArrayList<RoadEdge> edges, Road target) {
         for (int i = 0; i < edges.size(); i++) {
             RoadEdge currentEdge = edges.get(i);
@@ -80,6 +80,4 @@ class RoadEdge {
         this.source = source;
         this.target = target;
     }
-
-
 }

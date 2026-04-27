@@ -1,12 +1,12 @@
 package org.road;
 
-import java.util.ArrayList;
+import com.badlogic.gdx.math.Vector2;
+import com.google.common.graph.MutableGraph;
 
 import org.render.*;
 import org.vehicles.VehicleFactory;
 
-import com.badlogic.gdx.math.Vector2;
-import com.google.common.graph.MutableGraph;
+import java.util.ArrayList;
 
 public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
@@ -14,7 +14,8 @@ public class RoadNetwork {
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
 
-    public RoadNetwork(MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
+    public RoadNetwork(
+            MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
         this.roadGraph = roadGraph;
         this.vehicleManager = new VehicleManager(roadGraph, sources, sinks, DEFAULT_TIMER);
     }

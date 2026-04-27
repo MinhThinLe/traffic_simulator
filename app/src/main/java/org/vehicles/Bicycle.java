@@ -1,10 +1,5 @@
 package org.vehicles;
 
-import org.render.Renderer;
-import org.road.Road;
-
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
@@ -13,17 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
+import org.render.Renderer;
+import org.road.Road;
+
+import java.util.ArrayList;
+
 public class Bicycle extends Vehicle {
     private static final float DEFAULT_BICYCLE_SPEED = 50;
     private static final float WIDTH = 20;
     private static final float HEIGHT = 10;
     private static final String VEHICLE_NAME = "Bicycle";
-    private static final float[] polygonMesh = new float[] {
-        -WIDTH / 2, -HEIGHT / 2,
-         WIDTH / 2, -HEIGHT / 2,
-         WIDTH / 2,  HEIGHT / 2,
-        -WIDTH / 2,  HEIGHT / 2
-    };
+    private static final float[] polygonMesh =
+            new float[] {
+                -WIDTH / 2,
+                -HEIGHT / 2,
+                WIDTH / 2,
+                -HEIGHT / 2,
+                WIDTH / 2,
+                HEIGHT / 2,
+                -WIDTH / 2,
+                HEIGHT / 2
+            };
 
     public Bicycle(ArrayList<Road> path, Vector2 position) {
         super(path, position, DrivingMode.NORMAL, DEFAULT_BICYCLE_SPEED);
@@ -37,7 +42,7 @@ public class Bicycle extends Vehicle {
     @Override
     protected void graphicalDraw() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -68,7 +73,7 @@ public class Bicycle extends Vehicle {
 
     private void drawText() {
         LabelStyle style = new LabelStyle(Renderer.textRenderer, Color.RED);
-        Label text = new Label(VEHICLE_NAME , style);
+        Label text = new Label(VEHICLE_NAME, style);
 
         Container<Label> container = new Container<>(text);
 
@@ -77,7 +82,7 @@ public class Bicycle extends Vehicle {
         container.setY(position.y);
 
         float scaleX = WIDTH / text.getWidth();
-        float scaleY = HEIGHT / text.getHeight(); 
+        float scaleY = HEIGHT / text.getHeight();
 
         container.setScaleX(scaleX);
         container.setScaleY(scaleY);

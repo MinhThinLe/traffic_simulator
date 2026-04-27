@@ -1,9 +1,9 @@
 package org.vehicles;
 
+import com.badlogic.gdx.math.Vector2;
+
 import org.render.DrawMode;
 import org.road.Road;
-
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
@@ -61,6 +61,8 @@ public abstract class Vehicle {
     }
 
     public abstract int getVehiclePriority();
+
     protected abstract void primitiveDraw();
+
     protected abstract void graphicalDraw();
 }
