@@ -1,10 +1,10 @@
 package org.render;
 
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Renderer {
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
@@ -18,7 +18,7 @@ public class Renderer {
     public static void startBatch() {
         graphicalRenderer.begin();
         primitiveRenderer.begin();
-        
+
         ScreenUtils.clear(Color.WHITE);
     }
 

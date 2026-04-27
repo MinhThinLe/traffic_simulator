@@ -1,14 +1,14 @@
 package org.road;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.List;
-
 import com.google.common.graph.MutableGraph;
 
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 import org.vehicles.VehiclePacket;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class VehicleManager {
     private MutableGraph<Road> roadNetwork;
@@ -18,8 +18,12 @@ public class VehicleManager {
     private Random rng;
 
     private Timer timer;
-    
-    public VehicleManager(MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks, float timer) {
+
+    public VehicleManager(
+            MutableGraph<Road> roadGraph,
+            ArrayList<Road> sources,
+            ArrayList<Road> sinks,
+            float timer) {
         this.roadNetwork = roadGraph;
         this.sources = sources;
         this.sinks = sinks;
@@ -42,11 +46,7 @@ public class VehicleManager {
     }
 
     private void spawnVehicle() {
-        if (
-                this.vehicleFactories.isEmpty() ||
-                this.sinks.isEmpty() ||
-                this.sources.isEmpty()
-            ) {
+        if (this.vehicleFactories.isEmpty() || this.sinks.isEmpty() || this.sources.isEmpty()) {
             return;
         }
 

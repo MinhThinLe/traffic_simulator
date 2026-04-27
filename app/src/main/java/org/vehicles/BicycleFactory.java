@@ -1,8 +1,8 @@
 package org.vehicles;
 
-import java.util.ArrayList;
-
 import org.road.Road;
+
+import java.util.ArrayList;
 
 public class BicycleFactory implements VehicleFactory {
     @Override
