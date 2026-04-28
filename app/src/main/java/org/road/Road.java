@@ -35,8 +35,8 @@ public class Road {
         return this.nodeType;
     }
 
-    public void draw(DrawMode drawMode) {
-        switch (drawMode) {
+    public void draw() {
+        switch (Renderer.drawMode) {
             case DrawMode.GRAPHICAL:
                 graphicalDraw();
                 break;
@@ -49,7 +49,7 @@ public class Road {
                 break;
         }
         if (vehicle != null) {
-            vehicle.draw(drawMode);
+            vehicle.draw();
         }
     }
 

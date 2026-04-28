@@ -22,7 +22,6 @@ public class Main {
 class Game implements ApplicationListener {
     private FitViewport viewport;
     private RoadNetwork roadNetwork;
-    private DrawMode drawMode;
     private Camera camera;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
@@ -72,8 +71,6 @@ class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
 
         this.camera = cameraManager;
-
-        drawMode = DrawMode.PRIMITIVE;
     }
 
     private void draw() {
@@ -83,8 +80,8 @@ class Game implements ApplicationListener {
 
         Renderer.startBatch();
 
-        roadNetwork.drawNodes(this.drawMode);
-        roadNetwork.drawEdges(this.drawMode);
+        roadNetwork.drawNodes();
+        roadNetwork.drawEdges();
 
         Renderer.endBatch();
     }

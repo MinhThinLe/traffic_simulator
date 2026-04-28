@@ -10,6 +10,7 @@ public class Renderer {
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
     public static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     public static BitmapFont textRenderer = new BitmapFont();
+    public static DrawMode drawMode = DrawMode.PRIMITIVE;
 
     static {
         primitiveRenderer.setAutoShapeType(true);

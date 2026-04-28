@@ -45,8 +45,8 @@ public abstract class Vehicle {
         this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
-    public final void draw(DrawMode drawMode) {
-        switch (drawMode) {
+    public final void draw() {
+        switch (Renderer.drawMode) {
             case DrawMode.PRIMITIVE:
                 primitiveDraw();
                 break;
