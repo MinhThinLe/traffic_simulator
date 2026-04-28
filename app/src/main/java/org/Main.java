@@ -2,6 +2,7 @@ package org;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -67,8 +68,12 @@ class Game implements ApplicationListener {
         viewport.setCamera(camera);
 
         Camera cameraManager = new Camera(camera);
-        // Refactor this into InputMultiplexor if another need arises
-        Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(cameraManager);
+        inputMultiplexer.addProcessor(Renderer.stage);
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         this.camera = cameraManager;
     }
