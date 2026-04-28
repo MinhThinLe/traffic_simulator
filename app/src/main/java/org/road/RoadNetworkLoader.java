@@ -1,6 +1,5 @@
 package org.road;
 
-import com.badlogic.gdx.math.Vector2;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
@@ -12,11 +11,6 @@ import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.*;
-
-import com.google.common.graph.MutableGraph;
-import com.google.common.graph.GraphBuilder;
 
 public class RoadNetworkLoader {
     public static RoadNetwork readFromStream(InputStream XMLStream) {

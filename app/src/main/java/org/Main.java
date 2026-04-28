@@ -84,6 +84,8 @@ class Game implements ApplicationListener {
         roadNetwork.drawEdges();
 
         Renderer.endBatch();
+
+        Renderer.drawUI();
     }
 
     private void tick() {
@@ -91,5 +93,7 @@ class Game implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
         camera.update(deltaTime);
         roadNetwork.circulateTraffic(deltaTime);
+
+        Renderer.processUI(deltaTime);
     }
 }
