@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.*;
 
-import com.badlogic.gdx.math.Vector2;
 import com.google.common.graph.MutableGraph;
 import com.google.common.graph.GraphBuilder;
 
@@ -22,7 +21,7 @@ public class RoadNetworkLoader {
 
         // Read nodes from the file
         NodeList nodes = document.getElementsByTagName("node");
-        HashMap<String, Road> roadMap = new HashMap<>();
+        HashMap<Integer, Road> roadMap = new HashMap<>();
 
         ArrayList<Road> sources = new ArrayList<>();
         ArrayList<Road> sinks = new ArrayList<>();
@@ -30,20 +29,10 @@ public class RoadNetworkLoader {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
 
-            NamedNodeMap attributes = currentNode.getAttributes();
-            // nodes should only have 1 ID
-            assert attributes.getLength() == 1;
+            Road road = readRoadNode(currentNode);
 
-            RoadPackage roadPackage = readRoadNode(currentNode);
-            if (roadPackage.nodeType == SOURCE_NODE) {
-                sources.add(roadPackage.content);
-            }
-            if (roadPackage.nodeType == SINK_NODE) {
-                sinks.add(roadPackage.content);
-            }
-
-            roadMap.put(attributes.item(0).getTextContent(), roadPackage.content);
-            roadGraph.addNode(roadPackage.content);
+            roadMap.put(road.getId(), road);
+            roadGraph.addNode(road);
         }
 
         // Read edges from the file
@@ -75,19 +64,44 @@ public class RoadNetworkLoader {
         return null;
     }
 
-    private static RoadPackage readRoadNode(Node node) {
+    private static Road readRoadNode(Node node) {
+        getNodeId(node);
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
 
+        int id = getNodeId(node);
         float x = Float.parseFloat(attributes.get("x"));
         float y = Float.parseFloat(attributes.get("y"));
-        int nodeType = 0;
-        if (attributes.containsKey("node_type")) {
-            nodeType = Integer.parseInt(attributes.get("node_type"));
-        }
+        NodeType nodeType = extractNodeType(attributes);
         
-        Road roadNode = new Road(new Vector2(x, y));
+        return new Road(x, y, nodeType, id);
+    }
 
-        return new RoadPackage(roadNode, nodeType);
+    private static NodeType extractNodeType(HashMap<String, String> attributes) {
+        NodeType nodeType = NodeType.NORMAL_NODE;
+        if (attributes.containsKey("node_type")) {
+            int type = Integer.parseInt(attributes.get("node_type"));
+
+            if (type == SINK_NODE) {
+                nodeType = NodeType.SINK_NODE;
+            }
+            if (type == SOURCE_NODE) {
+                nodeType = NodeType.SOURCE_NODE;
+            }
+        }
+
+        return nodeType;
+    }
+
+    private static int getNodeId(Node node) {
+        var attributes = node.getAttributes();
+
+        for (int i = 0; i < attributes.getLength(); i++) {
+            if (attributes.item(i).getNodeName() == "id") {
+                return Integer.parseInt(attributes.item(i).getNodeValue());
+            }
+        }
+
+        return -1;
     }
 
     private static HashMap<String, String> readChildrenAttributeMap(Node node) {
@@ -118,20 +132,20 @@ public class RoadNetworkLoader {
 
             NamedNodeMap attributes = currentEdge.getAttributes();
             
-            String from = null;
-            String to = null;
+            int from = -1;
+            int to = -1;
             for (int j = 0; j < attributes.getLength(); j++) {
                 Node currentAttribute = attributes.item(j);
 
                 if (currentAttribute.getNodeName() == "source") {
-                    from = currentAttribute.getTextContent();
+                    from = Integer.parseInt(currentAttribute.getTextContent());
                 }
                 if (currentAttribute.getNodeName() == "target") {
-                    to = currentAttribute.getTextContent();
+                    to = Integer.parseInt(currentAttribute.getTextContent());
                 }
             }
 
-            if (from == null || to == null) {
+            if (from == -1 || to == -1) {
                 continue;
             }
 
@@ -144,21 +158,11 @@ public class RoadNetworkLoader {
 }
 
 class ParserEdge {
-    String source;
-    String target;
+    int source;
+    int target;
 
-    ParserEdge(String source, String target) {
+    ParserEdge(int source, int target) {
         this.source = source;
         this.target = target;
-    }
-}
-
-class RoadPackage {
-    Road content;
-    int nodeType;
-
-    RoadPackage(Road content, int nodeType) {
-        this.content = content;
-        this.nodeType = nodeType;
     }
 }
