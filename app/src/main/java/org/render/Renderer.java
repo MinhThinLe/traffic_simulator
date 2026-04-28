@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Renderer {
@@ -20,7 +21,7 @@ public class Renderer {
     public static BitmapFont textRenderer = new BitmapFont();
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
 
-    public static Stage stage = new Stage();
+    public static Stage stage = new Stage(new FitViewport(1280, 720));
     private static Table table = new Table();
 
     static {

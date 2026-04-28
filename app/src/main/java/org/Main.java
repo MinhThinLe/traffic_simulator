@@ -38,8 +38,8 @@ class Game implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
         Renderer.resize(width, height);
+        viewport.update(width, height, true);
     }
 
     @Override
