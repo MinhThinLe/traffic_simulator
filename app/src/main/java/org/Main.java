@@ -60,8 +60,8 @@ class Game implements ApplicationListener {
     public void create() {
         viewport = new FitViewport(16, 9);
 
-        InputStream resource = Road.class.getResourceAsStream("simple.graphml");
-        roadNetwork = RoadNetworkLoader.readFromStream(resource);
+        InputStream resource = Road.class.getResourceAsStream("5-way-intersection.graphml");
+        roadNetwork = RoadNetworkLoader.readFromStream(resource); 
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
         OrthographicCamera camera = new OrthographicCamera();

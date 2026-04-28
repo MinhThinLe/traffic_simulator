@@ -17,9 +17,22 @@ public class Road {
     private Vector2 position;
     private boolean sentVehicle;
 
-    public Road(Vector2 position) {
+    private int id;
+    private NodeType nodeType;
+    
+    public Road(float x, float y, NodeType nodeType, int id) {
         this.priorityQueue = new PriorityQueue<VehiclePacket>();
-        this.position = position;
+        this.position = new Vector2(x, y);
+        this.nodeType = nodeType;
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public NodeType getNodeType() {
+        return this.nodeType;
     }
 
     public void draw(DrawMode drawMode) {

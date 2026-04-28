@@ -15,6 +15,7 @@ public class PathFinder {
 
         while (!queue.isEmpty()) {
             Road currentNode = queue.getFirst();
+
             if (visitedNodes.contains(currentNode)) {
                 queue.removeFirst();
                 continue;
@@ -29,7 +30,7 @@ public class PathFinder {
                 edges.add(currentEdge);
 
                 if (nextNode == end) {
-                    break;
+                    return recoverPath(edges).reversed();
                 }
 
                 queue.add(nextNode);
@@ -37,13 +38,8 @@ public class PathFinder {
 
             queue.removeFirst();
         }
-
-        // This means that there isn't a path from `start` to `end`
-        if (edges.getLast().target != end) {
-            return null;
-        }
-
-        return recoverPath(edges).reversed();
+        
+        return null;
     }
 
     private static ArrayList<Road> recoverPath(ArrayList<RoadEdge> edges) {
