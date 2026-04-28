@@ -13,8 +13,6 @@ import com.google.common.graph.MutableGraph;
 import com.google.common.graph.GraphBuilder;
 
 public class RoadNetworkLoader {
-    private static final int SOURCE_NODE = 1;
-    private static final int SINK_NODE = -1;
     public static RoadNetwork readFromStream(InputStream XMLStream) {
         Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
@@ -30,6 +28,17 @@ public class RoadNetworkLoader {
             Node currentNode = nodes.item(i);
 
             Road road = readRoadNode(currentNode);
+
+            switch (road.getNodeType()) {
+                case SOURCE_NODE:
+                    sources.add(road);
+                    break;
+                case SINK_NODE:
+                    sinks.add(road);
+                    break;
+                default:
+                    break;
+            }
 
             roadMap.put(road.getId(), road);
             roadGraph.addNode(road);
@@ -76,6 +85,8 @@ public class RoadNetworkLoader {
         return new Road(x, y, nodeType, id);
     }
 
+    private static final int SOURCE_NODE = 1;
+    private static final int SINK_NODE = -1;
     private static NodeType extractNodeType(HashMap<String, String> attributes) {
         NodeType nodeType = NodeType.NORMAL_NODE;
         if (attributes.containsKey("node_type")) {
