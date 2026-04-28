@@ -1,8 +1,14 @@
 package org.road;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import com.badlogic.gdx.math.Vector2;
+import com.google.common.graph.GraphBuilder;
+import com.google.common.graph.MutableGraph;
+
+import org.w3c.dom.*;
+
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,13 +53,13 @@ public class RoadNetworkLoader {
         // Read edges from the file
         NodeList edges = document.getElementsByTagName("edge");
         ArrayList<ParserEdge> edgeList = readEdgeList(edges);
-        
+
         for (int i = 0; i < edgeList.size(); i++) {
             ParserEdge currentEdge = edgeList.get(i);
 
             Road from = roadMap.get(currentEdge.source);
             Road to = roadMap.get(currentEdge.target);
-    
+
             roadGraph.putEdge(from, to);
         }
 
@@ -67,7 +73,8 @@ public class RoadNetworkLoader {
             Document document = builder.parse(XMLStream);
 
             return document;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         // This should be unreachable
         return null;

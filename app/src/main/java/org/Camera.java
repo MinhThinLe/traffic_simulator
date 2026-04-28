@@ -16,12 +16,12 @@ public class Camera extends InputAdapter {
     private static final float DEFAULT_ZOOM = 50f;
 
     private OrthographicCamera camera;
-    
+
     public Camera(OrthographicCamera camera) {
         this.camera = camera;
         this.camera.zoom = DEFAULT_ZOOM;
     }
-    
+
     public Matrix4 getCameraProjection() {
         return this.camera.combined;
     }
@@ -52,11 +52,13 @@ public class Camera extends InputAdapter {
 
     private static final float SCREEN_BORDER_RATIO = 0.1f;
     private static final float MOUSE_MOVEMENT_SPEED = 2.5f;
+
     private void windowBorderMovement(float deltaTime) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
-        float borderSize = Float.min(screenWidth * SCREEN_BORDER_RATIO, screenHeight * SCREEN_BORDER_RATIO);
+        float borderSize =
+                Float.min(screenWidth * SCREEN_BORDER_RATIO, screenHeight * SCREEN_BORDER_RATIO);
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.input.getY();
@@ -90,7 +92,7 @@ public class Camera extends InputAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
             this.camera.zoom -= zoomAmount;
         }
-        
+
         this.camera.zoom = (float) MathUtils.clamp(this.camera.zoom, MIN_ZOOM, MAX_ZOOM);
     }
 

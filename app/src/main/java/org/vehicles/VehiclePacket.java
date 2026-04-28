@@ -1,8 +1,8 @@
 package org.vehicles;
 
-import org.road.Road;
-
 import com.badlogic.gdx.math.Vector2;
+
+import org.road.Road;
 
 // This class wraps the vehicle class, allowing a node to inform the sender node that its
 // vehicle has been accepted into its new location.
@@ -11,6 +11,7 @@ public class VehiclePacket implements Comparable<VehiclePacket> {
     public Road packetSender;
 
     private static final float TURN_ANGLE_SCALAR = 0.01f;
+
     @Override
     public int compareTo(VehiclePacket o) {
         int vehicle1Priority = this.vehicle.getVehiclePriority();
@@ -20,7 +21,8 @@ public class VehiclePacket implements Comparable<VehiclePacket> {
         float vehicle2TurnAngle = o.getTurnAngle() * TURN_ANGLE_SCALAR;
 
         // Because the vehicle with the lower turn angle gets precedent
-        return Float.compare(vehicle1Priority - vehicle1TurnAngle, vehicle2Priority - vehicle2TurnAngle);
+        return Float.compare(
+                vehicle1Priority - vehicle1TurnAngle, vehicle2Priority - vehicle2TurnAngle);
     }
 
     public VehiclePacket(Vehicle vehicle, Road sender) {

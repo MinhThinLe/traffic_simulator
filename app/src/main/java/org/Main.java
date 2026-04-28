@@ -7,11 +7,11 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.io.InputStream;
-
 import org.render.*;
 import org.road.*;
 import org.vehicles.BicycleFactory;
+
+import java.io.InputStream;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,7 +29,8 @@ class Game implements ApplicationListener {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("Hello World");
         configuration.useVsync(true);
-        configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
+        configuration.setForegroundFPS(
+                Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
         configuration.setWindowedMode(1280, 720);
 
         return configuration;
@@ -41,14 +42,10 @@ class Game implements ApplicationListener {
     }
 
     @Override
-    public void resume() {
-        
-    }
+    public void resume() {}
 
     @Override
-    public void dispose() {
-        
-    }
+    public void dispose() {}
 
     @Override
     public void render() {
@@ -57,9 +54,7 @@ class Game implements ApplicationListener {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
     public void create() {
@@ -72,7 +67,7 @@ class Game implements ApplicationListener {
         OrthographicCamera camera = new OrthographicCamera();
         viewport.setCamera(camera);
 
-        Camera cameraManager = new Camera(camera); 
+        Camera cameraManager = new Camera(camera);
         // Refactor this into InputMultiplexor if another need arises
         Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
 

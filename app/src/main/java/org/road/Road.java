@@ -1,14 +1,13 @@
 package org.road;
 
-import org.render.*;
-
-import java.util.PriorityQueue;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import org.render.*;
 import org.vehicles.*;
+
+import java.util.PriorityQueue;
 
 public class Road {
     private static final int RADIUS = 20;
@@ -60,7 +59,7 @@ public class Road {
 
     public void primitiveDraw() {
         ShapeRenderer renderer = Renderer.primitiveRenderer;
-        
+
         renderer.setColor(Color.BLACK);
         renderer.circle(position.x, position.y, RADIUS);
     }
@@ -103,7 +102,7 @@ public class Road {
         if (vehiclePacket == null) {
             return;
         }
-        
+
         vehiclePacket.vehicle.popDestination();
         // Only accepts vehicles that still have somewhere left to go
         if (vehiclePacket.vehicle.nextDestination() != null) {
