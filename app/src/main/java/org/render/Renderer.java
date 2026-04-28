@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Renderer {
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
@@ -19,17 +21,21 @@ public class Renderer {
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
 
     public static Stage stage = new Stage();
-    private static Stack stack = new Stack();
+    private static Table table = new Table();
 
     static {
         primitiveRenderer.setAutoShapeType(true);
-        stack.setFillParent(true);
-        stage.addActor(stack);
-        
+        table.setFillParent(true);
+        stage.addActor(table);
+
         initializeUI();
     }
 
     private static void initializeUI() {
+        table.top().right().add(makeRenderModeToggleButton());
+    }
+
+    private static TextButton makeRenderModeToggleButton() {
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = textRenderer;
 
@@ -38,20 +44,23 @@ public class Renderer {
         textButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (drawMode == DrawMode.PRIMITIVE) {
-                    drawMode = DrawMode.GRAPHICAL;
-                }
-                if (drawMode == DrawMode.GRAPHICAL) {
-                    drawMode = DrawMode.PRIMITIVE;
+                switch (drawMode) {
+                    case DrawMode.PRIMITIVE:
+                        drawMode = DrawMode.GRAPHICAL;
+                        break;
+                    case DrawMode.GRAPHICAL:
+                        drawMode = DrawMode.PRIMITIVE;
+                        break;
+                    default:
+                        break;
                 }
                 textButton.setText(drawMode.toString());
-                System.out.println(drawMode);
                 return true;
             }
         });
-        textButton.debugActor();
+        textButton.setOrigin(Align.center);
 
-        stack.addActor(textButton);
+        return textButton;
     }
 
     public static void startBatch() {
@@ -64,6 +73,12 @@ public class Renderer {
     public static void endBatch() {
         graphicalRenderer.end();
         primitiveRenderer.end();
+    }
+
+    public static void resize(int width, int height) {
+        Viewport viewport = stage.getViewport();
+        viewport.update(width, height, true);
+
     }
 
     public static void processUI(float deltaTime) {
