@@ -51,15 +51,8 @@ public class Bicycle extends Vehicle {
         drawText();
     }
 
-    private float getDirection() {
-        Vector2 destination = nextDestination().getPosition();
-        Vector2 direction = destination.sub(position);
-
-        return direction.angleDeg();
-    }
-
     private void drawBody() {
-        float angle = getDirection();
+        float angle = getDirection().angleDeg();
         Polygon polygon = new Polygon(polygonMesh);
 
         polygon.rotate(angle);
@@ -87,7 +80,7 @@ public class Bicycle extends Vehicle {
         container.setScaleX(scaleX);
         container.setScaleY(scaleY);
 
-        float angle = getDirection();
+        float angle = getDirection().angleDeg();
         if (angle > 90 && angle < 270) {
             angle -= 180;
         }
