@@ -2,7 +2,7 @@ package org.vehicles;
 
 import com.badlogic.gdx.math.Vector2;
 
-import org.render.DrawMode;
+import org.render.*;
 import org.road.Road;
 
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public abstract class Vehicle {
         this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
-    public final void draw(DrawMode drawMode) {
-        switch (drawMode) {
+    public final void draw() {
+        switch (Renderer.drawMode) {
             case DrawMode.PRIMITIVE:
                 primitiveDraw();
                 break;

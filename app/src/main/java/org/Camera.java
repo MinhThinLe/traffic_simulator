@@ -104,7 +104,7 @@ public class Camera extends InputAdapter {
 
     public void update(float deltaTime) {
         handleKeyboardMovement(deltaTime);
-        windowBorderMovement(deltaTime);
+        // windowBorderMovement(deltaTime);
         zoom(deltaTime);
         camera.update();
     }

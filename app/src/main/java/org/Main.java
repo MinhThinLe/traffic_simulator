@@ -2,6 +2,7 @@ package org;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,7 +23,6 @@ public class Main {
 class Game implements ApplicationListener {
     private FitViewport viewport;
     private RoadNetwork roadNetwork;
-    private DrawMode drawMode;
     private Camera camera;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
@@ -38,6 +38,7 @@ class Game implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
+        Renderer.resize(width, height);
         viewport.update(width, height, true);
     }
 
@@ -61,19 +62,21 @@ class Game implements ApplicationListener {
         viewport = new FitViewport(16, 9);
 
         InputStream resource = Road.class.getResourceAsStream("5-way-intersection.graphml");
-        roadNetwork = RoadNetworkLoader.readFromStream(resource); 
+        roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
         OrthographicCamera camera = new OrthographicCamera();
         viewport.setCamera(camera);
 
         Camera cameraManager = new Camera(camera);
-        // Refactor this into InputMultiplexor if another need arises
-        Gdx.input.setInputProcessor(cameraManager); // So that cameraManager can read scroll events
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(cameraManager);
+        inputMultiplexer.addProcessor(Renderer.stage);
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         this.camera = cameraManager;
-
-        drawMode = DrawMode.PRIMITIVE;
     }
 
     private void draw() {
@@ -83,10 +86,12 @@ class Game implements ApplicationListener {
 
         Renderer.startBatch();
 
-        roadNetwork.drawNodes(this.drawMode);
-        roadNetwork.drawEdges(this.drawMode);
+        roadNetwork.drawNodes();
+        roadNetwork.drawEdges();
 
         Renderer.endBatch();
+
+        Renderer.drawUI();
     }
 
     private void tick() {
@@ -94,5 +99,7 @@ class Game implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
         camera.update(deltaTime);
         roadNetwork.circulateTraffic(deltaTime);
+
+        Renderer.processUI(deltaTime);
     }
 }

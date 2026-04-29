@@ -1,6 +1,5 @@
 package org.road;
 
-import com.badlogic.gdx.math.Vector2;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 
@@ -12,11 +11,6 @@ import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.*;
-
-import com.google.common.graph.MutableGraph;
-import com.google.common.graph.GraphBuilder;
 
 public class RoadNetworkLoader {
     public static RoadNetwork readFromStream(InputStream XMLStream) {
@@ -88,12 +82,13 @@ public class RoadNetworkLoader {
         float x = Float.parseFloat(attributes.get("x"));
         float y = Float.parseFloat(attributes.get("y"));
         NodeType nodeType = extractNodeType(attributes);
-        
+
         return new Road(x, y, nodeType, id);
     }
 
     private static final int SOURCE_NODE = 1;
     private static final int SINK_NODE = -1;
+
     private static NodeType extractNodeType(HashMap<String, String> attributes) {
         NodeType nodeType = NodeType.NORMAL_NODE;
         if (attributes.containsKey("node_type")) {
@@ -149,7 +144,7 @@ public class RoadNetworkLoader {
             Node currentEdge = edges.item(i);
 
             NamedNodeMap attributes = currentEdge.getAttributes();
-            
+
             int from = -1;
             int to = -1;
             for (int j = 0; j < attributes.getLength(); j++) {

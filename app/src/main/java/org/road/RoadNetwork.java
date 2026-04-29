@@ -24,15 +24,15 @@ public class RoadNetwork {
         vehicleManager.addVehicleFactory(vehicleFactory);
     }
 
-    public void drawNodes(DrawMode drawMode) {
+    public void drawNodes() {
         var nodes = roadGraph.nodes().iterator();
 
         while (nodes.hasNext()) {
-            nodes.next().draw(drawMode);
+            nodes.next().draw();
         }
     }
 
-    public void drawEdges(DrawMode drawMode) {
+    public void drawEdges() {
         var edges = roadGraph.edges().iterator();
 
         while (edges.hasNext()) {
