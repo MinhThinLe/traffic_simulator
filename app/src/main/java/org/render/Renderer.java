@@ -1,6 +1,7 @@
 package org.render;
 
 import org.render.ui.RenderModeButton;
+import org.render.ui.VehicleDensitySlider;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -33,8 +35,11 @@ public class Renderer {
 
     private static void initializeUI() {
         RenderModeButton button = new RenderModeButton(textRenderer);
+        VehicleDensitySlider slider = new VehicleDensitySlider();
 
         table.top().right().add(button);
+        table.row();
+        table.top().right().add(slider);
 
         table.addListener(new EventListener() {
             @Override
