@@ -1,20 +1,23 @@
 package org.render;
 
-import org.render.ui.RenderModeButton;
-import org.render.ui.VehicleDensitySlider;
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import org.render.ui.RenderModeButton;
+import org.render.ui.VehicleDensitySlider;
 
 public class Renderer {
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
@@ -23,34 +26,44 @@ public class Renderer {
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
 
     public static Stage stage = new Stage(new FitViewport(1280, 720));
-    private static Table table = new Table();
 
     static {
         primitiveRenderer.setAutoShapeType(true);
-        table.setFillParent(true);
-        stage.addActor(table);
 
         initializeUI();
     }
 
     private static void initializeUI() {
-        RenderModeButton button = new RenderModeButton(textRenderer);
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        TextureAtlas atlas =
+                new TextureAtlas(Gdx.files.internal("org/render/ui/skin/skin-composer-ui.atlas"));
+        Skin uiSkin = new Skin(atlas);
+
+        RenderModeButton button = new RenderModeButton(textRenderer, uiSkin);
         VehicleDensitySlider slider = new VehicleDensitySlider();
+
+        FileHandle handle = Gdx.files.internal("org/render/ui/skin");
+
+        assert handle.exists();
 
         table.top().right().add(button);
         table.row();
         table.top().right().add(slider);
 
-        table.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (event.getTarget() == button) {
-                    flipDrawMode();
-                    button.setText(drawMode.toString());
-                }
-                return false;
-            }           
-        });
+        table.addListener(
+                new EventListener() {
+                    @Override
+                    public boolean handle(Event event) {
+                        if (event.getTarget() == button) {
+                            flipDrawMode();
+                            button.setText(drawMode.toString());
+                        }
+                        return false;
+                    }
+                });
     }
 
     private static void flipDrawMode() {
@@ -80,7 +93,6 @@ public class Renderer {
     public static void resize(int width, int height) {
         Viewport viewport = stage.getViewport();
         viewport.update(width, height, true);
-
     }
 
     public static void processUI(float deltaTime) {
