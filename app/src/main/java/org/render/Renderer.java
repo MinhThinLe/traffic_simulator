@@ -10,8 +10,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,7 +29,9 @@ public class Renderer {
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
     public static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     public static BitmapFont textRenderer = new BitmapFont(Gdx.files.internal(FONT_PATH));
+
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
+    public static float vehicleSpawnDelay = 10;
 
     public static Stage stage = new Stage(new FitViewport(1280, 720));
 
@@ -46,25 +51,36 @@ public class Renderer {
         Skin uiSkin = new Skin(atlas);
 
         RenderModeButton button = new RenderModeButton(textRenderer, uiSkin);
-        VehicleDensitySlider slider = new VehicleDensitySlider();
-
-        FileHandle handle = Gdx.files.internal("org/render/ui/skin");
-
-        assert handle.exists();
+        VehicleDensitySlider slider = new VehicleDensitySlider(uiSkin);
+        
+        LabelStyle labelStyle = new LabelStyle(textRenderer, Color.BLACK);
+        Label label = new Label("Seconds per vehicle: 10", labelStyle);
 
         table.top().right().add(button);
         table.row();
+        table.row();
         table.top().right().add(slider);
+        table.row();
+        table.top().right().add(label);
 
         table.addListener(
                 new EventListener() {
                     @Override
                     public boolean handle(Event event) {
-                        if (event.getTarget() == button && button.shouldFlip()) {
+                        if (event.getClass() != ChangeEvent.class) {
+                            return false;
+                        }
+
+                        if (event.getTarget() == button) {
                             flipDrawMode();
                             button.setText(drawMode.toString());
                         }
-                        return false;
+                        if (event.getTarget() == slider) {
+                            vehicleSpawnDelay = slider.getValue();
+                            label.setText("Seconds per vehicle: " + vehicleSpawnDelay);
+                        }
+
+                        return true;
                     }
                 });
     }
