@@ -20,9 +20,12 @@ import org.render.ui.RenderModeButton;
 import org.render.ui.VehicleDensitySlider;
 
 public class Renderer {
+    private static final String FONT_PATH = "org/render/ui/skin/font-export.fnt";
+    private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
+
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
     public static ShapeRenderer primitiveRenderer = new ShapeRenderer();
-    public static BitmapFont textRenderer = new BitmapFont();
+    public static BitmapFont textRenderer = new BitmapFont(Gdx.files.internal(FONT_PATH));
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
 
     public static Stage stage = new Stage(new FitViewport(1280, 720));
@@ -39,7 +42,7 @@ public class Renderer {
         stage.addActor(table);
 
         TextureAtlas atlas =
-                new TextureAtlas(Gdx.files.internal("org/render/ui/skin/skin-composer-ui.atlas"));
+                new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH));
         Skin uiSkin = new Skin(atlas);
 
         RenderModeButton button = new RenderModeButton(textRenderer, uiSkin);
@@ -57,7 +60,7 @@ public class Renderer {
                 new EventListener() {
                     @Override
                     public boolean handle(Event event) {
-                        if (event.getTarget() == button) {
+                        if (event.getTarget() == button && button.shouldFlip()) {
                             flipDrawMode();
                             button.setText(drawMode.toString());
                         }
