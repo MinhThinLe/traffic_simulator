@@ -4,6 +4,7 @@ public enum DrawMode {
     GRAPHICAL,
     PRIMITIVE,
     ;
+
     @Override
     public String toString() {
         switch (this.ordinal()) {
@@ -18,4 +19,3 @@ public enum DrawMode {
         return "INVALID STATE";
     }
 }
-

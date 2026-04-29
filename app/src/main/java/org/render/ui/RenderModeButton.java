@@ -1,12 +1,12 @@
 package org.render.ui;
 
-import org.render.DrawMode;
-
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+import org.render.DrawMode;
 
 public class RenderModeButton extends TextButton {
     private boolean clicked;

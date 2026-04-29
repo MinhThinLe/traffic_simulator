@@ -13,7 +13,9 @@ public class VehicleDensitySlider extends Slider {
     }
 
     private static SliderStyle makeSliderStyle(Skin skin) {
-        SliderStyle style = new SliderStyle(skin.getDrawable("slider-horizontal"), skin.getDrawable("slider-knob"));
+        SliderStyle style =
+                new SliderStyle(
+                        skin.getDrawable("slider-horizontal"), skin.getDrawable("slider-knob"));
         return style;
     }
 }

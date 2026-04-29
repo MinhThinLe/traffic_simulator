@@ -1,7 +1,6 @@
 package org.render;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -46,18 +45,16 @@ public class Renderer {
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextureAtlas atlas =
-                new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH));
         Skin uiSkin = new Skin(atlas);
 
         RenderModeButton button = new RenderModeButton(textRenderer, uiSkin);
         VehicleDensitySlider slider = new VehicleDensitySlider(uiSkin);
-        
+
         LabelStyle labelStyle = new LabelStyle(textRenderer, Color.BLACK);
         Label label = new Label("Seconds per vehicle: 10", labelStyle);
 
         table.top().right().add(button);
-        table.row();
         table.row();
         table.top().right().add(slider);
         table.row();
