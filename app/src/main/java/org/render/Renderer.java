@@ -1,16 +1,15 @@
 package org.render;
 
+import org.render.ui.RenderModeButton;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -33,35 +32,32 @@ public class Renderer {
     }
 
     private static void initializeUI() {
-        table.top().right().add(makeRenderModeToggleButton());
+        RenderModeButton button = new RenderModeButton(textRenderer);
+
+        table.top().right().add(button);
+
+        table.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (event.getTarget() == button) {
+                    flipDrawMode();
+                    button.setText(drawMode.toString());
+                }
+                return false;
+            }           
+        });
     }
 
-    private static TextButton makeRenderModeToggleButton() {
-        TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = textRenderer;
-
-        TextButton textButton = new TextButton(drawMode.toString(), textButtonStyle);
-
-        textButton.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                switch (drawMode) {
-                    case DrawMode.PRIMITIVE:
-                        drawMode = DrawMode.GRAPHICAL;
-                        break;
-                    case DrawMode.GRAPHICAL:
-                        drawMode = DrawMode.PRIMITIVE;
-                        break;
-                    default:
-                        break;
-                }
-                textButton.setText(drawMode.toString());
-                return true;
-            }
-        });
-        textButton.setOrigin(Align.center);
-
-        return textButton;
+    private static void flipDrawMode() {
+        switch (drawMode) {
+            case DrawMode.PRIMITIVE:
+                drawMode = DrawMode.GRAPHICAL;
+                break;
+            case DrawMode.GRAPHICAL:
+                drawMode = DrawMode.PRIMITIVE;
+            default:
+                break;
+        }
     }
 
     public static void startBatch() {
