@@ -1,5 +1,7 @@
 package org.render.ui;
 
+import org.render.DrawMode;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -10,7 +12,7 @@ public class RenderModeButton extends TextButton {
     private boolean clicked;
 
     public RenderModeButton(BitmapFont font, Skin skin) {
-        super("Press Me", makeStyle(skin, font));
+        super(DrawMode.PRIMITIVE.toString(), makeStyle(skin, font));
 
         addListener(
                 new InputListener() {
@@ -21,6 +23,15 @@ public class RenderModeButton extends TextButton {
                         return true;
                     }
                 });
+    }
+
+    public boolean shouldFlip() {
+        if (clicked) {
+            clicked = false;
+            return true;
+        }
+
+        return false;
     }
 
     private static TextButtonStyle makeStyle(Skin skin, BitmapFont font) {
