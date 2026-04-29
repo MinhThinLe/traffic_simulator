@@ -19,7 +19,7 @@ public class Road {
 
     private int id;
     private NodeType nodeType;
-    
+
     public Road(float x, float y, NodeType nodeType, int id) {
         this.priorityQueue = new PriorityQueue<VehiclePacket>();
         this.position = new Vector2(x, y);

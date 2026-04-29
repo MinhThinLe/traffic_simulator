@@ -38,7 +38,7 @@ public class PathFinder {
 
             queue.removeFirst();
         }
-        
+
         return null;
     }
 

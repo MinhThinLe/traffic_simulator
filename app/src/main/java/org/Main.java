@@ -62,7 +62,7 @@ class Game implements ApplicationListener {
         viewport = new FitViewport(16, 9);
 
         InputStream resource = Road.class.getResourceAsStream("5-way-intersection.graphml");
-        roadNetwork = RoadNetworkLoader.readFromStream(resource); 
+        roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
         OrthographicCamera camera = new OrthographicCamera();
