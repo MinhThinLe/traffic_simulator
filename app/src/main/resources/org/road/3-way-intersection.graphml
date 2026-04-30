@@ -19,15 +19,6 @@
             <data key="x">-0.19541414</data>
             <data key="y">0.26281005</data>
         </node>
-        <node id="1">
-            <data key="label">1</data>
-            <data key="size">4.0</data>
-            <data key="r">153</data>
-            <data key="g">153</data>
-            <data key="b">153</data>
-            <data key="x">-0.5606882</data>
-            <data key="y">0.122271255</data>
-        </node>
         <node id="2">
             <data key="label">2</data>
             <data key="size">4.0</data>
