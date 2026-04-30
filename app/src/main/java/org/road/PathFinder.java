@@ -5,6 +5,7 @@ import com.google.common.graph.MutableGraph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class PathFinder {
     public static List<Road> breathFirstSearch(MutableGraph<Road> roadGraph, Road start, Road end) {
@@ -44,13 +45,13 @@ public class PathFinder {
 
     private static ArrayList<Road> recoverPath(ArrayList<RoadEdge> edges) {
         ArrayList<Road> path = new ArrayList<>();
-        path.add(edges.getLast().target);
+        path.add(edges.getLast().target());
         while (true) {
             RoadEdge currentEdge = findEdgeWithTarget(edges, path.getLast());
             if (currentEdge == null) {
                 break;
             }
-            path.add(currentEdge.source);
+            path.add(currentEdge.source());
         }
 
         return path;
@@ -59,7 +60,7 @@ public class PathFinder {
     private static RoadEdge findEdgeWithTarget(ArrayList<RoadEdge> edges, Road target) {
         for (int i = 0; i < edges.size(); i++) {
             RoadEdge currentEdge = edges.get(i);
-            if (currentEdge.target == target) {
+            if (currentEdge.target() == target) {
                 return currentEdge;
             }
         }
@@ -68,12 +69,9 @@ public class PathFinder {
     }
 }
 
-class RoadEdge {
-    Road source;
-    Road target;
-
-    RoadEdge(Road source, Road target) {
-        this.source = source;
-        this.target = target;
+record RoadEdge(Road source, Road target) {
+    RoadEdge {
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(target);
     }
 }
