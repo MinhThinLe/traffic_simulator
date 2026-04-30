@@ -67,6 +67,7 @@ public abstract class Vehicle {
     }
 
     public abstract int getVehiclePriority();
+    public abstract float getSize();
 
     protected abstract void primitiveDraw();
 

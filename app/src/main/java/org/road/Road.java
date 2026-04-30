@@ -10,7 +10,7 @@ import org.vehicles.*;
 import java.util.PriorityQueue;
 
 public class Road {
-    public static final float RADIUS = 10;
+    public static final float RADIUS = 20;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
     private Vehicle vehicle;
@@ -81,7 +81,7 @@ public class Road {
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
-        if (vehiclePosition.dst(vehicleDestination) > RADIUS * 2) {
+        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getSize()) {
             if (this.moveToCenter) {
                 this.vehicle.moveToward(getPosition(), deltaTime);
 

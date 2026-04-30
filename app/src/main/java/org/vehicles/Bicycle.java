@@ -40,6 +40,11 @@ public class Bicycle extends Vehicle {
     }
 
     @Override
+    public float getSize() {
+        return WIDTH / 2;
+    }
+
+    @Override
     protected void graphicalDraw() {
         // TODO Auto-generated method stub
 
