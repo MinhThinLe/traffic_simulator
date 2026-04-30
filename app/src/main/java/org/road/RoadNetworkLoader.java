@@ -79,8 +79,9 @@ public class RoadNetworkLoader {
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
 
         int id = getNodeId(node);
-        float x = Float.parseFloat(attributes.get("x"));
-        float y = Float.parseFloat(attributes.get("y"));
+        float scalar = Road.RADIUS / Float.parseFloat(attributes.get("size"));
+        float x = Float.parseFloat(attributes.get("x")) * scalar;
+        float y = Float.parseFloat(attributes.get("y")) * scalar;
         NodeType nodeType = extractNodeType(attributes);
 
         return new Road(x, y, nodeType, id);
