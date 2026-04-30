@@ -105,6 +105,7 @@ public class RoadNetworkLoader {
             }
 
             trafficLight.addMemberNode(road);
+            road.setTrafficLight(trafficLight);
         }
 
         if (nodeType == NodeType.SOURCE_NODE) {

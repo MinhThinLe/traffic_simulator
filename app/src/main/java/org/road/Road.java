@@ -18,6 +18,7 @@ public class Road {
     private Vector2 position;
     private boolean sentVehicle;
     private boolean moveToCenter;
+    private TrafficLight trafficLight;
 
     private int id;
 
@@ -29,6 +30,10 @@ public class Road {
 
     public int getId() {
         return this.id;
+    }
+
+    public void setTrafficLight(TrafficLight trafficLight) {
+        this.trafficLight = trafficLight;
     }
 
     public void draw() {
@@ -107,9 +112,16 @@ public class Road {
     }
 
     private void acceptVehicle() {
-        VehiclePacket vehiclePacket = this.priorityQueue.poll();
+        VehiclePacket vehiclePacket = this.priorityQueue.peek();
         if (vehiclePacket == null) {
             return;
+        }
+
+        if (vehiclePacket.packetSender != null) {
+            if (this.trafficLight != null && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)) {
+                return;
+            }
+            vehiclePacket.packetSender.removeCurrentVehicle();
         }
 
         vehiclePacket.vehicle.popDestination();
@@ -119,9 +131,7 @@ public class Road {
             this.moveToCenter = true;
         }
 
-        if (vehiclePacket.packetSender != null) {
-            vehiclePacket.packetSender.removeCurrentVehicle();
-        }
+        this.priorityQueue.poll();
     }
 
     private void removeCurrentVehicle() {

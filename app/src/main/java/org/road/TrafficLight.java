@@ -58,7 +58,7 @@ public class TrafficLight {
     }
 
     private void primitiveDraw() {
-
+        
     }
 
     private void graphicalDraw() {
@@ -71,7 +71,7 @@ public class TrafficLight {
             return;
         }
 
-        permittedNodeIndex = ingressNodes.size() % (permittedNodeIndex + 1);
+        permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
     }
 
     public void addIngressNodes(MutableGraph<Road> roadGraph) {
@@ -89,6 +89,15 @@ public class TrafficLight {
                 ingressNodes.add(new RoadEdge(predecessor, currentNode));
             }
         }
+    }
+
+    public boolean isPermittedNode(Road node) {
+        for (int i = 0; i < memberNodes.size(); i++) {
+            if (memberNodes.get(i) == node) {
+                return true;
+            }
+        }
+        return this.ingressNodes.get(this.permittedNodeIndex).source() == node;
     }
 
     private boolean isMember(Road node) {

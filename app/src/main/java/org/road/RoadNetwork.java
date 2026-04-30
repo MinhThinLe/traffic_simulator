@@ -58,8 +58,10 @@ public class RoadNetwork {
     public void circulateTraffic(float deltaTime) {
         vehicleManager.tick(deltaTime);
 
-        for (int i = 0; i < trafficLights.size(); i++) {
-            trafficLights.get(i).tick(deltaTime);
+        if (trafficLights != null) {
+            for (int i = 0; i < trafficLights.size(); i++) {
+                trafficLights.get(i).tick(deltaTime);
+            }
         }
 
         var nodes = roadGraph.nodes().iterator();
