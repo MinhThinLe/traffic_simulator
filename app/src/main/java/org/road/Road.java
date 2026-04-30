@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 
 public class Road {
     public static final float RADIUS = 20;
+    private static final float TOLERANCE = 5;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
     private Vehicle vehicle;
@@ -82,15 +83,7 @@ public class Road {
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
         if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getSize()) {
-            if (this.moveToCenter) {
-                this.vehicle.moveToward(getPosition(), deltaTime);
-
-                if (this.vehicle.getPosition().dst2(this.position) < 1) {
-                    this.moveToCenter = false;
-                }
-                return;
-            }
-            this.vehicle.moveToward(vehicleDestination, deltaTime);
+            routeVehicle(deltaTime, vehicleDestination);
             return;
         }
 
@@ -100,6 +93,19 @@ public class Road {
             nextNode.addVehicle(new VehiclePacket(this.vehicle, this));
             sentVehicle = true;
         }
+    }
+
+    private void routeVehicle(float deltaTime, Vector2 vehicleDestination) {
+        if (this.vehicle.getPosition().dst2(this.position) < TOLERANCE) {
+            this.moveToCenter = false;
+        }
+
+        if (!this.moveToCenter) {
+            this.vehicle.moveToward(vehicleDestination, deltaTime);
+            return;
+        }
+
+        this.vehicle.moveToward(getPosition(), deltaTime);
     }
 
     public void addVehicle(VehiclePacket vehiclePacket) {
