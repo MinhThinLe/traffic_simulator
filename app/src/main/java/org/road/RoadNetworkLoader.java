@@ -15,10 +15,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class RoadNetworkLoader {
     private static ArrayList<Road> sources;
     private static ArrayList<Road> sinks;
+    private static ArrayList<TrafficLight> trafficLights;
 
     public static RoadNetwork readFromStream(InputStream XMLStream) {
+        // Because muh state-less
         sources = new ArrayList<>();
         sinks = new ArrayList<>();
+        trafficLights = new ArrayList<>();
+
         Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
 
@@ -48,6 +52,10 @@ public class RoadNetworkLoader {
             roadGraph.putEdge(from, to);
         }
 
+        for (int i = 0; i < trafficLights.size(); i++) {
+            trafficLights.get(i).addIngressNodes(roadGraph);
+        }
+
         return new RoadNetwork(roadGraph, sources, sinks);
     }
 
@@ -66,7 +74,6 @@ public class RoadNetworkLoader {
     }
 
     private static Road readRoadNode(Node node) {
-        getNodeId(node);
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
 
         int id = getNodeId(node);
@@ -77,6 +84,23 @@ public class RoadNetworkLoader {
 
         Road road = new Road(x, y, id);
 
+        if (attributes.containsKey("traffic_light_cluster_id")) {
+            int trafficCluster = Integer.parseInt(attributes.get("traffic_light_cluster_id"));
+            TrafficLight trafficLight = getTrafficLightOrNew(trafficCluster);
+
+            if (attributes.containsKey("traffic_light_type")) {
+                int trafficLightType = Integer.parseInt(attributes.get("traffic_light_type"));
+                trafficLight.setType(trafficLightType);
+            }
+            if (attributes.containsKey("traffic_light_duration")) {
+                float trafficLightDuration =
+                        Float.parseFloat(attributes.get("traffic_light_duration"));
+                trafficLight.setDuration(trafficLightDuration);
+            }
+
+            trafficLight.addMemberNode(road);
+        }
+
         if (nodeType == NodeType.SOURCE_NODE) {
             sources.add(road);
         }
@@ -85,6 +109,19 @@ public class RoadNetworkLoader {
         }
 
         return road;
+    }
+
+    private static TrafficLight getTrafficLightOrNew(int id) {
+        for (int i = 0; i < trafficLights.size(); i++) {
+            if (trafficLights.get(i).getId() == id) {
+                return trafficLights.get(i);
+            }
+        }
+
+        TrafficLight trafficLight = new TrafficLight(id);
+        trafficLights.add(trafficLight);
+
+        return trafficLight;
     }
 
     private static final int SOURCE_NODE = 1;
