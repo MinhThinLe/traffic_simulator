@@ -12,6 +12,7 @@ public abstract class Vehicle {
     protected Vector2 position;
     protected DrivingMode drivingMode;
     protected float speed;
+    protected Vector2 direction;
 
     public Vehicle(ArrayList<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
         this.path = path;
@@ -40,8 +41,13 @@ public abstract class Vehicle {
         return new Vector2(this.position);
     }
 
+    public Vector2 getDirection() {
+        return new Vector2(this.direction);
+    }
+
     public void moveToward(Vector2 newPosition, float deltaTime) {
         Vector2 direction = newPosition.sub(this.position);
+        this.direction = new Vector2(direction);
         this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
@@ -61,6 +67,7 @@ public abstract class Vehicle {
     }
 
     public abstract int getVehiclePriority();
+    public abstract float getSize();
 
     protected abstract void primitiveDraw();
 
