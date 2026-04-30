@@ -20,21 +20,15 @@ public class Road {
     private boolean moveToCenter;
 
     private int id;
-    private NodeType nodeType;
 
-    public Road(float x, float y, NodeType nodeType, int id) {
+    public Road(float x, float y, int id) {
         this.priorityQueue = new PriorityQueue<VehiclePacket>();
         this.position = new Vector2(x, y);
-        this.nodeType = nodeType;
         this.id = id;
     }
 
     public int getId() {
         return this.id;
-    }
-
-    public NodeType getNodeType() {
-        return this.nodeType;
     }
 
     public void draw() {

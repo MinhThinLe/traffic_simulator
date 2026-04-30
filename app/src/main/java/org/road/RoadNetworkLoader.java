@@ -13,7 +13,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RoadNetworkLoader {
+    private static ArrayList<Road> sources;
+    private static ArrayList<Road> sinks;
+
     public static RoadNetwork readFromStream(InputStream XMLStream) {
+        sources = new ArrayList<>();
+        sinks = new ArrayList<>();
         Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
 
@@ -21,24 +26,10 @@ public class RoadNetworkLoader {
         NodeList nodes = document.getElementsByTagName("node");
         HashMap<Integer, Road> roadMap = new HashMap<>();
 
-        ArrayList<Road> sources = new ArrayList<>();
-        ArrayList<Road> sinks = new ArrayList<>();
-
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
 
             Road road = readRoadNode(currentNode);
-
-            switch (road.getNodeType()) {
-                case SOURCE_NODE:
-                    sources.add(road);
-                    break;
-                case SINK_NODE:
-                    sinks.add(road);
-                    break;
-                default:
-                    break;
-            }
 
             roadMap.put(road.getId(), road);
             roadGraph.addNode(road);
@@ -84,7 +75,16 @@ public class RoadNetworkLoader {
         float y = Float.parseFloat(attributes.get("y")) * scalar;
         NodeType nodeType = extractNodeType(attributes);
 
-        return new Road(x, y, nodeType, id);
+        Road road = new Road(x, y, id);
+
+        if (nodeType == NodeType.SOURCE_NODE) {
+            sources.add(road);
+        }
+        if (nodeType == NodeType.SINK_NODE) {
+            sinks.add(road);
+        }
+
+        return road;
     }
 
     private static final int SOURCE_NODE = 1;
