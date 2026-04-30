@@ -56,7 +56,13 @@ public class RoadNetworkLoader {
             trafficLights.get(i).addIngressNodes(roadGraph);
         }
 
-        return new RoadNetwork(roadGraph, sources, sinks);
+        RoadNetwork roadNetwork = new RoadNetwork(roadGraph, sources, sinks);
+
+        if (!trafficLights.isEmpty()) {
+            roadNetwork.setTrafficLightArray(trafficLights);
+        }
+
+        return roadNetwork;
     }
 
     private static Document readDocument(InputStream XMLStream) {

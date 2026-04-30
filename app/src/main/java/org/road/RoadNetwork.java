@@ -13,6 +13,7 @@ public class RoadNetwork {
 
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
+    private ArrayList<TrafficLight> trafficLights;
 
     public RoadNetwork(
             MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
@@ -22,6 +23,10 @@ public class RoadNetwork {
 
     public void addVehicleFactory(VehicleFactory vehicleFactory) {
         vehicleManager.addVehicleFactory(vehicleFactory);
+    }
+
+    public void setTrafficLightArray(ArrayList<TrafficLight> trafficLights) {
+        this.trafficLights = trafficLights;
     }
 
     public void drawNodes() {
@@ -52,8 +57,12 @@ public class RoadNetwork {
 
     public void circulateTraffic(float deltaTime) {
         vehicleManager.tick(deltaTime);
-        var nodes = roadGraph.nodes().iterator();
 
+        for (int i = 0; i < trafficLights.size(); i++) {
+            trafficLights.get(i).tick(deltaTime);
+        }
+
+        var nodes = roadGraph.nodes().iterator();
         while (nodes.hasNext()) {
             nodes.next().circulate(deltaTime);
         }
