@@ -6,10 +6,12 @@ import org.render.*;
 
 import com.google.common.graph.MutableGraph;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 enum TrafficLightType {
     FULL_COUNT_DOWN,
@@ -79,26 +81,67 @@ public class TrafficLight {
     private void primitiveDrawEdge(RoadEdge edge) {
         Vector2 direction = edge.source().getPosition().sub(edge.target().getPosition()).setLength(Road.RADIUS + HEIGHT / 2);
         Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
-
         Vector2 location = edge.target().getPosition().add(direction).add(offset);
 
+        drawBody(location, offset.angleDeg());
+    
+        location.add(new Vector2(0, HEIGHT / 4).rotateDeg(offset.angleDeg()));
+
+        drawContent(location, edge.source(), offset.angleDeg());
+    }
+
+    private void drawBody(Vector2 location, float rotation) {
         Polygon polygon = new Polygon(polygonMesh);
-        polygon.rotate(offset.angleDeg());
+        polygon.rotate(rotation);
         polygon.translate(location.x, location.y);
 
         ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.polygon(polygon.getTransformedVertices());
-    
-        location.add(new Vector2(0, HEIGHT / 4).rotateDeg(offset.angleDeg()));
+    }
+
+    private void drawContent(Vector2 location, Road sourceEdge, float angle) {
+        drawLight(location, sourceEdge);
+        location.sub(new Vector2(0, HEIGHT / 2).rotateDeg(angle));
+        drawCounter(location, sourceEdge, angle);
+    }
+
+    private void drawLight(Vector2 location, Road sourceEdge) {
         ShapeRenderer filledRenderer = Renderer.filledPrimitiveRenderer;
-        if (isPermittedNode(edge.source())) {
+        if (isPermittedNode(sourceEdge)) {
             filledRenderer.setColor(Color.GREEN);
         } else {
             filledRenderer.setColor(Color.RED);
         }
         filledRenderer.circle(location.x, location.y, WIDTH * 0.45f);
         filledRenderer.setAutoShapeType(true);
+    }
+
+    private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
+        LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
+        Label label = new Label((int) Math.ceil(getRemainingTime(sourceEdge)) + "", labelStyle);
+
+        Container<Label> container = new Container<Label>(label);
+
+        container.setTransform(true);
+        container.setPosition(location.x, location.y);
+        container.setRotation(angle);
+        
+        container.draw(Renderer.graphicalRenderer, 1);
+    }
+
+    private float getRemainingTime(Road ingressNode) {
+        if (isPermittedNode(ingressNode)) {
+            return this.timer.getTimeRemaining();
+        }
+
+        int nodeIndex = getIngressNodeIndex(ingressNode);
+        if (nodeIndex > permittedNodeIndex) {
+            return this.timer.getTimeRemaining() + timer.getDuration() * (nodeIndex - permittedNodeIndex - 1);
+        }
+
+        int untilLoopAround = this.ingressNodes.size() - nodeIndex - 1;
+        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
 
     private void graphicalDraw() {
@@ -132,14 +175,15 @@ public class TrafficLight {
     }
 
     public boolean isPermittedNode(Road node) {
-        for (int i = 0; i < memberNodes.size(); i++) {
-            if (memberNodes.get(i) == node) {
-                return true;
-            }
+        if (isMember(node)) {
+            return true;
         }
         return this.ingressNodes.get(this.permittedNodeIndex).source() == node;
     }
 
+    // This is actually prefferable to using ArrayList.contains() since this relies
+    // on pointer comparison rather than the .equals() method, which can get more
+    // expensive the larger the class is.
     private boolean isMember(Road node) {
         for (int i = 0; i < this.memberNodes.size(); i++) {
             if (this.memberNodes.get(i) == node) {
@@ -148,5 +192,15 @@ public class TrafficLight {
         }
 
         return false;
+    }
+
+    private int getIngressNodeIndex(Road ingressNode) {
+        for (int i = 0; i < ingressNodes.size(); i++) {
+            if (ingressNodes.get(i).source() == ingressNode) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
