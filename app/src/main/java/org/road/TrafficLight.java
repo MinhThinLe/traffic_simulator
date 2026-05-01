@@ -145,11 +145,11 @@ public class TrafficLight {
 
         int nodeIndex = getIngressNodeIndex(ingressNode);
         if (nodeIndex > permittedNodeIndex) {
-            return this.timer.getTimeRemaining() + timer.getDuration() * (nodeIndex - permittedNodeIndex - 1);
+            return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex - permittedNodeIndex - 1);
         }
 
-        int untilLoopAround = this.ingressNodes.size() - nodeIndex - 1;
-        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround - 1);
+        int untilLoopAround = this.ingressNodes.size() - permittedNodeIndex - 1;
+        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
 
     private void graphicalDraw() {
