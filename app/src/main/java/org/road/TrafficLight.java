@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import org.render.*;
 
 import com.google.common.graph.MutableGraph;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
 
 enum TrafficLightType {
     FULL_COUNT_DOWN,
@@ -58,7 +63,42 @@ public class TrafficLight {
     }
 
     private void primitiveDraw() {
-        
+        for (int i = 0; i < ingressNodes.size(); i++) {
+            primitiveDrawEdge(ingressNodes.get(i));
+        }
+    }
+    
+    private static final float WIDTH = 15;
+    private static final float HEIGHT = 2 * WIDTH;
+    private static final float[] polygonMesh = new float[] {
+        -WIDTH / 2, -HEIGHT / 2,
+        WIDTH / 2, -HEIGHT / 2,
+        WIDTH / 2, HEIGHT / 2,
+        -WIDTH / 2, HEIGHT / 2
+    };
+    private void primitiveDrawEdge(RoadEdge edge) {
+        Vector2 direction = edge.source().getPosition().sub(edge.target().getPosition()).setLength(Road.RADIUS + HEIGHT / 2);
+        Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
+
+        Vector2 location = edge.target().getPosition().add(direction).add(offset);
+
+        Polygon polygon = new Polygon(polygonMesh);
+        polygon.rotate(offset.angleDeg());
+        polygon.translate(location.x, location.y);
+
+        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.polygon(polygon.getTransformedVertices());
+    
+        location.add(new Vector2(0, HEIGHT / 4).rotateDeg(offset.angleDeg()));
+        ShapeRenderer filledRenderer = Renderer.filledPrimitiveRenderer;
+        if (isPermittedNode(edge.source())) {
+            filledRenderer.setColor(Color.GREEN);
+        } else {
+            filledRenderer.setColor(Color.RED);
+        }
+        filledRenderer.circle(location.x, location.y, WIDTH * 0.45f);
+        filledRenderer.setAutoShapeType(true);
     }
 
     private void graphicalDraw() {

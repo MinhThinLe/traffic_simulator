@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,6 +28,7 @@ public class Renderer {
 
     public static SpriteBatch graphicalRenderer = new SpriteBatch();
     public static ShapeRenderer primitiveRenderer = new ShapeRenderer();
+    public static ShapeRenderer filledPrimitiveRenderer = new ShapeRenderer();
     public static BitmapFont textRenderer = new BitmapFont(Gdx.files.internal(FONT_PATH));
 
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
@@ -36,6 +38,7 @@ public class Renderer {
 
     static {
         primitiveRenderer.setAutoShapeType(true);
+        filledPrimitiveRenderer.setAutoShapeType(true);
 
         initializeUI();
     }
@@ -97,6 +100,8 @@ public class Renderer {
     public static void startBatch() {
         graphicalRenderer.begin();
         primitiveRenderer.begin();
+        filledPrimitiveRenderer.begin();
+        filledPrimitiveRenderer.set(ShapeType.Filled);
 
         ScreenUtils.clear(Color.WHITE);
     }
@@ -104,6 +109,7 @@ public class Renderer {
     public static void endBatch() {
         graphicalRenderer.end();
         primitiveRenderer.end();
+        filledPrimitiveRenderer.end();
     }
 
     public static void resize(int width, int height) {

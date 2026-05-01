@@ -35,6 +35,10 @@ public class RoadNetwork {
         while (nodes.hasNext()) {
             nodes.next().draw();
         }
+
+        for (int i = 0; i < this.trafficLights.size(); i++) {
+            this.trafficLights.get(i).draw();
+        }
     }
 
     public void drawEdges() {
