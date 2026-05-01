@@ -109,4 +109,8 @@ class Timer {
     public float getTimeRemaining() {
         return this.remaining;
     }
+
+    public void reset() {
+        remaining = duration;
+    }
 }

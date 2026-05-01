@@ -6,6 +6,8 @@ import org.Globals;
 import org.render.*;
 
 import com.google.common.graph.MutableGraph;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
@@ -79,32 +81,40 @@ public class TrafficLight {
         WIDTH / 2, HEIGHT / 2,
         -WIDTH / 2, HEIGHT / 2
     };
-    private void primitiveDrawEdge(RoadEdge edge) {
+
+    private Polygon getPolygonBody(RoadEdge edge) {
         Vector2 direction = edge.source().getPosition().sub(edge.target().getPosition()).setLength(Road.RADIUS + HEIGHT / 2);
         Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
         Vector2 location = edge.target().getPosition().add(direction).add(offset);
 
-        drawBody(location, offset.angleDeg());
-    
-        location.add(new Vector2(0, HEIGHT / 4).rotateDeg(offset.angleDeg()));
+        Polygon polygon = new Polygon(polygonMesh);
+        polygon.rotate(offset.angleDeg());
+        polygon.translate(location.x, location.y);
 
-        drawContent(location, edge.source(), offset.angleDeg());
+        return polygon;
     }
 
-    private void drawBody(Vector2 location, float rotation) {
-        Polygon polygon = new Polygon(polygonMesh);
-        polygon.rotate(rotation);
-        polygon.translate(location.x, location.y);
+    private void primitiveDrawEdge(RoadEdge edge) {
+        drawBody(edge);
+        drawContent(edge);
+    }
+
+    private void drawBody(RoadEdge edge) {
+        Polygon polygon = getPolygonBody(edge);
 
         ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.polygon(polygon.getTransformedVertices());
     }
 
-    private void drawContent(Vector2 location, Road sourceEdge, float angle) {
-        drawLight(location, sourceEdge);
-        location.sub(new Vector2(0, HEIGHT / 2).rotateDeg(angle));
-        drawCounter(location, sourceEdge, angle);
+    private void drawContent(RoadEdge edge) {
+        Polygon polygon = getPolygonBody(edge);
+        Vector2 location = new Vector2(polygon.getX(), polygon.getY());
+        location.add(new Vector2(0, HEIGHT / 4).rotateDeg(polygon.getRotation()));
+
+        drawLight(location, edge.source());
+        location.sub(new Vector2(0, HEIGHT / 2).rotateDeg(polygon.getRotation()));
+        drawCounter(location, edge.source(), polygon.getRotation());
     }
 
     private void drawLight(Vector2 location, Road sourceEdge) {
@@ -157,12 +167,32 @@ public class TrafficLight {
     }
 
     public void tick(float deltaTime) {
+        if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
+            int lightClickedIndex = getJustClickedLight();
+            if (lightClickedIndex == -1) {
+                return;
+            }
+
+            permittedNodeIndex = lightClickedIndex;
+            timer.reset();
+        }
         this.timer.tick(deltaTime);
         if (!timer.hasFinished()) {
             return;
         }
-
+        
         permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
+   }
+
+    private int getJustClickedLight() {
+        for (int i = 0; i < ingressNodes.size(); i++) {
+            Polygon polygon = getPolygonBody(ingressNodes.get(i));
+            if (polygon.contains(Globals.mouseWorldPosition)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public void addIngressNodes(MutableGraph<Road> roadGraph) {
