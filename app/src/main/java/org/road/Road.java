@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import org.Globals;
 import org.render.*;
 import org.vehicles.*;
 
@@ -18,14 +19,13 @@ public class Road {
     private Vector2 position;
     private boolean sentVehicle;
     private boolean moveToCenter;
+    private TrafficLight trafficLight;
 
     private int id;
-    private NodeType nodeType;
 
-    public Road(float x, float y, NodeType nodeType, int id) {
+    public Road(float x, float y, int id) {
         this.priorityQueue = new PriorityQueue<VehiclePacket>();
         this.position = new Vector2(x, y);
-        this.nodeType = nodeType;
         this.id = id;
     }
 
@@ -33,12 +33,12 @@ public class Road {
         return this.id;
     }
 
-    public NodeType getNodeType() {
-        return this.nodeType;
+    public void setTrafficLight(TrafficLight trafficLight) {
+        this.trafficLight = trafficLight;
     }
 
     public void draw() {
-        switch (Renderer.drawMode) {
+        switch (Globals.drawMode) {
             case DrawMode.GRAPHICAL:
                 graphicalDraw();
                 break;
@@ -113,9 +113,16 @@ public class Road {
     }
 
     private void acceptVehicle() {
-        VehiclePacket vehiclePacket = this.priorityQueue.poll();
+        VehiclePacket vehiclePacket = this.priorityQueue.peek();
         if (vehiclePacket == null) {
             return;
+        }
+
+        if (vehiclePacket.packetSender != null) {
+            if (this.trafficLight != null && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)) {
+                return;
+            }
+            vehiclePacket.packetSender.removeCurrentVehicle();
         }
 
         vehiclePacket.vehicle.popDestination();
@@ -125,9 +132,7 @@ public class Road {
             this.moveToCenter = true;
         }
 
-        if (vehiclePacket.packetSender != null) {
-            vehiclePacket.packetSender.removeCurrentVehicle();
-        }
+        this.priorityQueue.poll();
     }
 
     private void removeCurrentVehicle() {

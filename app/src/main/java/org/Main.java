@@ -2,11 +2,8 @@ package org;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import org.render.*;
 import org.road.*;
@@ -21,7 +18,6 @@ public class Main {
 }
 
 class Game implements ApplicationListener {
-    private FitViewport viewport;
     private RoadNetwork roadNetwork;
     private Camera camera;
 
@@ -39,7 +35,7 @@ class Game implements ApplicationListener {
     @Override
     public void resize(int width, int height) {
         Renderer.resize(width, height);
-        viewport.update(width, height, true);
+        camera.resize(width, height);
     }
 
     @Override
@@ -59,30 +55,21 @@ class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        viewport = new FitViewport(16, 9);
-
-        InputStream resource = Road.class.getResourceAsStream("5-way-intersection.graphml");
+        InputStream resource = Road.class.getResourceAsStream("3-way-intersection-traffic-light.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
-        OrthographicCamera camera = new OrthographicCamera();
-        viewport.setCamera(camera);
+        this.camera = new Camera();
 
-        Camera cameraManager = new Camera(camera);
+        Gdx.input.setInputProcessor(Globals.inputMultiplexer);
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(cameraManager);
-        inputMultiplexer.addProcessor(Renderer.stage);
-
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-        this.camera = cameraManager;
     }
 
     private void draw() {
         // Because wonky shits happen when you try to wrap this in a method
         Renderer.graphicalRenderer.setProjectionMatrix(camera.getCameraProjection());
         Renderer.primitiveRenderer.setProjectionMatrix(camera.getCameraProjection());
+        Renderer.filledPrimitiveRenderer.setProjectionMatrix(camera.getCameraProjection());
 
         Renderer.startBatch();
 

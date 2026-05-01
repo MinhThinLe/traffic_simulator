@@ -18,10 +18,10 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [ ] Hỗ trợ xe có thể vượt nhau
 
-- [ ] Thêm đèn đỏ và các biến thể
-    - [ ] Đếm giờ đầy đủ
-    - [ ] Đếm 10 giây cuối
-    - [ ] Chuyển đổi thủ công
+- [x] Thêm đèn đỏ và các biến thể
+    - [x] Đếm giờ đầy đủ
+    - [x] Đếm 10 giây cuối
+    - [x] Chuyển đổi thủ công
 
 - [ ] Thêm chế độ hiển thị đồ họa
 

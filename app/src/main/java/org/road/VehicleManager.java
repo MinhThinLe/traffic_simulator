@@ -2,7 +2,7 @@ package org.road;
 
 import com.google.common.graph.MutableGraph;
 
-import org.render.Renderer;
+import org.Globals;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 import org.vehicles.VehiclePacket;
@@ -34,8 +34,8 @@ public class VehicleManager {
     }
 
     public void tick(float deltaTime) {
-        if (Renderer.vehicleSpawnDelay != this.timer.getDuration()) {
-            this.timer.setDuration(Renderer.vehicleSpawnDelay);
+        if (Globals.vehicleSpawnDelay != this.timer.getDuration()) {
+            this.timer.setDuration(Globals.vehicleSpawnDelay);
         }
         this.timer.tick(deltaTime);
         if (!this.timer.hasFinished()) {
@@ -104,5 +104,13 @@ class Timer {
         if (remaining > duration) {
             remaining = duration;
         }
+    }
+
+    public float getTimeRemaining() {
+        return this.remaining;
+    }
+
+    public void reset() {
+        remaining = duration;
     }
 }

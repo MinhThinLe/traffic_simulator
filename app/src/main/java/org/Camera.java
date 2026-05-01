@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Camera extends InputAdapter {
     private static final float CAMERA_SPEED = 7f;
@@ -16,10 +17,16 @@ public class Camera extends InputAdapter {
     private static final float DEFAULT_ZOOM = 50f;
 
     private OrthographicCamera camera;
+    private FitViewport viewport;
 
-    public Camera(OrthographicCamera camera) {
-        this.camera = camera;
+    public Camera() {
+        this.camera = new OrthographicCamera();
         this.camera.zoom = DEFAULT_ZOOM;
+
+        this.viewport = new FitViewport(16, 9);
+        this.viewport.setCamera(this.camera);
+
+        Globals.inputMultiplexer.addProcessor(this);
     }
 
     public Matrix4 getCameraProjection() {
@@ -100,6 +107,12 @@ public class Camera extends InputAdapter {
     public boolean scrolled(float amountX, float amountY) {
         this.camera.zoom += ZOOM_SPEED * this.camera.zoom * amountY * 0.1;
         return true;
+    } 
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        Globals.mouseWorldPosition.set(viewport.unproject(new Vector2(screenX, screenY)));
+        return true;
     }
 
     public void update(float deltaTime) {
@@ -107,5 +120,9 @@ public class Camera extends InputAdapter {
         // windowBorderMovement(deltaTime);
         zoom(deltaTime);
         camera.update();
+    }
+
+    public void resize(int width, int height) {
+        this.viewport.update(width, height);
     }
 }

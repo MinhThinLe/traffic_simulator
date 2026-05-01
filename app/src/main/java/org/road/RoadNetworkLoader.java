@@ -13,7 +13,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RoadNetworkLoader {
+    private static ArrayList<Road> sources;
+    private static ArrayList<Road> sinks;
+    private static ArrayList<TrafficLight> trafficLights;
+
     public static RoadNetwork readFromStream(InputStream XMLStream) {
+        // Because muh state-less
+        sources = new ArrayList<>();
+        sinks = new ArrayList<>();
+        trafficLights = new ArrayList<>();
+
         Document document = readDocument(XMLStream);
         MutableGraph<Road> roadGraph = GraphBuilder.directed().build();
 
@@ -21,24 +30,10 @@ public class RoadNetworkLoader {
         NodeList nodes = document.getElementsByTagName("node");
         HashMap<Integer, Road> roadMap = new HashMap<>();
 
-        ArrayList<Road> sources = new ArrayList<>();
-        ArrayList<Road> sinks = new ArrayList<>();
-
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
 
             Road road = readRoadNode(currentNode);
-
-            switch (road.getNodeType()) {
-                case SOURCE_NODE:
-                    sources.add(road);
-                    break;
-                case SINK_NODE:
-                    sinks.add(road);
-                    break;
-                default:
-                    break;
-            }
 
             roadMap.put(road.getId(), road);
             roadGraph.addNode(road);
@@ -57,7 +52,17 @@ public class RoadNetworkLoader {
             roadGraph.putEdge(from, to);
         }
 
-        return new RoadNetwork(roadGraph, sources, sinks);
+        for (int i = 0; i < trafficLights.size(); i++) {
+            trafficLights.get(i).addIngressNodes(roadGraph);
+        }
+
+        RoadNetwork roadNetwork = new RoadNetwork(roadGraph, sources, sinks);
+
+        if (!trafficLights.isEmpty()) {
+            roadNetwork.setTrafficLightArray(trafficLights);
+        }
+
+        return roadNetwork;
     }
 
     private static Document readDocument(InputStream XMLStream) {
@@ -75,7 +80,6 @@ public class RoadNetworkLoader {
     }
 
     private static Road readRoadNode(Node node) {
-        getNodeId(node);
         HashMap<String, String> attributes = readChildrenAttributeMap(node);
 
         int id = getNodeId(node);
@@ -84,7 +88,47 @@ public class RoadNetworkLoader {
         float y = Float.parseFloat(attributes.get("y")) * scalar;
         NodeType nodeType = extractNodeType(attributes);
 
-        return new Road(x, y, nodeType, id);
+        Road road = new Road(x, y, id);
+
+        if (attributes.containsKey("traffic_light_cluster_id")) {
+            int trafficCluster = Integer.parseInt(attributes.get("traffic_light_cluster_id"));
+            TrafficLight trafficLight = getTrafficLightOrNew(trafficCluster);
+
+            if (attributes.containsKey("traffic_light_type")) {
+                int trafficLightType = Integer.parseInt(attributes.get("traffic_light_type"));
+                trafficLight.setType(trafficLightType);
+            }
+            if (attributes.containsKey("traffic_light_duration")) {
+                float trafficLightDuration =
+                        Float.parseFloat(attributes.get("traffic_light_duration"));
+                trafficLight.setDuration(trafficLightDuration);
+            }
+
+            trafficLight.addMemberNode(road);
+            road.setTrafficLight(trafficLight);
+        }
+
+        if (nodeType == NodeType.SOURCE_NODE) {
+            sources.add(road);
+        }
+        if (nodeType == NodeType.SINK_NODE) {
+            sinks.add(road);
+        }
+
+        return road;
+    }
+
+    private static TrafficLight getTrafficLightOrNew(int id) {
+        for (int i = 0; i < trafficLights.size(); i++) {
+            if (trafficLights.get(i).getId() == id) {
+                return trafficLights.get(i);
+            }
+        }
+
+        TrafficLight trafficLight = new TrafficLight(id);
+        trafficLights.add(trafficLight);
+
+        return trafficLight;
     }
 
     private static final int SOURCE_NODE = 1;

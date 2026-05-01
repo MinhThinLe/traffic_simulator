@@ -2,8 +2,9 @@ package org.vehicles;
 
 import com.badlogic.gdx.math.Vector2;
 
-import org.render.*;
+import org.render.DrawMode;
 import org.road.Road;
+import org.Globals;
 
 import java.util.ArrayList;
 
@@ -52,7 +53,7 @@ public abstract class Vehicle {
     }
 
     public final void draw() {
-        switch (Renderer.drawMode) {
+        switch (Globals.drawMode) {
             case DrawMode.PRIMITIVE:
                 primitiveDraw();
                 break;
