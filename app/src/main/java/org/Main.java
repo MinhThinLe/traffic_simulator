@@ -72,7 +72,7 @@ class Game implements ApplicationListener {
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(cameraManager);
-        inputMultiplexer.addProcessor(Renderer.stage);
+        inputMultiplexer.addProcessor(Globals.stage);
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 

@@ -2,6 +2,7 @@ package org.road;
 
 import java.util.ArrayList;
 
+import org.Globals;
 import org.render.*;
 
 import com.google.common.graph.MutableGraph;
@@ -52,7 +53,7 @@ public class TrafficLight {
     }
 
     public void draw() {
-        switch (Renderer.drawMode) {
+        switch (Globals.drawMode) {
             case DrawMode.PRIMITIVE:
                 primitiveDraw();               
                 break;
