@@ -67,16 +67,10 @@ class Game implements ApplicationListener {
 
         OrthographicCamera camera = new OrthographicCamera();
         viewport.setCamera(camera);
+        this.camera = new Camera(camera);
 
-        Camera cameraManager = new Camera(camera);
+        Gdx.input.setInputProcessor(Globals.inputMultiplexer);
 
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(cameraManager);
-        inputMultiplexer.addProcessor(Globals.stage);
-
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-        this.camera = cameraManager;
     }
 
     private void draw() {

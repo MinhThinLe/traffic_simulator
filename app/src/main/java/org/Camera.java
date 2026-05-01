@@ -20,6 +20,8 @@ public class Camera extends InputAdapter {
     public Camera(OrthographicCamera camera) {
         this.camera = camera;
         this.camera.zoom = DEFAULT_ZOOM;
+
+        Globals.inputMultiplexer.addProcessor(this);
     }
 
     public Matrix4 getCameraProjection() {

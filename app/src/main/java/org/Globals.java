@@ -5,6 +5,8 @@ import org.render.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+
 import org.render.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -18,9 +20,12 @@ public class Globals {
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
     public static float vehicleSpawnDelay = 10;
     public static Stage stage = new Stage(new FitViewport(1280, 720));
+    public static InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     static {
         initializeUI();
+
+        inputMultiplexer.addProcessor(stage);
     }
 
     private static void initializeUI() {
