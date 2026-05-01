@@ -22,8 +22,13 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Đếm giờ đầy đủ
     - [x] Đếm 10 giây cuối
     - [x] Chuyển đổi thủ công
+    - [ ] Chuyển đổi hoàn toàn thủ công 
 
 - [ ] Thêm chế độ hiển thị đồ họa
+
+- [ ] Thêm âm thanh
+
+- [ ] Vẽ đường xe chạy đẹp hơn
 
 - [ ] Thêm menu chính
     - [ ] Giao diện chọn bản đồ
