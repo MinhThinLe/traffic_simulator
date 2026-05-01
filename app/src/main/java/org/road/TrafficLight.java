@@ -119,6 +119,13 @@ public class TrafficLight {
 
     private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
         LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
+        if (this.type == TrafficLightType.NO_COUNT_DOWN) {
+            return;
+        }
+        if (this.type == TrafficLightType.LAST_TEN_SECONDS && Math.ceil(getRemainingTime(sourceEdge)) > 10) {
+            return;
+        }
+
         Label label = new Label((int) Math.ceil(getRemainingTime(sourceEdge)) + "", labelStyle);
 
         Container<Label> container = new Container<Label>(label);
@@ -141,7 +148,7 @@ public class TrafficLight {
         }
 
         int untilLoopAround = this.ingressNodes.size() - nodeIndex - 1;
-        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround);
+        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround - 1);
     }
 
     private void graphicalDraw() {
