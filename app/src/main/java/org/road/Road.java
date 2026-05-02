@@ -120,7 +120,17 @@ public class Road {
         sentVehicle = true;
     }
 
+    private static final float ACCELERATE_THRESHOLD = 0.3f;
+
     private boolean negotiateOvertake(Vehicle vehicle) {
+        Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
+        float distanceFromDestination = this.vehicle.getPosition().dst(vehicleDestination);
+        float pathLength = this.getPosition().dst(vehicleDestination);
+
+        if (distanceFromDestination / pathLength > ACCELERATE_THRESHOLD) {
+            this.vehicle.accelerate();
+            return false;
+        }
         if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
             return false;
         }
@@ -133,6 +143,7 @@ public class Road {
         if (this.pullOverVehicle != null) {
             return false;
         }
+
 
         this.pullOverVehicle = this.vehicle;
         vehicle.popDestination();
@@ -192,6 +203,7 @@ public class Road {
 
         vehiclePacket.vehicle.popDestination();
         this.vehicle = vehiclePacket.vehicle;
+        this.vehicle.resetSpeedModifier();
         this.moveToCenter = true;
 
         this.priorityQueue.poll();
