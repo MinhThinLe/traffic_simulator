@@ -31,7 +31,7 @@ public class Ambulance extends Vehicle {
 
     @Override
     public int getVehiclePriority() {
-        return 10;
+        return 2;
     }
 
     @Override
@@ -63,9 +63,6 @@ public class Ambulance extends Vehicle {
         ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.polygon(polygon.getTransformedVertices());
-
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(position.x, position.y, 4);
     }
 
     private void drawText() {
@@ -74,19 +71,22 @@ public class Ambulance extends Vehicle {
         Container<Label> container = new Container<>(text);
 
         container.setTransform(true);
-        container.setX(position.x);
-        container.setY(position.y);
+        container.setX(position.x - WIDTH / 2);
+        container.setY(position.y - HEIGHT / 2);
+        container.setWidth(WIDTH);
+        container.setHeight(HEIGHT);
 
         float scaleX = WIDTH / text.getWidth();
         float scaleY = HEIGHT / text.getHeight();
-        container.setScaleX(scaleX);
-        container.setScaleY(scaleY);
+        float scale = Math.min(scaleX, scaleY) * 0.8f;
+        container.setScale(scale);
 
         float angle = getDirectionAngle();
         if (angle > 90 && angle < 270) {
             angle -= 180;
         }
 
+        container.setOrigin(WIDTH / 2, HEIGHT / 2);
         container.setRotation(angle);
         container.draw(Renderer.graphicalRenderer, 1);
     }
