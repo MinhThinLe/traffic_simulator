@@ -20,6 +20,7 @@ public class Road {
     private boolean sentVehicle;
     private boolean moveToCenter;
     private TrafficLight trafficLight;
+    private Vehicle pullOverVehicle;
 
     private int id;
 
@@ -53,6 +54,9 @@ public class Road {
         if (vehicle != null) {
             vehicle.draw();
         }
+        if (pullOverVehicle != null) {
+            pullOverVehicle.draw();
+        }
     }
 
     public void graphicalDraw() {
@@ -79,6 +83,11 @@ public class Road {
             return;
         }
 
+        if (vehicle.nextDestination() == null) {
+            this.vehicle = null;
+            return;
+        }
+
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
@@ -89,9 +98,60 @@ public class Road {
 
         // Make a request to send the vehicle to its next node
         if (!sentVehicle) {
-            Road nextNode = this.vehicle.nextDestination();
-            nextNode.addVehicle(new VehiclePacket(this.vehicle, this));
-            sentVehicle = true;
+            sendVehicle();
+            return;
+        }
+
+        boolean nextNodeIsOccupied = this.vehicle.nextDestination().isOccupied();
+        if (!this.vehicle.shouldSendOvertakeRequest() || !nextNodeIsOccupied) {
+            return;
+        }
+
+        boolean reply = this.vehicle.nextDestination().negotiateOvertake(this.vehicle);
+        if (!reply) {
+            return;
+        }
+        removeCurrentVehicle();
+    }
+
+    private void sendVehicle() {
+        Road nextNode = this.vehicle.nextDestination();
+        nextNode.addVehicle(new VehiclePacket(this.vehicle, this));
+        sentVehicle = true;
+    }
+
+    private boolean negotiateOvertake(Vehicle vehicle) {
+        if (this.vehicle.getVehiclePriority() > vehicle.getVehiclePriority()) {
+            return false;
+        }
+        if (!this.vehicle.shouldAcceptOvertakeRequest()) {
+            return false;
+        }
+        if (sentVehicle) {
+            return false;
+        }
+        if (this.pullOverVehicle != null) {
+            return false;
+        }
+
+        this.pullOverVehicle = this.vehicle;
+        vehicle.popDestination();
+        this.vehicle = vehicle;
+        
+        // Since the vehicle has been accepted to its destination already, we should
+        // remove it from the queue to prevent further problems
+        removeFromQueue();
+        return true;
+    }
+
+    private void removeFromQueue() {
+        var queueItems = priorityQueue.iterator();
+        while (queueItems.hasNext()) {
+            var queueItem = queueItems.next();
+            if (queueItem.vehicle == vehicle) {
+                priorityQueue.remove(queueItem);
+                return;
+            }
         }
     }
 
@@ -113,6 +173,11 @@ public class Road {
     }
 
     private void acceptVehicle() {
+        if (this.pullOverVehicle != null) {
+            this.vehicle = this.pullOverVehicle;
+            this.pullOverVehicle = null;
+            return;
+        }
         VehiclePacket vehiclePacket = this.priorityQueue.peek();
         if (vehiclePacket == null) {
             return;
@@ -126,11 +191,8 @@ public class Road {
         }
 
         vehiclePacket.vehicle.popDestination();
-        // Only accepts vehicles that still have somewhere left to go
-        if (vehiclePacket.vehicle.nextDestination() != null) {
-            this.vehicle = vehiclePacket.vehicle;
-            this.moveToCenter = true;
-        }
+        this.vehicle = vehiclePacket.vehicle;
+        this.moveToCenter = true;
 
         this.priorityQueue.poll();
     }
@@ -138,5 +200,9 @@ public class Road {
     private void removeCurrentVehicle() {
         this.vehicle = null;
         this.sentVehicle = false;
+    }
+
+    private boolean isOccupied() {
+        return this.vehicle != null;
     }
 }

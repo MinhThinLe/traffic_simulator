@@ -15,6 +15,11 @@ public abstract class Vehicle {
     protected float speed;
     protected Vector2 direction;
 
+    protected float impatientness;  // A float ranging from 0 to 1 indicating the chance that this vehicle would
+                                    // send an overtake request
+    protected float stinginess; // A float ranging from 0 to 1 indicating the chance that this vehicle would
+                                // refuse an overtake request
+
     public Vehicle(ArrayList<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
         this.path = path;
         this.position = position;
@@ -65,6 +70,14 @@ public abstract class Vehicle {
 
     public final void popDestination() {
         this.path.removeFirst();
+    }
+
+    public boolean shouldSendOvertakeRequest() {
+        return Globals.rng.nextFloat() < impatientness;
+    }
+
+    public boolean shouldAcceptOvertakeRequest() {
+        return Globals.rng.nextFloat() > stinginess;
     }
 
     public abstract int getVehiclePriority();
