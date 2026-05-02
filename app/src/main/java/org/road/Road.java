@@ -121,7 +121,7 @@ public class Road {
     }
 
     private boolean negotiateOvertake(Vehicle vehicle) {
-        if (this.vehicle.getVehiclePriority() > vehicle.getVehiclePriority()) {
+        if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
             return false;
         }
         if (!this.vehicle.shouldAcceptOvertakeRequest()) {
