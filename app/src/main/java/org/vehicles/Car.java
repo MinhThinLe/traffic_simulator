@@ -51,9 +51,7 @@ public class Car extends Vehicle {
     }
 
     private float getDirectionAngle() {
-        Vector2 destination = nextDestination().getPosition();
-        Vector2 direction = destination.sub(position);
-        return direction.angleDeg();
+        return getDirection().angleDeg();
     }
 
     private void drawBody() {
