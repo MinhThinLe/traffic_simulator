@@ -1,5 +1,7 @@
 package org;
 
+import java.util.Random;
+
 import org.render.*;
 
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,6 +26,7 @@ public class Globals {
     public static InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     public static Vector2 mouseWorldPosition = new Vector2();
+    public static Random rng = new Random();
 
     static {
         initializeUI();
