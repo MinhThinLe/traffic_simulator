@@ -16,7 +16,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [ ] Xe máy
     - [ ] Xe buýt
 
-- [ ] Hỗ trợ xe có thể vượt nhau
+- [x] Hỗ trợ xe có thể vượt nhau
 
 - [x] Thêm đèn đỏ và các biến thể
     - [x] Đếm giờ đầy đủ
