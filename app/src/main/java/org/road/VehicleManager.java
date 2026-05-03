@@ -9,14 +9,12 @@ import org.vehicles.VehiclePacket;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class VehicleManager {
     private MutableGraph<Road> roadNetwork;
     private ArrayList<Road> sources;
     private ArrayList<Road> sinks;
     private ArrayList<VehicleFactory> vehicleFactories;
-    private Random rng;
 
     private Timer timer;
 
@@ -29,7 +27,6 @@ public class VehicleManager {
         this.sources = sources;
         this.sinks = sinks;
         this.timer = new Timer(timer);
-        this.rng = new Random();
         this.vehicleFactories = new ArrayList<>();
     }
 
@@ -54,8 +51,8 @@ public class VehicleManager {
             return;
         }
 
-        Road source = sources.get(rng.nextInt(this.sources.size()));
-        Road sink = sinks.get(rng.nextInt(this.sinks.size()));
+        Road source = sources.get(Globals.rng.nextInt(this.sources.size()));
+        Road sink = sinks.get(Globals.rng.nextInt(this.sinks.size()));
         List<Road> path = PathFinder.breathFirstSearch(roadNetwork, source, sink);
 
         // Can't find a valid path
@@ -65,7 +62,7 @@ public class VehicleManager {
 
         ArrayList<Road> vehiclePath = new ArrayList<>(path);
 
-        var vehicleFactory = vehicleFactories.get(rng.nextInt(this.vehicleFactories.size()));
+        var vehicleFactory = vehicleFactories.get(Globals.rng.nextInt(this.vehicleFactories.size()));
         Vehicle vehicle = vehicleFactory.createVehicle(vehiclePath);
 
         VehiclePacket vehiclePacket = new VehiclePacket(vehicle, null);
