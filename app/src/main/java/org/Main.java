@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.render.*;
 import org.road.*;
-import org.vehicles.BicycleFactory;
+import org.vehicles.*;
 
 import java.io.InputStream;
 
@@ -58,6 +58,10 @@ class Game implements ApplicationListener {
         InputStream resource = Road.class.getResourceAsStream("3-way-intersection-traffic-light.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
+        roadNetwork.addVehicleFactory(new CarFactory());
+        roadNetwork.addVehicleFactory(new MotorbikeFactory());
+        roadNetwork.addVehicleFactory(new BusFactory());
+        roadNetwork.addVehicleFactory(new AmbulanceFactory());
 
         this.camera = new Camera();
 
