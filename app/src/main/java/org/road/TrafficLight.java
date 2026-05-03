@@ -19,7 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 enum TrafficLightType {
     FULL_COUNT_DOWN,
     NO_COUNT_DOWN,
-    LAST_TEN_SECONDS
+    LAST_TEN_SECONDS,
+    FULLY_MANUAL
 }
 
 public class TrafficLight {
@@ -129,14 +130,14 @@ public class TrafficLight {
     }
 
     private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
-        LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
-        if (this.type == TrafficLightType.NO_COUNT_DOWN) {
+        if (this.type == TrafficLightType.NO_COUNT_DOWN || this.type == TrafficLightType.FULLY_MANUAL) {
             return;
         }
         if (this.type == TrafficLightType.LAST_TEN_SECONDS && Math.ceil(getRemainingTime(sourceEdge)) > 10) {
             return;
         }
 
+        LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
         Label label = new Label((int) Math.ceil(getRemainingTime(sourceEdge)) + "", labelStyle);
 
         Container<Label> container = new Container<Label>(label);
@@ -175,6 +176,9 @@ public class TrafficLight {
 
             permittedNodeIndex = lightClickedIndex;
             timer.reset();
+        }
+        if (this.type == TrafficLightType.FULLY_MANUAL) {
+            return;
         }
         this.timer.tick(deltaTime);
         if (!timer.hasFinished()) {
