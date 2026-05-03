@@ -57,7 +57,6 @@ public class Road {
         }
         if (pullOverVehicle != null) {
             pullOverVehicle.draw();
-            Renderer.primitiveRenderer.circle(pullOverPosition.x, pullOverPosition.y, 5);
         }
     }
 
