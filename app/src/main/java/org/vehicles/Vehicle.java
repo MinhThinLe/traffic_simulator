@@ -9,15 +9,11 @@ import org.Globals;
 import java.util.ArrayList;
 
 public abstract class Vehicle {
-    private static float ACCELERATE_AMOUNT = 0.15f;
-    private static final float DEFAULT_SPEED_MODIFIER = 1;
-
     protected ArrayList<Road> path;
     protected Vector2 position;
     protected DrivingMode drivingMode;
     protected float speed;
     protected Vector2 direction;
-    protected float speedModifier;
 
     protected float impatientness;  // A float ranging from 0 to 1 indicating the chance that this vehicle would
                                     // send an overtake request
@@ -29,7 +25,6 @@ public abstract class Vehicle {
         this.position = position;
         this.drivingMode = drivingMode;
         this.speed = speed;
-        this.speedModifier = DEFAULT_SPEED_MODIFIER;
     }
 
     public Road nextDestination() {
@@ -56,14 +51,10 @@ public abstract class Vehicle {
         return new Vector2(this.direction);
     }
 
-    public float getSpeed() {
-        return this.speed * this.speedModifier;
-    }
-
     public void moveToward(Vector2 newPosition, float deltaTime) {
         Vector2 direction = newPosition.sub(this.position);
         this.direction = new Vector2(direction);
-        this.position.add(direction.setLength(getSpeed()).scl(deltaTime));
+        this.position.add(direction.setLength(this.speed).scl(deltaTime));
     }
 
     public final void draw() {
@@ -77,6 +68,10 @@ public abstract class Vehicle {
         }
     }
 
+    public void increaseStinginess() {
+        this.stinginess += 0.1;
+    }
+
     public final void popDestination() {
         this.path.removeFirst();
     }
@@ -87,14 +82,6 @@ public abstract class Vehicle {
 
     public boolean shouldAcceptOvertakeRequest() {
         return Globals.rng.nextFloat() > stinginess;
-    }
-
-    public void accelerate() {
-        this.speedModifier += ACCELERATE_AMOUNT;
-    }
-
-    public void resetSpeedModifier() {
-        this.speedModifier = DEFAULT_SPEED_MODIFIER;
     }
 
     public abstract int getVehiclePriority();
