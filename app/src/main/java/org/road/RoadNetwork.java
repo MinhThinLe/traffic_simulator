@@ -19,6 +19,7 @@ public class RoadNetwork {
             MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
         this.roadGraph = roadGraph;
         this.vehicleManager = new VehicleManager(roadGraph, sources, sinks, DEFAULT_TIMER);
+        this.trafficLights = new ArrayList<>();
     }
 
     public void addVehicleFactory(VehicleFactory vehicleFactory) {
