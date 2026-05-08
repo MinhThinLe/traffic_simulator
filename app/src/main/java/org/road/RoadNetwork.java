@@ -1,9 +1,6 @@
 package org.road;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Sets;
@@ -19,7 +16,6 @@ import java.util.Set;
 import java.util.List;
 
 public class RoadNetwork {
-    private static TextureRegion ROAD_DIRECTION_TEXTURE = new TextureRegion(new Texture(Gdx.files.internal("org/road/road-arrow.png")));
     private static final float DEFAULT_TIMER = 10;
 
     private MutableGraph<Road> roadGraph;
@@ -127,7 +123,6 @@ public class RoadNetwork {
             LineDrawCall curvedLineDrawCall = new LineDrawCall(current, next, ROAD_WIDTH + EXTRA_WIDTH, Color.GRAY, ShapeType.Filled);
             Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
         }
-
     }
 
     public void circulateTraffic(float deltaTime) {
