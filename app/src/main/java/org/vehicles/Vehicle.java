@@ -14,15 +14,12 @@ public abstract class Vehicle {
     protected DrivingMode drivingMode;
     protected float speed;
     protected Vector2 direction;
-
-    protected float
-            impatientness; // A float ranging from 0 to 1 indicating the chance that this vehicle
-                           // would
-    // send an overtake request
-    protected float
-            stinginess; // A float ranging from 0 to 1 indicating the chance that this vehicle would
-
+    // A float ranging from 0 to 1 indicating the chance that this vehicle
+    // would send an overtake request
+    protected float impatientness;
+    // A float ranging from 0 to 1 indicating the chance that this vehicle would
     // refuse an overtake request
+    protected float stinginess;
 
     public Vehicle(ArrayList<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
         this.path = path;
