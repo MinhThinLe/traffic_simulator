@@ -1,12 +1,17 @@
 package org.road;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.google.common.collect.Sets;
 import com.google.common.graph.MutableGraph;
 
+import org.Globals;
 import org.render.*;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.List;
 
 public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
@@ -43,6 +48,19 @@ public class RoadNetwork {
     }
 
     public void drawEdges() {
+        switch (Globals.drawMode) {
+            case DrawMode.PRIMITIVE:
+                drawEdgesPrimitive();
+                break;
+            case DrawMode.GRAPHICAL:
+                drawEdgesGraphical();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void drawEdgesPrimitive() {
         var edges = roadGraph.edges().iterator();
 
         while (edges.hasNext()) {
@@ -57,6 +75,47 @@ public class RoadNetwork {
             to.sub(direction);
 
             Renderer.primitiveRenderer.line(from, to);
+        }
+    }
+
+    private void drawEdgesGraphical() {
+        Renderer.filledPrimitiveRenderer.setColor(Color.GRAY);
+
+        var nodes = roadGraph.nodes().iterator();
+        while (nodes.hasNext()) {
+            var currentNode = nodes.next();
+
+            Set<Road> ingressNodes = roadGraph.predecessors(currentNode);
+            Set<Road> egressNodes = roadGraph.successors(currentNode);
+
+            Set<List<Road>> roadPairs = Sets.cartesianProduct(ingressNodes, egressNodes);
+            var road = roadPairs.iterator();
+            while (road.hasNext()) {
+                var currentPair = road.next();
+                drawRoad(currentPair.get(0).getPosition(), currentNode.getPosition(), currentPair.get(1).getPosition());
+            }
+        }
+    }
+    
+    private static final float ROAD_WIDTH = 15;
+    private static final int POINTS = 50;
+    private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
+        start.lerp(middle, 0.5f);
+        end.lerp(middle, 0.5f);
+
+        Vector2 firstSegmentEnd = new Vector2(middle).add(new Vector2(start).sub(middle).setLength(Road.RADIUS));
+        Vector2 lastSegmentStart = new Vector2(middle).add(new Vector2(end).sub(middle).setLength(Road.RADIUS));
+
+        Renderer.filledPrimitiveRenderer.rectLine(start, firstSegmentEnd, ROAD_WIDTH);
+        Renderer.filledPrimitiveRenderer.rectLine(lastSegmentStart, end, ROAD_WIDTH);
+        
+        QuadraticBerzier berzier = new QuadraticBerzier(List.of(start, middle, end));
+        
+        for (int i = 0; i < POINTS; i++) {
+            Vector2 current = berzier.interpolate((float) i / POINTS);
+            Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
+
+            Renderer.filledPrimitiveRenderer.rectLine(current, next, ROAD_WIDTH);
         }
     }
 
