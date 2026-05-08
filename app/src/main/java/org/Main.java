@@ -55,7 +55,7 @@ class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        InputStream resource = Road.class.getResourceAsStream("3-way-intersection-traffic-light.graphml");
+        InputStream resource = Road.class.getResourceAsStream("3-way-intersection.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
