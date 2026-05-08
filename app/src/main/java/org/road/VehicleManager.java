@@ -62,7 +62,8 @@ public class VehicleManager {
 
         ArrayList<Road> vehiclePath = new ArrayList<>(path);
 
-        var vehicleFactory = vehicleFactories.get(Globals.rng.nextInt(this.vehicleFactories.size()));
+        var vehicleFactory =
+                vehicleFactories.get(Globals.rng.nextInt(this.vehicleFactories.size()));
         Vehicle vehicle = vehicleFactory.createVehicle(vehiclePath);
 
         VehiclePacket vehiclePacket = new VehiclePacket(vehicle, null);
