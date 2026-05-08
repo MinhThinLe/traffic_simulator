@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import org.Globals;
 import org.render.*;
+import org.render.drawcalls.CircleDrawCall;
+import org.render.drawcalls.ContainerDrawCall;
+import org.render.drawcalls.PolygonDrawCall;
 
 import com.google.common.graph.MutableGraph;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -102,10 +105,8 @@ public class TrafficLight {
 
     private void drawBody(RoadEdge edge) {
         Polygon polygon = getPolygonBody(edge);
-
-        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.polygon(polygon.getTransformedVertices());
+        PolygonDrawCall drawCall = new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Line);
+        Renderer.addPrimitiveDrawCall(drawCall);
     }
 
     private void drawContent(RoadEdge edge) {
@@ -119,14 +120,13 @@ public class TrafficLight {
     }
 
     private void drawLight(Vector2 location, Road sourceEdge) {
-        ShapeRenderer filledRenderer = Renderer.filledPrimitiveRenderer;
+        Color lightColor = Color.RED;
         if (isPermittedNode(sourceEdge)) {
-            filledRenderer.setColor(Color.GREEN);
-        } else {
-            filledRenderer.setColor(Color.RED);
+            lightColor = Color.GREEN;
         }
-        filledRenderer.circle(location.x, location.y, WIDTH * 0.45f);
-        filledRenderer.setAutoShapeType(true);
+
+        CircleDrawCall drawCall = new CircleDrawCall(location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, lightColor);
+        Renderer.addPrimitiveDrawCall(drawCall);
     }
 
     private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
@@ -146,7 +146,8 @@ public class TrafficLight {
         container.setPosition(location.x, location.y);
         container.setRotation(angle);
         
-        container.draw(Renderer.graphicalRenderer, 1);
+        ContainerDrawCall drawCall = new ContainerDrawCall(container);
+        Renderer.addGraphicalDrawCall(drawCall);
     }
 
     private float getRemainingTime(Road ingressNode) {

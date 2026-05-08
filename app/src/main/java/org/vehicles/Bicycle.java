@@ -1,7 +1,7 @@
 package org.vehicles;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import org.render.Renderer;
+import org.render.drawcalls.ContainerDrawCall;
+import org.render.drawcalls.PolygonDrawCall;
 import org.road.Road;
 
 import java.util.ArrayList;
@@ -63,10 +65,8 @@ public class Bicycle extends Vehicle {
         polygon.rotate(angle);
         polygon.translate(position.x, position.y);
 
-        ShapeRenderer shapeRenderer = Renderer.primitiveRenderer;
-
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.polygon(polygon.getTransformedVertices());
+        PolygonDrawCall drawCall = new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Line);
+        Renderer.addPrimitiveDrawCall(drawCall);
     }
 
     private void drawText() {
@@ -91,6 +91,7 @@ public class Bicycle extends Vehicle {
         }
         container.setRotation(angle);
 
-        container.draw(Renderer.graphicalRenderer, 1);
+        ContainerDrawCall drawCall = new ContainerDrawCall(container);
+        Renderer.addGraphicalDrawCall(drawCall);
     }
 }

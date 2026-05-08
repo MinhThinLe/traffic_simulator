@@ -55,7 +55,7 @@ class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        InputStream resource = Road.class.getResourceAsStream("3-way-intersection-traffic-light.graphml");
+        InputStream resource = Road.class.getResourceAsStream("3-way-intersection.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
         roadNetwork.addVehicleFactory(new BicycleFactory());
 
@@ -66,19 +66,10 @@ class Game implements ApplicationListener {
     }
 
     private void draw() {
-        // Because wonky shits happen when you try to wrap this in a method
-        Renderer.graphicalRenderer.setProjectionMatrix(camera.getCameraProjection());
-        Renderer.primitiveRenderer.setProjectionMatrix(camera.getCameraProjection());
-        Renderer.filledPrimitiveRenderer.setProjectionMatrix(camera.getCameraProjection());
-
-        Renderer.startBatch();
-
         roadNetwork.drawNodes();
         roadNetwork.drawEdges();
 
-        Renderer.endBatch();
-
-        Renderer.drawUI();
+        Renderer.render(camera.getCameraProjection());
     }
 
     private void tick() {
