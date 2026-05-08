@@ -66,7 +66,8 @@ public class Road {
     }
 
     public void primitiveDraw() {
-        CircleDrawCall body = new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK);
+        CircleDrawCall body =
+                new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK);
         Renderer.addPrimitiveDrawCall(body);
     }
 
@@ -122,10 +123,11 @@ public class Road {
         nextNode.addVehicle(new VehiclePacket(this.vehicle, this));
         sentVehicle = true;
     }
-    
+
     private static final float MINIMUM_OVERTAKE_DISTANCE = 75;
     private static final float STRAFE_LENGTH = 40;
     private static final float STRAFE_ANGLE = -45;
+
     private boolean negotiateOvertake(Vehicle vehicle) {
         if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
             return false;
@@ -148,14 +150,21 @@ public class Road {
         }
 
         if (pullOverVehicle == null) {
-            this.pullOverPosition = this.vehicle.getPosition().add(this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH));
+            this.pullOverPosition =
+                    this.vehicle
+                            .getPosition()
+                            .add(
+                                    this.vehicle
+                                            .getDirection()
+                                            .rotateDeg(STRAFE_ANGLE)
+                                            .setLength(STRAFE_LENGTH));
         }
         this.pullOverVehicle = this.vehicle;
         this.pullOverVehicle.increaseStinginess();
 
         vehicle.popDestination();
         this.vehicle = vehicle;
-        
+
         // Since the vehicle has been accepted to its destination already, we should
         // remove it from the queue to prevent further problems
         removeFromQueue();
@@ -209,7 +218,8 @@ public class Road {
         }
 
         if (vehiclePacket.packetSender != null) {
-            if (this.trafficLight != null && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)) {
+            if (this.trafficLight != null
+                    && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)) {
                 return;
             }
             vehiclePacket.packetSender.removeCurrentVehicle();

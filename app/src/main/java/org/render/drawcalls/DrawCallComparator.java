@@ -9,7 +9,7 @@ public class DrawCallComparator implements Comparator<PrimitiveDrawCall> {
         if (shapeCompare != 0) {
             return shapeCompare;
         }
-        return Float.compare(o1.color.r + o1.color.g + o1.color.b, o2.color.r + o2.color.g + o2. color.b);
+        return Float.compare(
+                o1.color.r + o1.color.g + o1.color.b, o2.color.r + o2.color.g + o2.color.b);
     }
-    
 }

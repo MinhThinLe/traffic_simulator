@@ -10,6 +10,7 @@ public class ContainerDrawCall extends GraphicalDrawCall {
         super(0, 0, 0);
         this.container = container;
     }
+
     @Override
     public void draw(SpriteBatch graphicalRenderer) {
         container.draw(graphicalRenderer, 1);

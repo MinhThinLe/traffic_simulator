@@ -1,14 +1,5 @@
 package org.road;
 
-import java.util.ArrayList;
-
-import org.Globals;
-import org.render.*;
-import org.render.drawcalls.CircleDrawCall;
-import org.render.drawcalls.ContainerDrawCall;
-import org.render.drawcalls.PolygonDrawCall;
-
-import com.google.common.graph.MutableGraph;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +9,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.google.common.graph.MutableGraph;
+
+import org.Globals;
+import org.render.*;
+import org.render.drawcalls.CircleDrawCall;
+import org.render.drawcalls.ContainerDrawCall;
+import org.render.drawcalls.PolygonDrawCall;
+
+import java.util.ArrayList;
 
 enum TrafficLightType {
     FULL_COUNT_DOWN,
@@ -61,7 +61,7 @@ public class TrafficLight {
     public void draw() {
         switch (Globals.drawMode) {
             case DrawMode.PRIMITIVE:
-                primitiveDraw();               
+                primitiveDraw();
                 break;
             case DrawMode.GRAPHICAL:
                 graphicalDraw();
@@ -76,18 +76,23 @@ public class TrafficLight {
             primitiveDrawEdge(ingressNodes.get(i));
         }
     }
-    
+
     private static final float WIDTH = 15;
     private static final float HEIGHT = 2 * WIDTH;
-    private static final float[] polygonMesh = new float[] {
-        -WIDTH / 2, -HEIGHT / 2,
-        WIDTH / 2, -HEIGHT / 2,
-        WIDTH / 2, HEIGHT / 2,
-        -WIDTH / 2, HEIGHT / 2
-    };
+    private static final float[] polygonMesh =
+            new float[] {
+                -WIDTH / 2, -HEIGHT / 2,
+                WIDTH / 2, -HEIGHT / 2,
+                WIDTH / 2, HEIGHT / 2,
+                -WIDTH / 2, HEIGHT / 2
+            };
 
     private Polygon getPolygonBody(RoadEdge edge) {
-        Vector2 direction = edge.source().getPosition().sub(edge.target().getPosition()).setLength(Road.RADIUS + HEIGHT / 2);
+        Vector2 direction =
+                edge.source()
+                        .getPosition()
+                        .sub(edge.target().getPosition())
+                        .setLength(Road.RADIUS + HEIGHT / 2);
         Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
         Vector2 location = edge.target().getPosition().add(direction).add(offset);
 
@@ -125,15 +130,19 @@ public class TrafficLight {
             lightColor = Color.GREEN;
         }
 
-        CircleDrawCall drawCall = new CircleDrawCall(location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, lightColor);
+        CircleDrawCall drawCall =
+                new CircleDrawCall(
+                        location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, lightColor);
         Renderer.addPrimitiveDrawCall(drawCall);
     }
 
     private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
-        if (this.type == TrafficLightType.NO_COUNT_DOWN || this.type == TrafficLightType.FULLY_MANUAL) {
+        if (this.type == TrafficLightType.NO_COUNT_DOWN
+                || this.type == TrafficLightType.FULLY_MANUAL) {
             return;
         }
-        if (this.type == TrafficLightType.LAST_TEN_SECONDS && Math.ceil(getRemainingTime(sourceEdge)) > 10) {
+        if (this.type == TrafficLightType.LAST_TEN_SECONDS
+                && Math.ceil(getRemainingTime(sourceEdge)) > 10) {
             return;
         }
 
@@ -145,7 +154,7 @@ public class TrafficLight {
         container.setTransform(true);
         container.setPosition(location.x, location.y);
         container.setRotation(angle);
-        
+
         ContainerDrawCall drawCall = new ContainerDrawCall(container);
         Renderer.addGraphicalDrawCall(drawCall);
     }
@@ -157,16 +166,16 @@ public class TrafficLight {
 
         int nodeIndex = getIngressNodeIndex(ingressNode);
         if (nodeIndex > permittedNodeIndex) {
-            return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex - permittedNodeIndex - 1);
+            return this.timer.getTimeRemaining()
+                    + this.timer.getDuration() * (nodeIndex - permittedNodeIndex - 1);
         }
 
         int untilLoopAround = this.ingressNodes.size() - permittedNodeIndex - 1;
-        return this.timer.getTimeRemaining() + this.timer.getDuration() * (nodeIndex + untilLoopAround);
+        return this.timer.getTimeRemaining()
+                + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
 
-    private void graphicalDraw() {
-
-    }
+    private void graphicalDraw() {}
 
     public void tick(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
@@ -185,9 +194,9 @@ public class TrafficLight {
         if (!timer.hasFinished()) {
             return;
         }
-        
+
         permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
-   }
+    }
 
     private int getJustClickedLight() {
         for (int i = 0; i < ingressNodes.size(); i++) {
@@ -204,7 +213,7 @@ public class TrafficLight {
         for (int i = 0; i < this.memberNodes.size(); i++) {
             Road currentNode = this.memberNodes.get(i);
             var predecessors = roadGraph.predecessors(currentNode).iterator();
-        
+
             while (predecessors.hasNext()) {
                 var predecessor = predecessors.next();
 

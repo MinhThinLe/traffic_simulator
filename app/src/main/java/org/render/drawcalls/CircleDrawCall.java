@@ -11,7 +11,7 @@ public class CircleDrawCall extends PrimitiveDrawCall {
         super(x, y, shapeType, color);
         this.radius = radius;
     }
-    
+
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
         prepare(shapeRenderer);

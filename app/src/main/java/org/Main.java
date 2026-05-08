@@ -62,7 +62,6 @@ class Game implements ApplicationListener {
         this.camera = new Camera();
 
         Gdx.input.setInputProcessor(Globals.inputMultiplexer);
-
     }
 
     private void draw() {

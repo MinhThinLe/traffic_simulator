@@ -12,8 +12,8 @@ import org.render.drawcalls.LineDrawCall;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
@@ -93,34 +93,45 @@ public class RoadNetwork {
             var road = roadPairs.iterator();
             while (road.hasNext()) {
                 var currentPair = road.next();
-                drawRoad(currentPair.get(0).getPosition(), currentNode.getPosition(), currentPair.get(1).getPosition());
+                drawRoad(
+                        currentPair.get(0).getPosition(),
+                        currentNode.getPosition(),
+                        currentPair.get(1).getPosition());
             }
         }
     }
-    
+
     private static final float ROAD_WIDTH = 15;
-    private static final float EXTRA_WIDTH = 2.5f; // Adding this to ROAD_WIDTH makes the curves match each other for some reason
+    private static final float EXTRA_WIDTH =
+            2.5f; // Adding this to ROAD_WIDTH makes the curves match each other for some reason
     private static final int POINTS = 50;
+
     private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
         start.lerp(middle, 0.5f);
         end.lerp(middle, 0.5f);
 
-        Vector2 firstSegmentEnd = new Vector2(middle).add(new Vector2(start).sub(middle).setLength(Road.RADIUS));
-        Vector2 lastSegmentStart = new Vector2(middle).add(new Vector2(end).sub(middle).setLength(Road.RADIUS));
+        Vector2 firstSegmentEnd =
+                new Vector2(middle).add(new Vector2(start).sub(middle).setLength(Road.RADIUS));
+        Vector2 lastSegmentStart =
+                new Vector2(middle).add(new Vector2(end).sub(middle).setLength(Road.RADIUS));
 
-        LineDrawCall startLineDrawCall = new LineDrawCall(start, firstSegmentEnd, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
-        LineDrawCall endLineDrawCall = new LineDrawCall(lastSegmentStart, end, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
+        LineDrawCall startLineDrawCall =
+                new LineDrawCall(start, firstSegmentEnd, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
+        LineDrawCall endLineDrawCall =
+                new LineDrawCall(lastSegmentStart, end, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
 
         Renderer.addPrimitiveDrawCall(startLineDrawCall);
         Renderer.addPrimitiveDrawCall(endLineDrawCall);
-        
+
         QuadraticBerzier berzier = new QuadraticBerzier(List.of(start, middle, end));
-        
+
         for (int i = 0; i < POINTS; i++) {
             Vector2 current = berzier.interpolate((float) i / POINTS);
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
-            LineDrawCall curvedLineDrawCall = new LineDrawCall(current, next, ROAD_WIDTH + EXTRA_WIDTH, Color.GRAY, ShapeType.Filled);
+            LineDrawCall curvedLineDrawCall =
+                    new LineDrawCall(
+                            current, next, ROAD_WIDTH + EXTRA_WIDTH, Color.GRAY, ShapeType.Filled);
             Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
         }
     }

@@ -1,8 +1,5 @@
 package org.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,6 +12,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.Globals;
 import org.render.drawcalls.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Renderer {
     private static final String FONT_PATH = "org/render/ui/skin/font-export.fnt";
 
@@ -23,7 +23,7 @@ public class Renderer {
 
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
-    
+
     public static BitmapFont textRenderer = new BitmapFont(Gdx.files.internal(FONT_PATH));
 
     static {
@@ -33,12 +33,12 @@ public class Renderer {
     public static void render(Matrix4 matrix) {
         primitiveRenderer.setProjectionMatrix(new Matrix4(matrix));
         graphicalRenderer.setProjectionMatrix(new Matrix4(matrix));
-        
+
         ScreenUtils.clear(Color.WHITE);
         renderShapes();
         renderTextures();
         Globals.stage.draw();
-    }  
+    }
 
     private static void renderShapes() {
         primitiveDrawCalls.sort(new DrawCallComparator());

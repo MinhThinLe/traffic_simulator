@@ -107,7 +107,7 @@ public class Camera extends InputAdapter {
     public boolean scrolled(float amountX, float amountY) {
         this.camera.zoom += ZOOM_SPEED * this.camera.zoom * amountY * 0.1;
         return true;
-    } 
+    }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
