@@ -1,11 +1,12 @@
 package org.road;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 import org.Globals;
 import org.render.*;
+import org.render.drawcalls.CircleDrawCall;
 import org.vehicles.*;
 
 import java.util.PriorityQueue;
@@ -65,10 +66,8 @@ public class Road {
     }
 
     public void primitiveDraw() {
-        ShapeRenderer renderer = Renderer.primitiveRenderer;
-
-        renderer.setColor(Color.BLACK);
-        renderer.circle(position.x, position.y, RADIUS);
+        CircleDrawCall body = new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK);
+        Renderer.addPrimitiveDrawCall(body);
     }
 
     public Vector2 getPosition() {

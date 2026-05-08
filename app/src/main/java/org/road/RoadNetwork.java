@@ -1,12 +1,17 @@
 package org.road;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Sets;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
 import org.render.*;
+import org.render.drawcalls.LineDrawCall;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
@@ -14,6 +19,7 @@ import java.util.Set;
 import java.util.List;
 
 public class RoadNetwork {
+    private static TextureRegion ROAD_DIRECTION_TEXTURE = new TextureRegion(new Texture(Gdx.files.internal("org/road/road-arrow.png")));
     private static final float DEFAULT_TIMER = 10;
 
     private MutableGraph<Road> roadGraph;
@@ -74,13 +80,12 @@ public class RoadNetwork {
             from.add(direction);
             to.sub(direction);
 
-            Renderer.primitiveRenderer.line(from, to);
+            LineDrawCall line = new LineDrawCall(from, to, Color.BLACK, ShapeType.Line);
+            Renderer.addPrimitiveDrawCall(line);
         }
     }
 
     private void drawEdgesGraphical() {
-        Renderer.filledPrimitiveRenderer.setColor(Color.GRAY);
-
         var nodes = roadGraph.nodes().iterator();
         while (nodes.hasNext()) {
             var currentNode = nodes.next();
@@ -107,8 +112,11 @@ public class RoadNetwork {
         Vector2 firstSegmentEnd = new Vector2(middle).add(new Vector2(start).sub(middle).setLength(Road.RADIUS));
         Vector2 lastSegmentStart = new Vector2(middle).add(new Vector2(end).sub(middle).setLength(Road.RADIUS));
 
-        Renderer.filledPrimitiveRenderer.rectLine(start, firstSegmentEnd, ROAD_WIDTH);
-        Renderer.filledPrimitiveRenderer.rectLine(lastSegmentStart, end, ROAD_WIDTH);
+        LineDrawCall startLineDrawCall = new LineDrawCall(start, firstSegmentEnd, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
+        LineDrawCall endLineDrawCall = new LineDrawCall(lastSegmentStart, end, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
+
+        Renderer.addPrimitiveDrawCall(startLineDrawCall);
+        Renderer.addPrimitiveDrawCall(endLineDrawCall);
         
         QuadraticBerzier berzier = new QuadraticBerzier(List.of(start, middle, end));
         
@@ -116,8 +124,10 @@ public class RoadNetwork {
             Vector2 current = berzier.interpolate((float) i / POINTS);
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
-            Renderer.filledPrimitiveRenderer.rectLine(current, next, ROAD_WIDTH + EXTRA_WIDTH);
+            LineDrawCall curvedLineDrawCall = new LineDrawCall(current, next, ROAD_WIDTH + EXTRA_WIDTH, Color.GRAY, ShapeType.Filled);
+            Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
         }
+
     }
 
     public void circulateTraffic(float deltaTime) {
