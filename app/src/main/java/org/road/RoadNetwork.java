@@ -98,6 +98,7 @@ public class RoadNetwork {
     }
     
     private static final float ROAD_WIDTH = 15;
+    private static final float EXTRA_WIDTH = 2.5f; // Adding this to ROAD_WIDTH makes the curves match each other for some reason
     private static final int POINTS = 50;
     private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
         start.lerp(middle, 0.5f);
@@ -115,7 +116,7 @@ public class RoadNetwork {
             Vector2 current = berzier.interpolate((float) i / POINTS);
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
-            Renderer.filledPrimitiveRenderer.rectLine(current, next, ROAD_WIDTH);
+            Renderer.filledPrimitiveRenderer.rectLine(current, next, ROAD_WIDTH + EXTRA_WIDTH);
         }
     }
 
