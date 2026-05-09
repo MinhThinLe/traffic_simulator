@@ -125,7 +125,7 @@ public class RoadNetwork {
             }
         }
     }
-
+    
     private void drawRoadSign() {
         var edges = roadGraph.edges().iterator();
 
@@ -141,12 +141,12 @@ public class RoadNetwork {
             TextureDrawCall drawCall =
                     new TextureDrawCall(
                             ROAD_SIGN_TEXTURE,
-                            position.x - 8,
-                            position.y - 16,
-                            8,
-                            16,
-                            16,
-                            32,
+                            position.x - ROAD_SIGN_TEXTURE.getRegionWidth() / 2,
+                            position.y - ROAD_SIGN_TEXTURE.getRegionHeight() / 2,
+                            ROAD_SIGN_TEXTURE.getRegionWidth() / 2,
+                            ROAD_SIGN_TEXTURE.getRegionHeight() / 2,
+                            ROAD_SIGN_TEXTURE.getRegionWidth(),
+                            ROAD_SIGN_TEXTURE.getRegionHeight(),
                             1,
                             1,
                             direction);
