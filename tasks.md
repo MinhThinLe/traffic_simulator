@@ -28,7 +28,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [ ] Thêm âm thanh
 
-- [-] Vẽ đường xe chạy đẹp hơn
+- [x] Vẽ đường xe chạy đẹp hơn
 
 - [ ] Thêm menu chính
     - [ ] Giao diện chọn bản đồ
