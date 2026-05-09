@@ -22,7 +22,8 @@ import java.util.Set;
 
 public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
-    private static final TextureRegion ROAD_SIGN_TEXTURE = new TextureRegion(new Texture(Gdx.files.internal("org/road/road-arrow.png")));
+    private static final TextureRegion ROAD_SIGN_TEXTURE =
+            new TextureRegion(new Texture(Gdx.files.internal("org/road/road-arrow.png")));
 
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
@@ -100,8 +101,14 @@ public class RoadNetwork {
             Set<Vector2> ingressNodes = new HashSet<>();
             Set<Vector2> egressNodes = new HashSet<>();
 
-            roadGraph.predecessors(currentNode).iterator().forEachRemaining(node -> ingressNodes.add(node.getPosition()));
-            roadGraph.successors(currentNode).iterator().forEachRemaining(node -> egressNodes.add(node.getPosition()));
+            roadGraph
+                    .predecessors(currentNode)
+                    .iterator()
+                    .forEachRemaining(node -> ingressNodes.add(node.getPosition()));
+            roadGraph
+                    .successors(currentNode)
+                    .iterator()
+                    .forEachRemaining(node -> egressNodes.add(node.getPosition()));
 
             if (ingressNodes.isEmpty()) {
                 ingressNodes.add(currentNode.getPosition());
@@ -114,10 +121,7 @@ public class RoadNetwork {
             var road = roadPairs.iterator();
             while (road.hasNext()) {
                 var currentPair = road.next();
-                drawRoad(
-                        currentPair.get(0),
-                        currentNode.getPosition(),
-                        currentPair.get(1));
+                drawRoad(currentPair.get(0), currentNode.getPosition(), currentPair.get(1));
             }
         }
     }
@@ -134,7 +138,18 @@ public class RoadNetwork {
             Vector2 position = from.getPosition().lerp(to.getPosition(), 0.5f);
             float direction = to.getPosition().sub(from.getPosition()).angleDeg() - 90;
 
-            TextureDrawCall drawCall = new TextureDrawCall(ROAD_SIGN_TEXTURE, position.x - 8, position.y - 16, 8, 16, 16, 32, 1, 1, direction);
+            TextureDrawCall drawCall =
+                    new TextureDrawCall(
+                            ROAD_SIGN_TEXTURE,
+                            position.x - 8,
+                            position.y - 16,
+                            8,
+                            16,
+                            16,
+                            32,
+                            1,
+                            1,
+                            direction);
             Renderer.addGraphicalDrawCall(drawCall);
         }
     }
@@ -166,8 +181,7 @@ public class RoadNetwork {
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
             LineDrawCall curvedLineDrawCall =
-                    new LineDrawCall(
-                            current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
+                    new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
             Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
         }
     }
