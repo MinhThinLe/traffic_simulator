@@ -140,8 +140,6 @@ public class RoadNetwork {
     }
 
     private static final float ROAD_WIDTH = 15;
-    private static final float EXTRA_WIDTH =
-            2.5f; // Adding this to ROAD_WIDTH makes the curves match each other for some reason
     private static final int POINTS = 50;
 
     private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
@@ -169,7 +167,7 @@ public class RoadNetwork {
 
             LineDrawCall curvedLineDrawCall =
                     new LineDrawCall(
-                            current, next, ROAD_WIDTH + EXTRA_WIDTH, Color.GRAY, ShapeType.Filled);
+                            current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
             Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
         }
     }
