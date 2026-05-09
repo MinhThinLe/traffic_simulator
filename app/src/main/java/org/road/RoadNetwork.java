@@ -24,6 +24,8 @@ public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
     private static final TextureRegion ROAD_SIGN_TEXTURE =
             new TextureRegion(new Texture(Gdx.files.internal("org/road/road-arrow.png")));
+    private static final float TEXTURE_WIDTH = ROAD_SIGN_TEXTURE.getRegionWidth();
+    private static final float TEXTURE_HEIGHT = ROAD_SIGN_TEXTURE.getRegionHeight();
 
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
@@ -125,7 +127,7 @@ public class RoadNetwork {
             }
         }
     }
-
+    
     private void drawRoadSign() {
         var edges = roadGraph.edges().iterator();
 
@@ -141,12 +143,12 @@ public class RoadNetwork {
             TextureDrawCall drawCall =
                     new TextureDrawCall(
                             ROAD_SIGN_TEXTURE,
-                            position.x - 8,
-                            position.y - 16,
-                            8,
-                            16,
-                            16,
-                            32,
+                            position.x - TEXTURE_WIDTH / 2,
+                            position.y - TEXTURE_HEIGHT / 2,
+                            TEXTURE_WIDTH / 2,
+                            TEXTURE_HEIGHT / 2,
+                            TEXTURE_WIDTH,
+                            TEXTURE_HEIGHT,
                             1,
                             1,
                             direction);
