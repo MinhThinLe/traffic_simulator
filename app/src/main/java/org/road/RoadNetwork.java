@@ -12,6 +12,7 @@ import org.render.drawcalls.LineDrawCall;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -82,21 +83,35 @@ public class RoadNetwork {
     }
 
     private void drawEdgesGraphical() {
+        drawRoadBody();
+    }
+
+    private void drawRoadBody() {
         var nodes = roadGraph.nodes().iterator();
         while (nodes.hasNext()) {
             var currentNode = nodes.next();
 
-            Set<Road> ingressNodes = roadGraph.predecessors(currentNode);
-            Set<Road> egressNodes = roadGraph.successors(currentNode);
+            Set<Vector2> ingressNodes = new HashSet<>();
+            Set<Vector2> egressNodes = new HashSet<>();
 
-            Set<List<Road>> roadPairs = Sets.cartesianProduct(ingressNodes, egressNodes);
+            roadGraph.predecessors(currentNode).iterator().forEachRemaining(node -> ingressNodes.add(node.getPosition()));
+            roadGraph.successors(currentNode).iterator().forEachRemaining(node -> egressNodes.add(node.getPosition()));
+
+            if (ingressNodes.isEmpty()) {
+                ingressNodes.add(currentNode.getPosition());
+            }
+            if (egressNodes.isEmpty()) {
+                egressNodes.add(currentNode.getPosition());
+            }
+
+            Set<List<Vector2>> roadPairs = Sets.cartesianProduct(ingressNodes, egressNodes);
             var road = roadPairs.iterator();
             while (road.hasNext()) {
                 var currentPair = road.next();
                 drawRoad(
-                        currentPair.get(0).getPosition(),
+                        currentPair.get(0),
                         currentNode.getPosition(),
-                        currentPair.get(1).getPosition());
+                        currentPair.get(1));
             }
         }
     }
