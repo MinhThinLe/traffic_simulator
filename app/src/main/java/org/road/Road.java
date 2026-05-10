@@ -219,7 +219,8 @@ public class Road {
 
         if (vehiclePacket.packetSender != null) {
             if (this.trafficLight != null
-                    && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender) && !vehiclePacket.vehicle.shouldRunRedLight()) {
+                    && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)
+                    && !vehiclePacket.vehicle.shouldRunRedLight()) {
                 return;
             }
             vehiclePacket.packetSender.removeCurrentVehicle();
