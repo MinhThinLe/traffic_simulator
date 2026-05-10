@@ -12,10 +12,11 @@ import java.util.List;
 
 public class Ambulance extends Vehicle {
     private static final float DEFAULT_AMBULANCE_SPEED = 100;
-    private static final float WIDTH = 40;
-    private static final float HEIGHT = 20;
+    private static final float WIDTH = 30;
+    private static final float HEIGHT = 15;
 
     private static final int SPRITE_SIZE = 140;
+    private static final int RENDERED_SIZE = 50;
 
     private Texture AMBULANCE_TEXTURE = new Texture(Gdx.files.internal("org/vehicles/textures/Ambulance.png"));
     private Sprite sprite = new Sprite(AMBULANCE_TEXTURE, 0, 0, 140, 140);
@@ -58,6 +59,6 @@ public class Ambulance extends Vehicle {
 
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
-        new TextureDrawCall(sprite, position.x - SPRITE_SIZE / 4, position.y - SPRITE_SIZE / 4, SPRITE_SIZE / 4, SPRITE_SIZE / 4, SPRITE_SIZE / 2, SPRITE_SIZE / 2, 1, 1, 0).submit();;
+        new TextureDrawCall(sprite, position.x - RENDERED_SIZE / 2, position.y - RENDERED_SIZE / 2, RENDERED_SIZE / 2, RENDERED_SIZE / 2, RENDERED_SIZE, RENDERED_SIZE, 1, 1, 0).submit();;
     }
 }
