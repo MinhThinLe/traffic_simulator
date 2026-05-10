@@ -1,20 +1,19 @@
 package org.vehicles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import org.Globals;
 import org.render.DrawMode;
-import org.road.Road;
-
-import com.badlogic.gdx.math.Polygon;
-import org.render.drawcalls.PolygonDrawCall;
 import org.render.Renderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import org.road.Road;
 
 import java.util.List;
 
@@ -103,14 +102,14 @@ public abstract class Vehicle {
     }
 
     private Polygon getPolygonMesh() {
-        return new Polygon(new float[] {
-            -getWidth() / 2, -getHeight() / 2,
-            getWidth() / 2, -getHeight() / 2,
-            getWidth() / 2, getHeight() / 2,
-            -getWidth() / 2, getHeight() / 2
-        });
+        return new Polygon(
+                new float[] {
+                    -getWidth() / 2, -getHeight() / 2,
+                    getWidth() / 2, -getHeight() / 2,
+                    getWidth() / 2, getHeight() / 2,
+                    -getWidth() / 2, getHeight() / 2
+                });
     }
-
 
     public void primitiveDraw() {
         drawBody();
@@ -155,8 +154,11 @@ public abstract class Vehicle {
     }
 
     public abstract int getVehiclePriority();
+
     public abstract float getWidth();
+
     public abstract float getHeight();
+
     public abstract String getVehicleName();
 
     protected abstract void graphicalDraw();

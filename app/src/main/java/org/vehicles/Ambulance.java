@@ -1,12 +1,12 @@
 package org.vehicles;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 
 import java.util.List;
 
@@ -18,7 +18,8 @@ public class Ambulance extends Vehicle {
     private static final int SPRITE_SIZE = 140;
     private static final int RENDERED_SIZE = 50;
 
-    private Texture AMBULANCE_TEXTURE = new Texture(Gdx.files.internal("org/vehicles/textures/Ambulance.png"));
+    private Texture AMBULANCE_TEXTURE =
+            new Texture(Gdx.files.internal("org/vehicles/textures/Ambulance.png"));
     private Sprite sprite = new Sprite(AMBULANCE_TEXTURE, 0, 0, 140, 140);
 
     public Ambulance(List<Road> path, Vector2 position) {
@@ -48,17 +49,30 @@ public class Ambulance extends Vehicle {
 
     private static final int SPRITE_COUNT = 48;
     private static final int GRID_WIDTH = 7;
+
     @Override
     protected void graphicalDraw() {
         float direction = getDirection().angleDeg();
         float spriteStep = 360f / (SPRITE_COUNT - 1);
-        int spriteNumber =  SPRITE_COUNT - (int) (direction / spriteStep) - 1;
+        int spriteNumber = SPRITE_COUNT - (int) (direction / spriteStep) - 1;
 
         int regionX = (spriteNumber % GRID_WIDTH) * SPRITE_SIZE;
         int regionY = (spriteNumber / GRID_WIDTH) * SPRITE_SIZE;
 
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
-        new TextureDrawCall(sprite, position.x - RENDERED_SIZE / 2, position.y - RENDERED_SIZE / 2, RENDERED_SIZE / 2, RENDERED_SIZE / 2, RENDERED_SIZE, RENDERED_SIZE, 1, 1, 0).submit();;
+        new TextureDrawCall(
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        RENDERED_SIZE / 2,
+                        RENDERED_SIZE / 2,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE,
+                        1,
+                        1,
+                        0)
+                .submit();
+        ;
     }
 }

@@ -14,8 +14,8 @@ import com.google.common.graph.MutableGraph;
 import org.Globals;
 import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
-import org.render.drawcalls.WidgetDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
+import org.render.drawcalls.WidgetDrawCall;
 
 import java.util.ArrayList;
 

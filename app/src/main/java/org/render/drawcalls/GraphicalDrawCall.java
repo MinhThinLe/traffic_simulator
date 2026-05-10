@@ -1,8 +1,8 @@
 package org.render.drawcalls;
 
-import org.render.Renderer;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import org.render.Renderer;
 
 public abstract class GraphicalDrawCall {
     float x;
