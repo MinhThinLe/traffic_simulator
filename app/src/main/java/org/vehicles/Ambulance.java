@@ -12,6 +12,7 @@ public class Ambulance extends Vehicle {
 
     public Ambulance(List<Road> path, Vector2 position) {
         super(path, position, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED);
+        this.impatientness = 1;
     }
 
     @Override

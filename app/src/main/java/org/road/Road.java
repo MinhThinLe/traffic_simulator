@@ -124,7 +124,7 @@ public class Road {
         sentVehicle = true;
     }
 
-    private static final float MINIMUM_OVERTAKE_DISTANCE = 75;
+    private static final float MINIMUM_OVERTAKE_DISTANCE = 30;
     private static final float STRAFE_LENGTH = 40;
     private static final float STRAFE_ANGLE = -45;
 
@@ -139,6 +139,9 @@ public class Road {
             return false;
         }
         if (this.pullOverVehicle != null) {
+            return false;
+        }
+        if (this.getPosition().dst(this.vehicle.getPosition()) < MINIMUM_OVERTAKE_DISTANCE) {
             return false;
         }
 
