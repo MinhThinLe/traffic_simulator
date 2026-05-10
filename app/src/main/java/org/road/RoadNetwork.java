@@ -125,7 +125,7 @@ public class RoadNetwork {
             }
         }
     }
-    
+
     private void drawRoadSign() {
         var edges = roadGraph.edges().iterator();
 

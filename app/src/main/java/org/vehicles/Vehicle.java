@@ -85,6 +85,13 @@ public abstract class Vehicle {
         return Globals.rng.nextFloat() > stinginess;
     }
 
+    public boolean shouldRunRedLight() {
+        return switch (this.drivingMode) {
+            case DrivingMode.AGGRESSIVE -> shouldSendOvertakeRequest();
+            default -> false;
+        };
+    }
+
     public abstract int getVehiclePriority();
 
     public abstract float getSize();

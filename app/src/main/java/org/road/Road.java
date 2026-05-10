@@ -150,14 +150,10 @@ public class Road {
         }
 
         if (pullOverVehicle == null) {
-            this.pullOverPosition =
-                    this.vehicle
-                            .getPosition()
-                            .add(
-                                    this.vehicle
-                                            .getDirection()
-                                            .rotateDeg(STRAFE_ANGLE)
-                                            .setLength(STRAFE_LENGTH));
+            Vector2 pullOverOffset =
+                    this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
+            Vector2 pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
+            this.pullOverPosition = pullOverPosition;
         }
         this.pullOverVehicle = this.vehicle;
         this.pullOverVehicle.increaseStinginess();
@@ -219,7 +215,8 @@ public class Road {
 
         if (vehiclePacket.packetSender != null) {
             if (this.trafficLight != null
-                    && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)) {
+                    && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)
+                    && !vehiclePacket.vehicle.shouldRunRedLight()) {
                 return;
             }
             vehiclePacket.packetSender.removeCurrentVehicle();
