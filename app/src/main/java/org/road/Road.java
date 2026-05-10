@@ -95,7 +95,7 @@ public class Road {
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
-        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getSize()) {
+        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getWidth() / 2) {
             routeVehicle(deltaTime, vehicleDestination);
             return;
         }

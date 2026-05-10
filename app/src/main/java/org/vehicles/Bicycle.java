@@ -1,38 +1,17 @@
 package org.vehicles;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
-import org.render.Renderer;
-import org.render.drawcalls.ContainerDrawCall;
-import org.render.drawcalls.PolygonDrawCall;
 import org.road.Road;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Bicycle extends Vehicle {
     private static final float DEFAULT_BICYCLE_SPEED = 50;
     private static final float WIDTH = 20;
     private static final float HEIGHT = 10;
-    private static final String VEHICLE_NAME = "Bicycle";
-    private static final float[] polygonMesh =
-            new float[] {
-                -WIDTH / 2,
-                -HEIGHT / 2,
-                WIDTH / 2,
-                -HEIGHT / 2,
-                WIDTH / 2,
-                HEIGHT / 2,
-                -WIDTH / 2,
-                HEIGHT / 2
-            };
 
-    public Bicycle(ArrayList<Road> path, Vector2 position) {
+    public Bicycle(List<Road> path, Vector2 position) {
         super(path, position, DrivingMode.NORMAL, DEFAULT_BICYCLE_SPEED);
     }
 
@@ -42,56 +21,22 @@ public class Bicycle extends Vehicle {
     }
 
     @Override
-    public float getSize() {
-        return WIDTH / 2;
+    public float getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public float getHeight() {
+        return HEIGHT;
+    }
+
+    @Override
+    public String getVehicleName() {
+        return "Bicycle";
     }
 
     @Override
     protected void graphicalDraw() {
         // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void primitiveDraw() {
-        drawBody();
-        drawText();
-    }
-
-    private void drawBody() {
-        float angle = getDirection().angleDeg();
-        Polygon polygon = new Polygon(polygonMesh);
-
-        polygon.rotate(angle);
-        polygon.translate(position.x, position.y);
-
-        PolygonDrawCall drawCall = new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Line);
-        Renderer.addPrimitiveDrawCall(drawCall);
-    }
-
-    private void drawText() {
-        LabelStyle style = new LabelStyle(Renderer.textRenderer, Color.RED);
-        Label text = new Label(VEHICLE_NAME, style);
-
-        Container<Label> container = new Container<>(text);
-
-        container.setTransform(true);
-        container.setX(position.x);
-        container.setY(position.y);
-
-        float scaleX = WIDTH / text.getWidth();
-        float scaleY = HEIGHT / text.getHeight();
-
-        container.setScaleX(scaleX);
-        container.setScaleY(scaleY);
-
-        float angle = getDirection().angleDeg();
-        if (angle > 90 && angle < 270) {
-            angle -= 180;
-        }
-        container.setRotation(angle);
-
-        ContainerDrawCall drawCall = new ContainerDrawCall(container);
-        Renderer.addGraphicalDrawCall(drawCall);
     }
 }
