@@ -154,7 +154,7 @@ public class RoadNetwork {
         }
     }
 
-    private static final float ROAD_WIDTH = 15;
+    private static final float ROAD_WIDTH = 25;
     private static final int POINTS = 50;
 
     private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
