@@ -10,8 +10,8 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [x] Sinh phương tiện vào bản đồ
 
-- [ ] Thêm phương tiện
-    - [ ] Xe cứu thương 
+- [-] Thêm phương tiện
+    - [x] Xe cứu thương 
     - [ ] Ô tô
     - [ ] Xe máy
     - [ ] Xe buýt

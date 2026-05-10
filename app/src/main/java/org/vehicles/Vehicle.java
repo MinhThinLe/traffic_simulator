@@ -1,15 +1,24 @@
 package org.vehicles;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
 import org.Globals;
 import org.render.DrawMode;
+import org.render.Renderer;
+import org.render.drawcalls.PolygonDrawCall;
+import org.render.drawcalls.WidgetDrawCall;
 import org.road.Road;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Vehicle {
-    protected ArrayList<Road> path;
+    protected List<Road> path;
     protected Vector2 position;
     protected DrivingMode drivingMode;
     protected float speed;
@@ -21,7 +30,7 @@ public abstract class Vehicle {
     // refuse an overtake request
     protected float stinginess;
 
-    public Vehicle(ArrayList<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
+    public Vehicle(List<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
         this.path = path;
         this.position = position;
         this.drivingMode = drivingMode;
@@ -92,11 +101,65 @@ public abstract class Vehicle {
         };
     }
 
+    private Polygon getPolygonMesh() {
+        return new Polygon(
+                new float[] {
+                    -getWidth() / 2, -getHeight() / 2,
+                    getWidth() / 2, -getHeight() / 2,
+                    getWidth() / 2, getHeight() / 2,
+                    -getWidth() / 2, getHeight() / 2
+                });
+    }
+
+    public void primitiveDraw() {
+        drawBody();
+        drawText();
+    }
+
+    void drawBody() {
+        float angle = getDirection().angleDeg();
+        Polygon polygon = getPolygonMesh();
+
+        polygon.rotate(angle);
+        polygon.translate(position.x, position.y);
+
+        PolygonDrawCall drawCall = new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Line);
+        Renderer.addPrimitiveDrawCall(drawCall);
+    }
+
+    void drawText() {
+        LabelStyle style = new LabelStyle(Renderer.textRenderer, Color.RED);
+        Label text = new Label(getVehicleName(), style);
+
+        Container<Label> container = new Container<>(text);
+
+        container.setTransform(true);
+        container.setX(position.x);
+        container.setY(position.y);
+
+        float scaleX = getWidth() / text.getWidth();
+        float scaleY = getHeight() / text.getHeight();
+
+        container.setScaleX(scaleX);
+        container.setScaleY(scaleY);
+
+        float angle = getDirection().angleDeg();
+        if (angle > 90 && angle < 270) {
+            angle -= 180;
+        }
+        container.setRotation(angle);
+
+        WidgetDrawCall drawCall = new WidgetDrawCall(container);
+        Renderer.addGraphicalDrawCall(drawCall);
+    }
+
     public abstract int getVehiclePriority();
 
-    public abstract float getSize();
+    public abstract float getWidth();
 
-    protected abstract void primitiveDraw();
+    public abstract float getHeight();
+
+    public abstract String getVehicleName();
 
     protected abstract void graphicalDraw();
 }

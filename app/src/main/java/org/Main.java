@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.render.*;
 import org.road.*;
+import org.vehicles.AmbulanceFactory;
 import org.vehicles.BicycleFactory;
 
 import java.io.InputStream;
@@ -57,7 +58,9 @@ class Game implements ApplicationListener {
     public void create() {
         InputStream resource = Road.class.getResourceAsStream("3-way-intersection.graphml");
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
+
         roadNetwork.addVehicleFactory(new BicycleFactory());
+        roadNetwork.addVehicleFactory(new AmbulanceFactory());
 
         this.camera = new Camera();
 

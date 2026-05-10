@@ -14,8 +14,8 @@ import com.google.common.graph.MutableGraph;
 import org.Globals;
 import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
-import org.render.drawcalls.ContainerDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
+import org.render.drawcalls.WidgetDrawCall;
 
 import java.util.ArrayList;
 
@@ -155,7 +155,7 @@ public class TrafficLight {
         container.setPosition(location.x, location.y);
         container.setRotation(angle);
 
-        ContainerDrawCall drawCall = new ContainerDrawCall(container);
+        WidgetDrawCall drawCall = new WidgetDrawCall(container);
         Renderer.addGraphicalDrawCall(drawCall);
     }
 

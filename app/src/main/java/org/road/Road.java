@@ -95,7 +95,7 @@ public class Road {
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         // This means that the vehicle hasn't reached its destination
-        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getSize()) {
+        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getWidth() / 2) {
             routeVehicle(deltaTime, vehicleDestination);
             return;
         }
@@ -124,7 +124,7 @@ public class Road {
         sentVehicle = true;
     }
 
-    private static final float MINIMUM_OVERTAKE_DISTANCE = 75;
+    private static final float MINIMUM_OVERTAKE_DISTANCE = 30;
     private static final float STRAFE_LENGTH = 40;
     private static final float STRAFE_ANGLE = -45;
 
@@ -139,6 +139,9 @@ public class Road {
             return false;
         }
         if (this.pullOverVehicle != null) {
+            return false;
+        }
+        if (this.getPosition().dst(this.vehicle.getPosition()) < MINIMUM_OVERTAKE_DISTANCE) {
             return false;
         }
 
