@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import org.render.drawcalls.ContainerDrawCall;
+import org.render.drawcalls.WidgetDrawCall;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 
 import java.util.List;
@@ -150,7 +150,7 @@ public abstract class Vehicle {
         }
         container.setRotation(angle);
 
-        ContainerDrawCall drawCall = new ContainerDrawCall(container);
+        WidgetDrawCall drawCall = new WidgetDrawCall(container);
         Renderer.addGraphicalDrawCall(drawCall);
     }
 
