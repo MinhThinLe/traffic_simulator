@@ -24,7 +24,7 @@ class Game implements ApplicationListener {
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("Hello World");
+        configuration.setTitle("Traffic Simulator");
         configuration.useVsync(true);
         configuration.setForegroundFPS(
                 Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
