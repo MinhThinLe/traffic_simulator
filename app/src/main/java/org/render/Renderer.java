@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.Globals;
 import org.render.drawcalls.*;
+import org.render.ui.Hud;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class Renderer {
 
     static {
         primitiveRenderer.setAutoShapeType(true);
+        new Hud().initializeHUDGUI(Globals.stage);
     }
 
     public static void render(Matrix4 matrix) {
