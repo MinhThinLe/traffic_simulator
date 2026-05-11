@@ -1,36 +1,34 @@
 package org.render.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import org.Globals;
 import org.render.DrawMode;
 import org.render.Renderer;
 
-public class Hud {
-    private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
-
-    public void initializeHUDGUI(Stage stage) {
+public class Hud implements Gui {
+    @Override
+    public Table createGUI() {
+        System.out.println("I ran");
         Table table = new Table();
         table.setFillParent(true);
-        stage.addActor(table);
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH));
-        Skin uiSkin = new Skin(atlas);
+        TextButton button =
+                new TextButton(
+                        DrawMode.PRIMITIVE + "",
+                        Styles.makeButtonStyle(Renderer.uiSkin, Renderer.font));
+        Slider slider =
+                new Slider(1, 60, 1, false, Styles.makeSliderStyle(Renderer.uiSkin, Renderer.font));
 
-        RenderModeButton button = new RenderModeButton(Renderer.textRenderer, uiSkin);
-        VehicleDensitySlider slider = new VehicleDensitySlider(uiSkin);
-
-        LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(Renderer.font, Color.BLACK);
         Label label = new Label("Seconds per vehicle: 10", labelStyle);
 
         table.top().right().add(button);
@@ -61,6 +59,8 @@ public class Hud {
                 };
 
         table.addListener(eventListener);
+
+        return table;
     }
 
     private static void flipDrawMode() {

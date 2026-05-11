@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.render.*;
+import org.render.ui.GameState;
 import org.road.*;
 import org.vehicles.AmbulanceFactory;
 import org.vehicles.BicycleFactory;
@@ -68,8 +69,10 @@ class Game implements ApplicationListener {
     }
 
     private void draw() {
-        roadNetwork.drawNodes();
-        roadNetwork.drawEdges();
+        if (Globals.gameState == GameState.NORMAL) {
+            roadNetwork.drawNodes();
+            roadNetwork.drawEdges();
+        }
 
         Renderer.render(camera.getCameraProjection());
     }

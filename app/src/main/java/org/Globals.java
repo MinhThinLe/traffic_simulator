@@ -6,11 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import org.render.*;
+import org.render.ui.GameState;
 
 import java.util.Random;
 
 public class Globals {
-
+    public static GameState gameState = GameState.MAIN_MENU;
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
     public static float vehicleSpawnDelay = 10;
     public static Stage stage = new Stage(new FitViewport(1280, 720));
@@ -22,9 +23,4 @@ public class Globals {
     static {
         inputMultiplexer.addProcessor(stage);
     }
-}
-
-enum GameState {
-    MAIN_MENU,
-    NORMAL,
 }
