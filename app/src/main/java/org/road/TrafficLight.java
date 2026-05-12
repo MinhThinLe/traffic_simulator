@@ -146,7 +146,7 @@ public class TrafficLight {
             return;
         }
 
-        LabelStyle labelStyle = new LabelStyle(Renderer.textRenderer, Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(Renderer.font, Color.BLACK);
         Label label = new Label((int) Math.ceil(getRemainingTime(sourceEdge)) + "", labelStyle);
 
         Container<Label> container = new Container<Label>(label);

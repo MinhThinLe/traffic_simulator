@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 import org.render.*;
+import org.render.ui.GameState;
 import org.road.*;
 import org.vehicles.AmbulanceFactory;
 import org.vehicles.BicycleFactory;
@@ -24,7 +25,7 @@ class Game implements ApplicationListener {
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("Hello World");
+        configuration.setTitle("Traffic Simulator");
         configuration.useVsync(true);
         configuration.setForegroundFPS(
                 Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
@@ -56,25 +57,36 @@ class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        InputStream resource = Road.class.getResourceAsStream("3-way-intersection.graphml");
-        roadNetwork = RoadNetworkLoader.readFromStream(resource);
-
-        roadNetwork.addVehicleFactory(new BicycleFactory());
-        roadNetwork.addVehicleFactory(new AmbulanceFactory());
-
         this.camera = new Camera();
 
         Gdx.input.setInputProcessor(Globals.inputMultiplexer);
     }
 
+    private void reload() {
+        InputStream resource = Road.class.getResourceAsStream(Globals.mapName);
+        roadNetwork = RoadNetworkLoader.readFromStream(resource);
+
+        roadNetwork.addVehicleFactory(new BicycleFactory());
+        roadNetwork.addVehicleFactory(new AmbulanceFactory());
+    }
+
     private void draw() {
-        roadNetwork.drawNodes();
-        roadNetwork.drawEdges();
+        if (Globals.gameState == GameState.NORMAL) {
+            roadNetwork.drawNodes();
+            roadNetwork.drawEdges();
+        }
 
         Renderer.render(camera.getCameraProjection());
     }
 
     private void tick() {
+        if (Globals.gameState != GameState.NORMAL) {
+            return;
+        }
+        if (roadNetwork == null) {
+            reload();
+        }
+
         // So that the simulation could be easily sped up later;
         float deltaTime = Gdx.graphics.getDeltaTime();
         camera.update(deltaTime);
