@@ -16,6 +16,7 @@ import org.render.drawcalls.*;
 import org.render.ui.GameState;
 import org.render.ui.Hud;
 import org.render.ui.MainMenu;
+import org.render.ui.MapSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,7 @@ public class Renderer {
                 switch (Globals.gameState) {
                     case GameState.MAIN_MENU -> new MainMenu().createGUI();
                     case GameState.NORMAL -> new Hud().createGUI();
+                    case GameState.LEVEL_SELECTION -> new MapSelection().createGUI();
                 });
     }
 }

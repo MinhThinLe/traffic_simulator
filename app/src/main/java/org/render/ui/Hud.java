@@ -17,7 +17,6 @@ import org.render.Renderer;
 public class Hud implements Gui {
     @Override
     public Table createGUI() {
-        System.out.println("I ran");
         Table table = new Table();
         table.setFillParent(true);
 

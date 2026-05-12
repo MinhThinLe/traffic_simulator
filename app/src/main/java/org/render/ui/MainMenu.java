@@ -20,8 +20,8 @@ public class MainMenu implements Gui {
         TextButton startButton =
                 new TextButton("Start", Styles.makeButtonStyle(Renderer.uiSkin, Renderer.font));
 
-        table.add(startButton);
-        table.add(quitButton);
+        table.add(startButton).size(100, 50).pad(10).row();
+        table.add(quitButton).size(100, 50).pad(10);
 
         EventListener eventListener =
                 new EventListener() {
@@ -35,7 +35,7 @@ public class MainMenu implements Gui {
                             System.exit(0);
                         }
                         if (event.getTarget() == startButton) {
-                            Globals.gameState = GameState.NORMAL;
+                            Globals.gameState = GameState.LEVEL_SELECTION;
                             Renderer.resetUI();
                         }
 

@@ -57,15 +57,17 @@ class Game implements ApplicationListener {
 
     @Override
     public void create() {
-        InputStream resource = Road.class.getResourceAsStream("3-way-intersection.graphml");
+        this.camera = new Camera();
+
+        Gdx.input.setInputProcessor(Globals.inputMultiplexer);
+    }
+
+    private void reload() {
+        InputStream resource = Road.class.getResourceAsStream(Globals.mapName);
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
 
         roadNetwork.addVehicleFactory(new BicycleFactory());
         roadNetwork.addVehicleFactory(new AmbulanceFactory());
-
-        this.camera = new Camera();
-
-        Gdx.input.setInputProcessor(Globals.inputMultiplexer);
     }
 
     private void draw() {
@@ -78,6 +80,13 @@ class Game implements ApplicationListener {
     }
 
     private void tick() {
+        if (Globals.gameState != GameState.NORMAL) {
+            return;
+        }
+        if (roadNetwork == null) {
+            reload();
+        }
+
         // So that the simulation could be easily sped up later;
         float deltaTime = Gdx.graphics.getDeltaTime();
         camera.update(deltaTime);
