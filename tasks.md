@@ -34,5 +34,5 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [ ] Chế độ
     - [ ] Thời gian
 
-- [ ] Thêm menu chính
-    - [ ] Giao diện chọn bản đồ
+- [x] Thêm menu chính
+    - [x] Giao diện chọn bản đồ
