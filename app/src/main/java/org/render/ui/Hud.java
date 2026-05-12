@@ -27,6 +27,7 @@ public class Hud implements Gui {
                         Styles.makeButtonStyle(Renderer.uiSkin, Renderer.font));
         Slider slider =
                 new Slider(1, 60, 1, false, Styles.makeSliderStyle(Renderer.uiSkin, Renderer.font));
+        slider.setValue(10);
 
         LabelStyle labelStyle = new LabelStyle(Renderer.font, Color.BLACK);
         Label label = new Label("Seconds per vehicle: 10", labelStyle);
