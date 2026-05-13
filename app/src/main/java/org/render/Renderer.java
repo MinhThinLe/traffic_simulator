@@ -19,6 +19,7 @@ import org.render.ui.MainMenu;
 import org.render.ui.MapSelection;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Renderer {
@@ -51,8 +52,9 @@ public class Renderer {
         Globals.stage.draw();
     }
 
+    private static final Comparator<PrimitiveDrawCall> PRIMITIVE_COMPARATOR = new PrimitiveDrawCallComparator();
     private static void renderShapes() {
-        primitiveDrawCalls.sort(new DrawCallComparator());
+        primitiveDrawCalls.sort(PRIMITIVE_COMPARATOR);
         primitiveRenderer.begin();
 
         for (int i = 0; i < primitiveDrawCalls.size(); i++) {
@@ -63,8 +65,10 @@ public class Renderer {
         primitiveDrawCalls.clear();
     }
 
+    private static final Comparator<GraphicalDrawCall> GRAPHICAL_COMPARATOR = new GraphicalDrawCallComparator();
     private static void renderTextures() {
-        // Figure out how to batch texture draw calls later
+        // TODO: Figure out how to batch texture draw calls later
+        graphicalDrawCalls.sort(GRAPHICAL_COMPARATOR);
         graphicalRenderer.begin();
 
         for (int i = 0; i < graphicalDrawCalls.size(); i++) {
