@@ -10,6 +10,7 @@ import org.road.Road;
 import java.util.List;
 
 public class Ambulance extends Vehicle {
+    private static final String TEXTURE_PATH = "org/vehicles/textures/Ambulance.png";
     private static final float DEFAULT_AMBULANCE_SPEED = 100;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
@@ -17,12 +18,12 @@ public class Ambulance extends Vehicle {
     private static final int SPRITE_SIZE = 140;
     private static final int RENDERED_SIZE = 50;
 
-    private Texture texture =
-            new Texture(Gdx.files.internal("org/vehicles/textures/Ambulance.png"));
-    private Sprite sprite = new Sprite(texture, 0, 0, SPRITE_SIZE, SPRITE_SIZE);
+    private Sprite sprite;
 
     public Ambulance(List<Road> path) {
         super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
+        Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));
+        sprite = new Sprite(ambulanceTexture);
     }
 
     @Override
