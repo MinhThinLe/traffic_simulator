@@ -30,11 +30,22 @@ public abstract class Vehicle {
     // refuse an overtake request
     protected float stinginess;
 
-    public Vehicle(List<Road> path, Vector2 position, DrivingMode drivingMode, float speed) {
+
+    public Vehicle(List<Road> path) {
+        this(path, DrivingMode.NORMAL, 0f);
+    }
+
+    public Vehicle(List<Road> path, DrivingMode drivingMode, float speed) {
+        this(path, drivingMode, speed, 0f, 0f);
+    }
+
+    public Vehicle(List<Road> path, DrivingMode drivingMode, float speed, float impatientness, float stinginess) {
         this.path = path;
-        this.position = position;
+        this.position = path.getFirst().getPosition();
         this.drivingMode = drivingMode;
         this.speed = speed;
+        this.impatientness = impatientness;
+        this.stinginess = stinginess;
     }
 
     public Road nextDestination() {

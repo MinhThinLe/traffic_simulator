@@ -9,7 +9,7 @@ import org.render.*;
 import org.render.ui.GameState;
 import org.road.*;
 import org.vehicles.AmbulanceFactory;
-import org.vehicles.BicycleFactory;
+import org.vehicles.BusFactory;
 
 import java.io.InputStream;
 
@@ -66,8 +66,8 @@ class Game implements ApplicationListener {
         InputStream resource = Road.class.getResourceAsStream(Globals.mapName);
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
 
-        roadNetwork.addVehicleFactory(new BicycleFactory());
         roadNetwork.addVehicleFactory(new AmbulanceFactory());
+        roadNetwork.addVehicleFactory(new BusFactory());
     }
 
     private void draw() {
