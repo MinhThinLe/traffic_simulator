@@ -14,7 +14,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Xe cứu thương 
     - [ ] Ô tô
     - [ ] Xe máy
-    - [ ] Xe buýt
+    - [x] Xe buýt
 
 - [x] Hỗ trợ xe có thể vượt nhau
 

@@ -3,7 +3,6 @@ package org.vehicles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
@@ -11,6 +10,7 @@ import org.road.Road;
 import java.util.List;
 
 public class Ambulance extends Vehicle {
+    private static final String TEXTURE_PATH = "org/vehicles/textures/Ambulance.png";
     private static final float DEFAULT_AMBULANCE_SPEED = 100;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
@@ -18,13 +18,12 @@ public class Ambulance extends Vehicle {
     private static final int SPRITE_SIZE = 140;
     private static final int RENDERED_SIZE = 50;
 
-    private Texture AMBULANCE_TEXTURE =
-            new Texture(Gdx.files.internal("org/vehicles/textures/Ambulance.png"));
-    private Sprite sprite = new Sprite(AMBULANCE_TEXTURE, 0, 0, 140, 140);
+    private Sprite sprite;
 
-    public Ambulance(List<Road> path, Vector2 position) {
-        super(path, position, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED);
-        this.impatientness = 1;
+    public Ambulance(List<Road> path) {
+        super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
+        Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));
+        sprite = new Sprite(ambulanceTexture);
     }
 
     @Override
