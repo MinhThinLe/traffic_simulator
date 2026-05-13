@@ -113,8 +113,6 @@ public class Road {
     }
 
     private static final float MINIMUM_OVERTAKE_DISTANCE = 30;
-    private static final float STRAFE_LENGTH = 40;
-    private static final float STRAFE_ANGLE = -45;
 
     private boolean negotiateOvertake(Vehicle vehicle) {
         if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
@@ -139,13 +137,9 @@ public class Road {
         if (distanceToCover < MINIMUM_OVERTAKE_DISTANCE) {
             return false;
         }
+        
+        setupPulloverPosition();
 
-        if (pullOverVehicle == null) {
-            Vector2 pullOverOffset =
-                    this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
-            Vector2 pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
-            this.pullOverPosition = pullOverPosition;
-        }
         this.pullOverVehicle = this.vehicle;
         this.pullOverVehicle.increaseStinginess();
 
@@ -156,6 +150,27 @@ public class Road {
         // remove it from the queue to prevent further problems
         removeFromQueue();
         return true;
+    }
+
+    private static final float MINIMUM_DISTANCE = 15;
+    private static final float STRAFE_LENGTH = 40;
+    private static final float STRAFE_ANGLE = -45;
+    private void setupPulloverPosition() {
+        Vector2 relativeVehiclePosition = this.vehicle.getPosition().sub(this.getPosition());
+        Vector2 destinationRelativePosition = this.vehicle.getPosition().sub(this.getPosition());
+    
+        float distanceFromMainTrack = relativeVehiclePosition.len() * (float) Math.sin(relativeVehiclePosition.angleDeg(destinationRelativePosition));
+        
+        if (distanceFromMainTrack > MINIMUM_DISTANCE) {
+            Vector2 pullOverOffset = new Vector2(relativeVehiclePosition).rotateDeg(STRAFE_ANGLE).setLength(30 - distanceFromMainTrack);
+            pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
+            return;
+        }
+
+        Vector2 pullOverOffset =
+                this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
+        Vector2 pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
+        this.pullOverPosition = pullOverPosition;
     }
 
     private void removeFromQueue() {
