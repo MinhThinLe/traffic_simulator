@@ -60,14 +60,8 @@ public class TrafficLight {
 
     public void draw() {
         switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE:
-                primitiveDraw();
-                break;
-            case DrawMode.GRAPHICAL:
-                graphicalDraw();
-                break;
-            default:
-                break;
+            case DrawMode.PRIMITIVE -> primitiveDraw();
+            case DrawMode.GRAPHICAL -> graphicalDraw();
         }
     }
 

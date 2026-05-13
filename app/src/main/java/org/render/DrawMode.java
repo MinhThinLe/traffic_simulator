@@ -7,15 +7,10 @@ public enum DrawMode {
 
     @Override
     public String toString() {
-        switch (this.ordinal()) {
-            case 0:
-                return "Graphical";
-            case 1:
-                return "Primitive";
-            default:
-                break;
-        }
-
-        return "INVALID STATE";
+        return switch (this.ordinal()) {
+            case 0 -> "Graphical";
+            case 1 -> "Primitive";
+            default -> "INVALID STATE";
+        };
     }
 }

@@ -84,12 +84,8 @@ public abstract class Vehicle {
 
     public final void draw() {
         switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE:
-                primitiveDraw();
-                break;
-            default:
-                graphicalDraw();
-                break;
+            case DrawMode.PRIMITIVE -> primitiveDraw();
+            case DrawMode.GRAPHICAL -> graphicalDraw();
         }
     }
 
