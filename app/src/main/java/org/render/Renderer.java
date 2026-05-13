@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import org.Globals;
 import org.render.drawcalls.*;
@@ -23,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Renderer {
-    private static final String FONT_PATH = "org/render/ui/skin/font-export.fnt";
+    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
 
     private static SpriteBatch graphicalRenderer = new SpriteBatch();
     private static List<GraphicalDrawCall> graphicalDrawCalls = new ArrayList<>();
@@ -31,12 +33,17 @@ public class Renderer {
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
-    public static BitmapFont font = new BitmapFont(Gdx.files.internal(FONT_PATH));
+    public static BitmapFont font;
 
     private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
     public static Skin uiSkin = new Skin(new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH)));
 
     static {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
+        parameters.size = 18;
+
+        font = fontGenerator.generateFont(parameters);
         primitiveRenderer.setAutoShapeType(true);
 
         Globals.stage.addActor(new MainMenu().createGUI());
