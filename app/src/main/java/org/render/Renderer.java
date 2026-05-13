@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import org.Globals;
 import org.render.drawcalls.*;
@@ -18,12 +20,10 @@ import org.render.ui.Hud;
 import org.render.ui.MainMenu;
 import org.render.ui.MapSelection;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Renderer {
-    private static final String FONT_PATH = "org/render/ui/skin/font-export.fnt";
+    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
 
     private static SpriteBatch graphicalRenderer = new SpriteBatch();
     private static List<GraphicalDrawCall> graphicalDrawCalls = new ArrayList<>();
@@ -31,7 +31,8 @@ public class Renderer {
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
-    public static BitmapFont font = new BitmapFont(Gdx.files.internal(FONT_PATH));
+    private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
+    private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
     private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
     public static Skin uiSkin = new Skin(new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH)));
@@ -89,6 +90,18 @@ public class Renderer {
 
     public static void addGraphicalDrawCall(GraphicalDrawCall drawCall) {
         graphicalDrawCalls.add(drawCall);
+    }
+
+    public static BitmapFont getFont(int size) {
+        if (fontCache.containsKey(size)) {
+            return fontCache.get(size);
+        }
+
+        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
+        parameters.size = size;
+        fontCache.put(size, fontGenerator.generateFont(parameters));
+        
+        return fontCache.get(size);
     }
 
     public static void resize(int width, int height) {

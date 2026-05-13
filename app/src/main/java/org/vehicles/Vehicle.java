@@ -139,7 +139,7 @@ public abstract class Vehicle {
     }
 
     void drawText() {
-        LabelStyle style = new LabelStyle(Renderer.font, Color.RED);
+        LabelStyle style = new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.RED);
         Label text = new Label(getVehicleName(), style);
 
         Container<Label> container = new Container<>(text);

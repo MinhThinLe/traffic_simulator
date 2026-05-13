@@ -23,12 +23,12 @@ public class Hud implements Gui {
         TextButton button =
                 new TextButton(
                         DrawMode.PRIMITIVE + "",
-                        Styles.makeButtonStyle(Renderer.uiSkin, Renderer.font));
+                        Styles.makeButtonStyle(Renderer.uiSkin, Renderer.getFont(Globals.FONT_SIZE)));
         Slider slider =
-                new Slider(1, 60, 1, false, Styles.makeSliderStyle(Renderer.uiSkin, Renderer.font));
+                new Slider(1, 60, 1, false, Styles.makeSliderStyle(Renderer.uiSkin, Renderer.getFont(Globals.FONT_SIZE)));
         slider.setValue(10);
 
-        LabelStyle labelStyle = new LabelStyle(Renderer.font, Color.BLACK);
+        LabelStyle labelStyle = new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
         Label label = new Label("Seconds per vehicle: 10", labelStyle);
 
         table.top().right().add(button);
