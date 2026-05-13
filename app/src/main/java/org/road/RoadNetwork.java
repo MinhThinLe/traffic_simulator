@@ -58,14 +58,8 @@ public class RoadNetwork {
 
     public void drawEdges() {
         switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE:
-                drawEdgesPrimitive();
-                break;
-            case DrawMode.GRAPHICAL:
-                drawEdgesGraphical();
-                break;
-            default:
-                break;
+            case DrawMode.PRIMITIVE -> drawEdgesPrimitive();
+            case DrawMode.GRAPHICAL -> drawEdgesGraphical();
         }
     }
 
