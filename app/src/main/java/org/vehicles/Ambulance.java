@@ -64,7 +64,7 @@ public class Ambulance extends Vehicle {
                         sprite,
                         position.x - RENDERED_SIZE / 2,
                         position.y - RENDERED_SIZE / 2,
-                        position.y,
+                        -position.y,
                         RENDERED_SIZE / 2,
                         RENDERED_SIZE / 2,
                         RENDERED_SIZE,

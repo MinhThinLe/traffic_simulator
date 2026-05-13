@@ -24,7 +24,7 @@ public class TextureDrawCall extends GraphicalDrawCall {
             float scaleX,
             float scaleY,
             float rotation) {
-        super(x, y, rotation);
+        super(x, y, z, rotation);
         this.texture = texture;
         this.originX = originX;
         this.originY = originY;
