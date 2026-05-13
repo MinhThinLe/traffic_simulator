@@ -58,14 +58,8 @@ public class RoadNetwork {
 
     public void drawEdges() {
         switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE:
-                drawEdgesPrimitive();
-                break;
-            case DrawMode.GRAPHICAL:
-                drawEdgesGraphical();
-                break;
-            default:
-                break;
+            case DrawMode.PRIMITIVE -> drawEdgesPrimitive();
+            case DrawMode.GRAPHICAL -> drawEdgesGraphical();
         }
     }
 
@@ -143,6 +137,7 @@ public class RoadNetwork {
                             ROAD_SIGN_TEXTURE,
                             position.x - ROAD_SIGN_TEXTURE.getRegionWidth() / 2,
                             position.y - ROAD_SIGN_TEXTURE.getRegionHeight() / 2,
+                            -10000000, // Stinky hack but ok
                             ROAD_SIGN_TEXTURE.getRegionWidth() / 2,
                             ROAD_SIGN_TEXTURE.getRegionHeight() / 2,
                             ROAD_SIGN_TEXTURE.getRegionWidth(),

@@ -58,7 +58,7 @@ public class Bus extends Vehicle {
 
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
-        new TextureDrawCall(sprite, position.x - RENDERED_SIZE / 2, position.y - RENDERED_SIZE / 2, RENDERED_SIZE / 2,
+        new TextureDrawCall(sprite, position.x - RENDERED_SIZE / 2, position.y - RENDERED_SIZE / 2, -position.y, RENDERED_SIZE / 2,
                 RENDERED_SIZE / 2, RENDERED_SIZE, RENDERED_SIZE, 1, 1, 0).submit();
     }
 }

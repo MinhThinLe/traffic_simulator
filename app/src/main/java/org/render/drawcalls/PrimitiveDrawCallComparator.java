@@ -2,7 +2,7 @@ package org.render.drawcalls;
 
 import java.util.Comparator;
 
-public class DrawCallComparator implements Comparator<PrimitiveDrawCall> {
+public class PrimitiveDrawCallComparator implements Comparator<PrimitiveDrawCall> {
     @Override
     public int compare(PrimitiveDrawCall o1, PrimitiveDrawCall o2) {
         int shapeCompare = o1.shapeType.compareTo(o2.shapeType);

@@ -41,28 +41,16 @@ public class Road {
     }
 
     public void draw() {
-        switch (Globals.drawMode) {
-            case DrawMode.GRAPHICAL:
-                graphicalDraw();
-                break;
-
-            case DrawMode.PRIMITIVE:
-                primitiveDraw();
-                break;
-
-            default:
-                break;
+        if (Globals.drawMode == DrawMode.PRIMITIVE) {
+            primitiveDraw();
         }
+
         if (vehicle != null) {
             vehicle.draw();
         }
         if (pullOverVehicle != null) {
             pullOverVehicle.draw();
         }
-    }
-
-    public void graphicalDraw() {
-        // TODO: Implement graphical draw
     }
 
     public void primitiveDraw() {

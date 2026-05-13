@@ -16,6 +16,7 @@ public class TextureDrawCall extends GraphicalDrawCall {
             TextureRegion texture,
             float x,
             float y,
+            float z,
             float originX,
             float originY,
             float width,
@@ -23,7 +24,7 @@ public class TextureDrawCall extends GraphicalDrawCall {
             float scaleX,
             float scaleY,
             float rotation) {
-        super(x, y, rotation);
+        super(x, y, z, rotation);
         this.texture = texture;
         this.originX = originX;
         this.originY = originY;
@@ -32,6 +33,21 @@ public class TextureDrawCall extends GraphicalDrawCall {
         this.scaleX = scaleX;
         this.scaleY = scaleY;
     }
+
+    public TextureDrawCall(
+            TextureRegion texture,
+            float x,
+            float y,
+            float originX,
+            float originY,
+            float width,
+            float height,
+            float scaleX,
+            float scaleY,
+            float rotation
+            ) {
+        this(texture, x, y, 0f, originX, originY, width, height, scaleX, scaleY, rotation);
+            }
 
     @Override
     public void draw(SpriteBatch graphicalRenderer) {
