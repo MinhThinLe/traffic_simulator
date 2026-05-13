@@ -20,9 +20,7 @@ import org.render.ui.Hud;
 import org.render.ui.MainMenu;
 import org.render.ui.MapSelection;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Renderer {
     private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
@@ -33,17 +31,13 @@ public class Renderer {
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
-    public static BitmapFont font;
+    private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
+    private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
     private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
     public static Skin uiSkin = new Skin(new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH)));
 
     static {
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
-        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
-        parameters.size = 18;
-
-        font = fontGenerator.generateFont(parameters);
         primitiveRenderer.setAutoShapeType(true);
 
         Globals.stage.addActor(new MainMenu().createGUI());
@@ -96,6 +90,18 @@ public class Renderer {
 
     public static void addGraphicalDrawCall(GraphicalDrawCall drawCall) {
         graphicalDrawCalls.add(drawCall);
+    }
+
+    public static BitmapFont getFont(int size) {
+        if (fontCache.containsKey(size)) {
+            return fontCache.get(size);
+        }
+
+        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
+        parameters.size = size;
+        fontCache.put(size, fontGenerator.generateFont(parameters));
+        
+        return fontCache.get(size);
     }
 
     public static void resize(int width, int height) {

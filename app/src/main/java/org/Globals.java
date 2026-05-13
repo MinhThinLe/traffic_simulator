@@ -20,6 +20,7 @@ public class Globals {
     public static Vector2 mouseWorldPosition = new Vector2();
     public static Random rng = new Random();
     public static String mapName = "3-way-intersection.graphml";
+    public static int FONT_SIZE = 18;
 
     static {
         inputMultiplexer.addProcessor(stage);
