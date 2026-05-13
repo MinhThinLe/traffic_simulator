@@ -7,5 +7,4 @@ public class GraphicalDrawCallComparator implements Comparator<GraphicalDrawCall
     public int compare(GraphicalDrawCall o1, GraphicalDrawCall o2) {
         return Float.compare(o1.z, o2.z);
     }
-    
 }

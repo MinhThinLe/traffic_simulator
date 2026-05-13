@@ -44,10 +44,9 @@ public class TextureDrawCall extends GraphicalDrawCall {
             float height,
             float scaleX,
             float scaleY,
-            float rotation
-            ) {
+            float rotation) {
         this(texture, x, y, 0f, originX, originY, width, height, scaleX, scaleY, rotation);
-            }
+    }
 
     @Override
     public void draw(SpriteBatch graphicalRenderer) {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
+
 import java.util.List;
 
 public class Bus extends Vehicle {
@@ -23,7 +24,9 @@ public class Bus extends Vehicle {
 
     public Bus(List<Road> path, BusColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_BUS_SPEED);
-        FileHandle file = Gdx.files.internal("org/vehicles/textures/buses/" + colorVariant.toString() + ".png");
+        FileHandle file =
+                Gdx.files.internal(
+                        "org/vehicles/textures/buses/" + colorVariant.toString() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
@@ -39,7 +42,7 @@ public class Bus extends Vehicle {
 
     @Override
     public float getHeight() {
-         return HEIGHT;
+        return HEIGHT;
     }
 
     @Override
@@ -58,8 +61,19 @@ public class Bus extends Vehicle {
 
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
-        new TextureDrawCall(sprite, position.x - RENDERED_SIZE / 2, position.y - RENDERED_SIZE / 2, -position.y, RENDERED_SIZE / 2,
-                RENDERED_SIZE / 2, RENDERED_SIZE, RENDERED_SIZE, 1, 1, 0).submit();
+        new TextureDrawCall(
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE / 2,
+                        RENDERED_SIZE / 2,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE,
+                        1,
+                        1,
+                        0)
+                .submit();
     }
 }
 

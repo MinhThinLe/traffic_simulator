@@ -52,7 +52,9 @@ public class Renderer {
         Globals.stage.draw();
     }
 
-    private static final Comparator<PrimitiveDrawCall> PRIMITIVE_COMPARATOR = new PrimitiveDrawCallComparator();
+    private static final Comparator<PrimitiveDrawCall> PRIMITIVE_COMPARATOR =
+            new PrimitiveDrawCallComparator();
+
     private static void renderShapes() {
         primitiveDrawCalls.sort(PRIMITIVE_COMPARATOR);
         primitiveRenderer.begin();
@@ -65,7 +67,9 @@ public class Renderer {
         primitiveDrawCalls.clear();
     }
 
-    private static final Comparator<GraphicalDrawCall> GRAPHICAL_COMPARATOR = new GraphicalDrawCallComparator();
+    private static final Comparator<GraphicalDrawCall> GRAPHICAL_COMPARATOR =
+            new GraphicalDrawCallComparator();
+
     private static void renderTextures() {
         // TODO: Figure out how to batch texture draw calls later
         graphicalDrawCalls.sort(GRAPHICAL_COMPARATOR);
