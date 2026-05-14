@@ -66,8 +66,7 @@ public class Ambulance extends Vehicle {
                         position.y - RENDERED_SIZE / 2,
                         -position.y,
                         RENDERED_SIZE,
-                        RENDERED_SIZE
-                        )
+                        RENDERED_SIZE)
                 .submit();
         ;
     }

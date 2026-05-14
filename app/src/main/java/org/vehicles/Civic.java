@@ -1,12 +1,12 @@
 package org.vehicles;
 
-import org.render.drawcalls.TextureDrawCall;
-import org.road.Road;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import org.render.drawcalls.TextureDrawCall;
+import org.road.Road;
 
 import java.util.List;
 
@@ -26,7 +26,8 @@ public class Civic extends Vehicle {
 
     public Civic(List<Road> path, CivicColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_SPEED);
-        FileHandle textureFile = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle textureFile =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(textureFile));
     }
 
@@ -44,7 +45,7 @@ public class Civic extends Vehicle {
     public float getHeight() {
         return HEIGHT;
     }
-    
+
     @Override
     public int getVehiclePriority() {
         return 0;
@@ -62,14 +63,13 @@ public class Civic extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                sprite, 
-                position.x - RENDERED_SIZE / 2, 
-                position.y - RENDERED_SIZE / 2, 
-                -position.y, 
-                RENDERED_SIZE, 
-                RENDERED_SIZE
-                )
-            .submit();
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE)
+                .submit();
     }
 }
 

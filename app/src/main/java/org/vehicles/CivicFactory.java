@@ -1,9 +1,9 @@
 package org.vehicles;
 
-import java.util.ArrayList;
-
 import org.Globals;
 import org.road.Road;
+
+import java.util.ArrayList;
 
 public class CivicFactory implements VehicleFactory {
     @Override
@@ -12,5 +12,4 @@ public class CivicFactory implements VehicleFactory {
         CivicColor color = CivicColor.values()[Globals.rng.nextInt(colorVariants)];
         return new Civic(path, color);
     }
-    
 }
