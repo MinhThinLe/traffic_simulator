@@ -2,6 +2,7 @@ package org.render.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
@@ -30,6 +31,9 @@ public class MapSelection implements Gui {
     public Table createGUI() {
         Table table = new Table();
         table.setFillParent(true);
+
+        Label mapSelection = new Label("Hãy chọn một bản đồ", Styles.getLabelStyle());
+        table.add(mapSelection).pad(10).row();
 
         ArrayList<TextButton> buttons = new ArrayList<>();
         for (int i = 0; i < MAPS.length; i++) {
