@@ -161,7 +161,7 @@ public class Road {
     
         float distanceFromMainTrack = relativeVehiclePosition.len() * (float) Math.sin(relativeVehiclePosition.angleDeg(destinationRelativePosition));
         
-        if (distanceFromMainTrack > MINIMUM_DISTANCE) {
+        if (Math.abs(distanceFromMainTrack) > MINIMUM_DISTANCE) {
             Vector2 pullOverOffset = new Vector2(relativeVehiclePosition).rotateDeg(STRAFE_ANGLE).setLength(30 - distanceFromMainTrack);
             pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
             return;
