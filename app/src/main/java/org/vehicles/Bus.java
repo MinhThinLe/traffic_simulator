@@ -66,13 +66,9 @@ public class Bus extends Vehicle {
                         position.x - RENDERED_SIZE / 2,
                         position.y - RENDERED_SIZE / 2,
                         -position.y,
-                        RENDERED_SIZE / 2,
-                        RENDERED_SIZE / 2,
                         RENDERED_SIZE,
-                        RENDERED_SIZE,
-                        1,
-                        1,
-                        0)
+                        RENDERED_SIZE
+                        )
                 .submit();
     }
 }
