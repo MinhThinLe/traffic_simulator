@@ -2,6 +2,7 @@ package org.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -41,6 +42,8 @@ public class Renderer {
         primitiveRenderer.setAutoShapeType(true);
 
         fontParameter.characters += Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
+        fontParameter.magFilter = TextureFilter.Linear;
+        fontParameter.minFilter = TextureFilter.Linear;
 
         Globals.stage.addActor(new MainMenu().createGUI());
     }
