@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
 import org.render.DrawMode;
@@ -20,7 +21,7 @@ public class Hud implements Gui {
         table.setFillParent(true);
 
         Table innerTable = new Table();
-        innerTable.add(makeDrawModeSwitcher()).pad(5).row();;
+        innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();;
         innerTable.add(makeSpawnDelaySlider()).pad(5);
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
