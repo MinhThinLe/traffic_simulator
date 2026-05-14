@@ -15,6 +15,7 @@ import org.render.DrawMode;
 import org.render.Renderer;
 
 public class Hud implements Gui {
+    private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện";
     @Override
     public Table createGUI() {
         Table table = new Table();
@@ -29,13 +30,14 @@ public class Hud implements Gui {
         slider.setValue(10);
 
         LabelStyle labelStyle = new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
-        Label label = new Label("Seconds per vehicle: 10", labelStyle);
+        Label label = new Label(VEHICLE_SPAWN_DELAY + ": 10", labelStyle);
 
-        table.top().right().add(button);
-        table.row();
-        table.top().right().add(slider);
-        table.row();
-        table.top().right().add(label);
+        Table innerTable = new Table();
+        innerTable.add(button).row();
+        innerTable.add(slider).row();
+        innerTable.add(label).row();
+
+        innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
         EventListener eventListener =
                 new EventListener() {
@@ -59,6 +61,8 @@ public class Hud implements Gui {
                 };
 
         table.addListener(eventListener);
+
+        table.top().right().pad(7).add(innerTable);
 
         return table;
     }

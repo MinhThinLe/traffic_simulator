@@ -31,6 +31,7 @@ public class Renderer {
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
+    private static FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
     private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
     private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
@@ -39,6 +40,8 @@ public class Renderer {
 
     static {
         primitiveRenderer.setAutoShapeType(true);
+
+        fontParameter.characters += Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
 
         Globals.stage.addActor(new MainMenu().createGUI());
     }
@@ -97,9 +100,8 @@ public class Renderer {
             return fontCache.get(size);
         }
 
-        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
-        parameters.size = size;
-        fontCache.put(size, fontGenerator.generateFont(parameters));
+        fontParameter.size = size;
+        fontCache.put(size, fontGenerator.generateFont(fontParameter));
         
         return fontCache.get(size);
     }
