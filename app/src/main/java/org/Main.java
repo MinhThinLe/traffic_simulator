@@ -10,6 +10,7 @@ import org.render.ui.GameState;
 import org.road.*;
 import org.vehicles.AmbulanceFactory;
 import org.vehicles.BusFactory;
+import org.vehicles.CivicFactory;
 
 import java.io.InputStream;
 
@@ -68,6 +69,7 @@ class Game implements ApplicationListener {
 
         roadNetwork.addVehicleFactory(new AmbulanceFactory());
         roadNetwork.addVehicleFactory(new BusFactory());
+        roadNetwork.addVehicleFactory(new CivicFactory());
     }
 
     private void draw() {
