@@ -33,7 +33,7 @@ public class Hud implements Gui {
         Label label = new Label(VEHICLE_SPAWN_DELAY + ": 10", labelStyle);
 
         Table innerTable = new Table();
-        innerTable.add(button).row();
+        innerTable.add(button).pad(10).row();
         innerTable.add(slider).row();
         innerTable.add(label).row();
 
@@ -53,7 +53,7 @@ public class Hud implements Gui {
                         }
                         if (event.getTarget() == slider) {
                             Globals.vehicleSpawnDelay = slider.getValue();
-                            label.setText("Seconds per vehicle: " + Globals.vehicleSpawnDelay);
+                            label.setText(VEHICLE_SPAWN_DELAY + ": " + Globals.vehicleSpawnDelay);
                         }
 
                         return true;
