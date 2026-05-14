@@ -15,13 +15,14 @@ import org.render.Renderer;
 
 public class Hud implements Gui {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
+
     @Override
     public Table createGUI() {
         Table table = new Table();
         table.setFillParent(true);
 
         Table innerTable = new Table();
-        innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();;
+        innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();
         innerTable.add(makeSpawnDelaySlider()).pad(5);
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
@@ -45,20 +46,21 @@ public class Hud implements Gui {
         TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
         Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
 
-        drawModeSwitcherComponent.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (!(event instanceof ChangeEvent)) {
-                    return false;
-                }
+        drawModeSwitcherComponent.addListener(
+                new EventListener() {
+                    @Override
+                    public boolean handle(Event event) {
+                        if (!(event instanceof ChangeEvent)) {
+                            return false;
+                        }
 
-                if (event.getTarget() == button) {
-                    flipDrawMode();
-                    button.setText(Globals.drawMode.toString());
-                }
-                return true;
-            }
-        });
+                        if (event.getTarget() == button) {
+                            flipDrawMode();
+                            button.setText(Globals.drawMode.toString());
+                        }
+                        return true;
+                    }
+                });
 
         drawModeSwitcherComponent.add(label).padRight(5);
         drawModeSwitcherComponent.add(button);
@@ -74,20 +76,21 @@ public class Hud implements Gui {
 
         Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
 
-        spawnDelaySliderComponent.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (!(event instanceof ChangeEvent)) {
-                    return false;
-                }
+        spawnDelaySliderComponent.addListener(
+                new EventListener() {
+                    @Override
+                    public boolean handle(Event event) {
+                        if (!(event instanceof ChangeEvent)) {
+                            return false;
+                        }
 
-                if (event.getTarget() == slider) {
-                    Globals.vehicleSpawnDelay = slider.getValue();
-                    label.setText(vehicleSpawnDelayAsString());
-                }
-                return true;
-            }
-        });
+                        if (event.getTarget() == slider) {
+                            Globals.vehicleSpawnDelay = slider.getValue();
+                            label.setText(vehicleSpawnDelayAsString());
+                        }
+                        return true;
+                    }
+                });
 
         spawnDelaySliderComponent.add(slider).row();
         spawnDelaySliderComponent.add(label);
@@ -98,7 +101,8 @@ public class Hud implements Gui {
     private static String vehicleSpawnDelayAsString() {
         String padding = "";
         if (Globals.vehicleSpawnDelay < 10) {
-            padding = "  "; // Spaces in noto sans are apparently only half as wide as other characters
+            // Spaces in noto sans are apparently only half as wide as other characters
+            padding = "  ";
         }
         return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
     }

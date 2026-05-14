@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 import org.Globals;
 import org.render.drawcalls.*;
@@ -33,7 +33,8 @@ public class Renderer {
     private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
     private static FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
     private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
-    private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+    private static FreeTypeFontGenerator fontGenerator =
+            new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
     private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
     public static Skin uiSkin = new Skin(new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH)));
@@ -41,7 +42,8 @@ public class Renderer {
     static {
         primitiveRenderer.setAutoShapeType(true);
 
-        fontParameter.characters += Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
+        fontParameter.characters +=
+                Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
         fontParameter.magFilter = TextureFilter.Linear;
         fontParameter.minFilter = TextureFilter.Linear;
 
@@ -104,7 +106,7 @@ public class Renderer {
 
         fontParameter.size = size;
         fontCache.put(size, fontGenerator.generateFont(fontParameter));
-        
+
         return fontCache.get(size);
     }
 

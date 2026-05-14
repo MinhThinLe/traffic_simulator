@@ -21,10 +21,7 @@ public class MapSelection implements Gui {
     };
 
     private static final String[] DISPLAY_NAMES = {
-        "Ngã ba",
-        "Ngã tư",
-        "Ngã năm",
-        "Ngã ba với đèn đỏ",
+        "Ngã ba", "Ngã tư", "Ngã năm", "Ngã ba với đèn đỏ",
     };
 
     @Override
@@ -37,10 +34,7 @@ public class MapSelection implements Gui {
 
         ArrayList<TextButton> buttons = new ArrayList<>();
         for (int i = 0; i < MAPS.length; i++) {
-            buttons.add(
-                    new TextButton(
-                            DISPLAY_NAMES[i],
-                            Styles.getButtonStyle()));
+            buttons.add(new TextButton(DISPLAY_NAMES[i], Styles.getButtonStyle()));
         }
 
         for (int i = 0; i < MAPS.length; i++) {
