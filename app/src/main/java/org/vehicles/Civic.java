@@ -1,6 +1,7 @@
 package org.vehicles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -9,26 +10,30 @@ import org.road.Road;
 
 import java.util.List;
 
-public class Ambulance extends Vehicle {
-    private static final String TEXTURE_PATH = "org/vehicles/textures/Ambulance.png";
-    private static final float DEFAULT_AMBULANCE_SPEED = 100;
+public class Civic extends Vehicle {
+    private static final float DEFAULT_SPEED = 60;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
 
-    private static final int SPRITE_SIZE = 140;
+    private static final int SPRITE_COUNT = 48;
+    private static final int SPRITE_SIZE = 100;
+    private static final int GRID_WIDTH = 7;
     private static final int RENDERED_SIZE = 50;
+
+    private static final String TEXTURE_PATH = "org/vehicles/textures/civics/";
 
     private Sprite sprite;
 
-    public Ambulance(List<Road> path) {
-        super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
-        Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));
-        sprite = new Sprite(ambulanceTexture);
+    public Civic(List<Road> path, CivicColor colorVariant) {
+        super(path, DrivingMode.NORMAL, DEFAULT_SPEED);
+        FileHandle textureFile =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        sprite = new Sprite(new Texture(textureFile));
     }
 
     @Override
-    public int getVehiclePriority() {
-        return 10;
+    public String getVehicleName() {
+        return "Civic";
     }
 
     @Override
@@ -42,12 +47,9 @@ public class Ambulance extends Vehicle {
     }
 
     @Override
-    public String getVehicleName() {
-        return "Ambulance";
+    public int getVehiclePriority() {
+        return 0;
     }
-
-    private static final int SPRITE_COUNT = 48;
-    private static final int GRID_WIDTH = 7;
 
     @Override
     protected void graphicalDraw() {
@@ -68,6 +70,13 @@ public class Ambulance extends Vehicle {
                         RENDERED_SIZE,
                         RENDERED_SIZE)
                 .submit();
-        ;
     }
+}
+
+enum CivicColor {
+    BLACK,
+    BROWN,
+    GREEN,
+    MAGENTA,
+    WHITE
 }

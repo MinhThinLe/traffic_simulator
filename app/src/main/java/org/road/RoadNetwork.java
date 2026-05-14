@@ -16,9 +16,9 @@ import org.render.drawcalls.TextureDrawCall;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RoadNetwork {
     private static final float DEFAULT_TIMER = 10;
@@ -92,17 +92,15 @@ public class RoadNetwork {
         while (nodes.hasNext()) {
             var currentNode = nodes.next();
 
-            Set<Vector2> ingressNodes = new HashSet<>();
-            Set<Vector2> egressNodes = new HashSet<>();
-
-            roadGraph
-                    .predecessors(currentNode)
-                    .iterator()
-                    .forEachRemaining(node -> ingressNodes.add(node.getPosition()));
-            roadGraph
-                    .successors(currentNode)
-                    .iterator()
-                    .forEachRemaining(node -> egressNodes.add(node.getPosition()));
+            // Functional programming baby
+            Set<Vector2> ingressNodes =
+                    roadGraph.predecessors(currentNode).stream()
+                            .map(node -> node.getPosition())
+                            .collect(Collectors.toSet());
+            Set<Vector2> egressNodes =
+                    roadGraph.successors(currentNode).stream()
+                            .map(node -> node.getPosition())
+                            .collect(Collectors.toSet());
 
             if (ingressNodes.isEmpty()) {
                 ingressNodes.add(currentNode.getPosition());
