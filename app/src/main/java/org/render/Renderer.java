@@ -2,6 +2,7 @@ package org.render;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -23,14 +24,14 @@ import org.render.ui.MapSelection;
 import java.util.*;
 
 public class Renderer {
-    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
-
     private static SpriteBatch graphicalRenderer = new SpriteBatch();
     private static List<GraphicalDrawCall> graphicalDrawCalls = new ArrayList<>();
 
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
+    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
+    private static FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
     private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
     private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
@@ -39,6 +40,10 @@ public class Renderer {
 
     static {
         primitiveRenderer.setAutoShapeType(true);
+
+        fontParameter.characters += Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
+        fontParameter.magFilter = TextureFilter.Linear;
+        fontParameter.minFilter = TextureFilter.Linear;
 
         Globals.stage.addActor(new MainMenu().createGUI());
     }
@@ -97,9 +102,8 @@ public class Renderer {
             return fontCache.get(size);
         }
 
-        FreeTypeFontParameter parameters = new FreeTypeFontParameter();
-        parameters.size = size;
-        fontCache.put(size, fontGenerator.generateFont(parameters));
+        fontParameter.size = size;
+        fontCache.put(size, fontGenerator.generateFont(fontParameter));
         
         return fontCache.get(size);
     }

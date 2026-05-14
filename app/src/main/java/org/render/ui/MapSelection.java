@@ -2,6 +2,7 @@ package org.render.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
@@ -20,10 +21,10 @@ public class MapSelection implements Gui {
     };
 
     private static final String[] DISPLAY_NAMES = {
-        "3-way intersection",
-        "4-way intersection",
-        "5-way intersection",
-        "3-way intersection with traffic lights",
+        "Ngã ba",
+        "Ngã tư",
+        "Ngã năm",
+        "Ngã ba với đèn đỏ",
     };
 
     @Override
@@ -31,12 +32,15 @@ public class MapSelection implements Gui {
         Table table = new Table();
         table.setFillParent(true);
 
+        Label mapSelection = new Label("Hãy chọn một bản đồ", Styles.getLabelStyle());
+        table.add(mapSelection).pad(10).row();
+
         ArrayList<TextButton> buttons = new ArrayList<>();
         for (int i = 0; i < MAPS.length; i++) {
             buttons.add(
                     new TextButton(
                             DISPLAY_NAMES[i],
-                            Styles.makeButtonStyle(Renderer.uiSkin, Renderer.getFont(18))));
+                            Styles.getButtonStyle()));
         }
 
         for (int i = 0; i < MAPS.length; i++) {
