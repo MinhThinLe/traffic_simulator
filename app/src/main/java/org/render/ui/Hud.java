@@ -13,7 +13,7 @@ import org.render.DrawMode;
 import org.render.Renderer;
 
 public class Hud implements Gui {
-    private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện";
+    private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
     @Override
     public Table createGUI() {
         Table table = new Table();
@@ -42,7 +42,7 @@ public class Hud implements Gui {
         Table drawModeSwitcherComponent = new Table();
 
         TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
-        Label label = new Label("Chế độ hiển thị", Styles.getLabelStyle());
+        Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
 
         drawModeSwitcherComponent.addListener(new EventListener() {
             @Override
@@ -71,7 +71,7 @@ public class Hud implements Gui {
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(Globals.vehicleSpawnDelay);
 
-        Label label = new Label(VEHICLE_SPAWN_DELAY + ": 10", Styles.getLabelStyle());
+        Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
 
         spawnDelaySliderComponent.addListener(new EventListener() {
             @Override
@@ -82,7 +82,7 @@ public class Hud implements Gui {
 
                 if (event.getTarget() == slider) {
                     Globals.vehicleSpawnDelay = slider.getValue();
-                    label.setText(VEHICLE_SPAWN_DELAY + ": " + Globals.vehicleSpawnDelay);
+                    label.setText(vehicleSpawnDelayAsString());
                 }
                 return true;
             }
@@ -92,5 +92,13 @@ public class Hud implements Gui {
         spawnDelaySliderComponent.add(label);
 
         return spawnDelaySliderComponent;
+    }
+
+    private static String vehicleSpawnDelayAsString() {
+        String padding = "";
+        if (Globals.vehicleSpawnDelay < 10) {
+            padding = "  "; // Spaces in noto sans are apparently only half as wide as other characters
+        }
+        return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
     }
 }
