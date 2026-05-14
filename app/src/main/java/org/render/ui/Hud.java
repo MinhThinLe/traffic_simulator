@@ -1,10 +1,8 @@
 package org.render.ui;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,46 +19,11 @@ public class Hud implements Gui {
         Table table = new Table();
         table.setFillParent(true);
 
-        TextButton button =
-                new TextButton(
-                        DrawMode.PRIMITIVE + "",
-                        Styles.makeButtonStyle(Renderer.uiSkin, Renderer.getFont(Globals.FONT_SIZE)));
-        Slider slider =
-                new Slider(1, 60, 1, false, Styles.makeSliderStyle(Renderer.uiSkin, Renderer.getFont(Globals.FONT_SIZE)));
-        slider.setValue(10);
-
-        LabelStyle labelStyle = new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
-        Label label = new Label(VEHICLE_SPAWN_DELAY + ": 10", labelStyle);
-
         Table innerTable = new Table();
-        innerTable.add(button).pad(10).row();
-        innerTable.add(slider).row();
-        innerTable.add(label).row();
+        innerTable.add(makeDrawModeSwitcher()).pad(5).row();;
+        innerTable.add(makeSpawnDelaySlider()).pad(5);
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
-
-        EventListener eventListener =
-                new EventListener() {
-                    @Override
-                    public boolean handle(Event event) {
-                        if (event.getClass() != ChangeEvent.class) {
-                            return false;
-                        }
-
-                        if (event.getTarget() == button) {
-                            flipDrawMode();
-                            button.setText(Globals.drawMode.toString());
-                        }
-                        if (event.getTarget() == slider) {
-                            Globals.vehicleSpawnDelay = slider.getValue();
-                            label.setText(VEHICLE_SPAWN_DELAY + ": " + Globals.vehicleSpawnDelay);
-                        }
-
-                        return true;
-                    }
-                };
-
-        table.addListener(eventListener);
 
         table.top().right().pad(7).add(innerTable);
 
@@ -73,5 +36,61 @@ public class Hud implements Gui {
                     case DrawMode.PRIMITIVE -> DrawMode.GRAPHICAL;
                     case DrawMode.GRAPHICAL -> DrawMode.PRIMITIVE;
                 };
+    }
+
+    private static Table makeDrawModeSwitcher() {
+        Table drawModeSwitcherComponent = new Table();
+
+        TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
+        Label label = new Label("Chế độ hiển thị", Styles.getLabelStyle());
+
+        drawModeSwitcherComponent.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!(event instanceof ChangeEvent)) {
+                    return false;
+                }
+
+                if (event.getTarget() == button) {
+                    flipDrawMode();
+                    button.setText(Globals.drawMode.toString());
+                }
+                return true;
+            }
+        });
+
+        drawModeSwitcherComponent.add(label).padRight(5);
+        drawModeSwitcherComponent.add(button);
+
+        return drawModeSwitcherComponent;
+    }
+
+    private static Table makeSpawnDelaySlider() {
+        Table spawnDelaySliderComponent = new Table();
+
+        Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
+        slider.setValue(Globals.vehicleSpawnDelay);
+
+        Label label = new Label(VEHICLE_SPAWN_DELAY + ": 10", Styles.getLabelStyle());
+
+        spawnDelaySliderComponent.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                if (!(event instanceof ChangeEvent)) {
+                    return false;
+                }
+
+                if (event.getTarget() == slider) {
+                    Globals.vehicleSpawnDelay = slider.getValue();
+                    label.setText(VEHICLE_SPAWN_DELAY + ": " + Globals.vehicleSpawnDelay);
+                }
+                return true;
+            }
+        });
+
+        spawnDelaySliderComponent.add(slider).row();
+        spawnDelaySliderComponent.add(label);
+
+        return spawnDelaySliderComponent;
     }
 }

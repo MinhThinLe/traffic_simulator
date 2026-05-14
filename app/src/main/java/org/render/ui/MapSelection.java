@@ -36,7 +36,7 @@ public class MapSelection implements Gui {
             buttons.add(
                     new TextButton(
                             DISPLAY_NAMES[i],
-                            Styles.makeButtonStyle(Renderer.uiSkin, Renderer.getFont(18))));
+                            Styles.getButtonStyle()));
         }
 
         for (int i = 0; i < MAPS.length; i++) {

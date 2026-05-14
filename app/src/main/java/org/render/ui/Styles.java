@@ -1,21 +1,28 @@
 package org.render.ui;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import org.Globals;
+import org.render.Renderer;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 public class Styles {
-    public static TextButtonStyle makeButtonStyle(Skin skin, BitmapFont font) {
+    public static TextButtonStyle getButtonStyle() {
         return new TextButtonStyle(
-                skin.getDrawable("button"),
-                skin.getDrawable("button-pressed"),
-                skin.getDrawable("button-over"),
-                font);
+                Renderer.uiSkin.getDrawable("button"),
+                Renderer.uiSkin.getDrawable("button-pressed"),
+                Renderer.uiSkin.getDrawable("button-over"),
+                Renderer.getFont(Globals.FONT_SIZE));
     }
 
-    public static SliderStyle makeSliderStyle(Skin skin, BitmapFont font) {
+    public static SliderStyle getSliderStyle() {
         return new SliderStyle(
-                skin.getDrawable("slider-horizontal"), skin.getDrawable("slider-knob"));
+                Renderer.uiSkin.getDrawable("slider-horizontal"), Renderer.uiSkin.getDrawable("slider-knob"));
+    }
+
+    public static LabelStyle getLabelStyle() {
+        return new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
     }
 }
