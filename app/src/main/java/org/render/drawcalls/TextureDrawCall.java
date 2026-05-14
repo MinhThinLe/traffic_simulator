@@ -48,6 +48,10 @@ public class TextureDrawCall extends GraphicalDrawCall {
         this(texture, x, y, 0f, originX, originY, width, height, scaleX, scaleY, rotation);
     }
 
+    public TextureDrawCall(TextureRegion texture, float x, float y, float z, float width, float height) {
+        this(texture, x, y, z, width / 2, height / 2, width, height, 1, 1, 0);
+    }
+
     @Override
     public void draw(SpriteBatch graphicalRenderer) {
         graphicalRenderer.draw(
