@@ -12,9 +12,12 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [-] Thêm phương tiện
     - [x] Xe cứu thương 
-    - [ ] Ô tô
-    - [ ] Xe máy
+    - [x] Ô tô
     - [x] Xe buýt
+    - [ ] Xe cảnh sát
+    - [ ] Xe taxi
+    - [ ] Siêu xe
+    - [ ] Xe mini van
 
 - [x] Hỗ trợ xe có thể vượt nhau
 
