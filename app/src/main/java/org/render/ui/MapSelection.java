@@ -20,10 +20,10 @@ public class MapSelection implements Gui {
     };
 
     private static final String[] DISPLAY_NAMES = {
-        "3-way intersection",
-        "4-way intersection",
-        "5-way intersection",
-        "3-way intersection with traffic lights",
+        "Ngã ba",
+        "Ngã tư",
+        "Ngã năm",
+        "Ngã ba với đèn đỏ",
     };
 
     @Override

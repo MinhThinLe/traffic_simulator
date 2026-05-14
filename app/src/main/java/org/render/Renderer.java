@@ -23,14 +23,13 @@ import org.render.ui.MapSelection;
 import java.util.*;
 
 public class Renderer {
-    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
-
     private static SpriteBatch graphicalRenderer = new SpriteBatch();
     private static List<GraphicalDrawCall> graphicalDrawCalls = new ArrayList<>();
 
     private static ShapeRenderer primitiveRenderer = new ShapeRenderer();
     private static List<PrimitiveDrawCall> primitiveDrawCalls = new ArrayList<>();
 
+    private static final String FONT_PATH = "org/render/ui/skin/NotoSans.ttf";
     private static FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
     private static Map<Integer, BitmapFont> fontCache = new HashMap<>();
     private static FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
