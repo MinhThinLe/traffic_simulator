@@ -137,7 +137,7 @@ public class Road {
         if (distanceToCover < MINIMUM_OVERTAKE_DISTANCE) {
             return false;
         }
-        
+
         setupPulloverPosition();
 
         this.pullOverVehicle = this.vehicle;
@@ -155,14 +155,23 @@ public class Road {
     private static final float MINIMUM_DISTANCE = 15;
     private static final float STRAFE_LENGTH = 40;
     private static final float STRAFE_ANGLE = -45;
+
     private void setupPulloverPosition() {
         Vector2 relativeVehiclePosition = this.vehicle.getPosition().sub(this.getPosition());
         Vector2 destinationRelativePosition = this.vehicle.getPosition().sub(this.getPosition());
-    
-        float distanceFromMainTrack = relativeVehiclePosition.len() * (float) Math.sin(relativeVehiclePosition.angleDeg(destinationRelativePosition));
-        
+
+        float distanceFromMainTrack =
+                relativeVehiclePosition.len()
+                        * (float)
+                                Math.sin(
+                                        relativeVehiclePosition.angleDeg(
+                                                destinationRelativePosition));
+
         if (Math.abs(distanceFromMainTrack) > MINIMUM_DISTANCE) {
-            Vector2 pullOverOffset = new Vector2(relativeVehiclePosition).rotateDeg(STRAFE_ANGLE).setLength(30 - distanceFromMainTrack);
+            Vector2 pullOverOffset =
+                    new Vector2(relativeVehiclePosition)
+                            .rotateDeg(STRAFE_ANGLE)
+                            .setLength(30 - distanceFromMainTrack);
             pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
             return;
         }

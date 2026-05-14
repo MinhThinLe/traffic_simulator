@@ -15,10 +15,8 @@ public class MainMenu implements Gui {
         Table table = new Table();
         table.setFillParent(true);
 
-        TextButton quitButton =
-                new TextButton("Thoát", Styles.getButtonStyle());
-        TextButton startButton =
-                new TextButton("Bắt đầu", Styles.getButtonStyle());
+        TextButton quitButton = new TextButton("Thoát", Styles.getButtonStyle());
+        TextButton startButton = new TextButton("Bắt đầu", Styles.getButtonStyle());
 
         table.add(startButton).size(100, 50).pad(10).row();
         table.add(quitButton).size(100, 50).pad(10);

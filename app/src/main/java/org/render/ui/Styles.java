@@ -1,12 +1,12 @@
 package org.render.ui;
 
-import org.Globals;
-import org.render.Renderer;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+
+import org.Globals;
+import org.render.Renderer;
 
 public class Styles {
     public static TextButtonStyle getButtonStyle() {
@@ -19,7 +19,8 @@ public class Styles {
 
     public static SliderStyle getSliderStyle() {
         return new SliderStyle(
-                Renderer.uiSkin.getDrawable("slider-horizontal"), Renderer.uiSkin.getDrawable("slider-knob"));
+                Renderer.uiSkin.getDrawable("slider-horizontal"),
+                Renderer.uiSkin.getDrawable("slider-knob"));
     }
 
     public static LabelStyle getLabelStyle() {
