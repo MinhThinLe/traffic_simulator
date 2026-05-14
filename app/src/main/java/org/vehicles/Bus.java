@@ -20,13 +20,14 @@ public class Bus extends Vehicle {
     private static final int SPRITE_COUNT = 48;
     private static final int GRID_WIDTH = 7;
 
+    private static final String TEXTURE_PATH = "org/vehicles/textures/buses/";
+
     private Sprite sprite;
 
     public Bus(List<Road> path, BusColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_BUS_SPEED);
         FileHandle file =
-                Gdx.files.internal(
-                        "org/vehicles/textures/buses/" + colorVariant.toString() + ".png");
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
@@ -79,16 +80,4 @@ enum BusColor {
     WHITE,
     YELLOW,
     ;
-
-    @Override
-    public String toString() {
-        return switch (this.ordinal()) {
-            case 0 -> "black";
-            case 1 -> "blue";
-            case 2 -> "green";
-            case 3 -> "white";
-            case 4 -> "yellow";
-            default -> "NOT IMPLEMENTED";
-        };
-    }
 }
