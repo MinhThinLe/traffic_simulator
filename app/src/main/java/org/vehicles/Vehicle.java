@@ -14,10 +14,12 @@ import org.render.Renderer;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
 import org.road.Road;
+import org.utils.Timer;
 
 import java.util.List;
 
 public abstract class Vehicle {
+    private static final float BASE_TIMER_DURATION = 5;
     protected List<Road> path;
     protected Vector2 position;
     protected DrivingMode drivingMode;
@@ -26,6 +28,7 @@ public abstract class Vehicle {
     // A float ranging from 0 to 1 indicating the chance that this vehicle
     // would send an overtake request
     protected float impatientness;
+    protected Timer honkTimer;
     // A float ranging from 0 to 1 indicating the chance that this vehicle would
     // refuse an overtake request
     protected float stinginess;
@@ -50,6 +53,8 @@ public abstract class Vehicle {
         this.speed = speed;
         this.impatientness = impatientness;
         this.stinginess = stinginess;
+
+        this.honkTimer = new Timer(BASE_TIMER_DURATION - impatientness * 4);
     }
 
     public Road nextDestination() {
@@ -97,7 +102,15 @@ public abstract class Vehicle {
         this.path.removeFirst();
     }
 
+    public void resetTimer() {
+        this.honkTimer.reset();
+    }
+
     public boolean shouldSendOvertakeRequest() {
+        honkTimer.tick();
+        if (!honkTimer.hasFinished()) {
+            return false;
+        }
         return Globals.rng.nextFloat() < impatientness;
     }
 

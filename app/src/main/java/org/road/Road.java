@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.Globals;
 import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
+import org.utils.AudioPlayer;
 import org.vehicles.*;
 
 import java.util.PriorityQueue;
@@ -99,6 +100,8 @@ public class Road {
             return;
         }
 
+        AudioPlayer.playHonk();
+
         boolean reply = this.vehicle.nextDestination().negotiateOvertake(this.vehicle);
         if (!reply) {
             return;
@@ -145,6 +148,7 @@ public class Road {
 
         vehicle.popDestination();
         this.vehicle = vehicle;
+        this.vehicle.resetTimer();
 
         // Since the vehicle has been accepted to its destination already, we should
         // remove it from the queue to prevent further problems

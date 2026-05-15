@@ -29,7 +29,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [ ] Thêm chế độ hiển thị đồ họa
 
-- [ ] Thêm âm thanh
+- [x] Thêm âm thanh
 
 - [x] Vẽ đường xe chạy đẹp hơn
 
