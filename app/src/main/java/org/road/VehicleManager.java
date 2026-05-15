@@ -6,6 +6,7 @@ import org.Globals;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 import org.vehicles.VehiclePacket;
+import org.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,47 +69,5 @@ public class VehicleManager {
 
         VehiclePacket vehiclePacket = new VehiclePacket(vehicle, null);
         vehicle.nextDestination().addVehicle(vehiclePacket);
-    }
-}
-
-class Timer {
-    private float duration;
-    private float remaining;
-
-    public Timer(float duration) {
-        this.duration = duration;
-        this.remaining = duration;
-    }
-
-    public void tick(float time) {
-        this.remaining -= time;
-    }
-
-    public boolean hasFinished() {
-        if (this.remaining < 0) {
-            this.remaining = this.duration;
-            return true;
-        }
-        return false;
-    }
-
-    public float getDuration() {
-        return this.duration;
-    }
-
-    public void setDuration(float newDuration) {
-        duration = newDuration;
-
-        if (remaining > duration) {
-            remaining = duration;
-        }
-    }
-
-    public float getTimeRemaining() {
-        return this.remaining;
-    }
-
-    public void reset() {
-        remaining = duration;
     }
 }
