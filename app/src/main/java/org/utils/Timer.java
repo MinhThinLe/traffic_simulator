@@ -1,5 +1,7 @@
 package org.utils;
 
+import com.badlogic.gdx.Gdx;
+
 public class Timer {
     private float duration;
     private float remaining;
@@ -11,6 +13,10 @@ public class Timer {
 
     public void tick(float time) {
         this.remaining -= time;
+    }
+
+    public void tick() {
+        tick(Gdx.graphics.getDeltaTime());
     }
 
     public boolean hasFinished() {
