@@ -13,6 +13,6 @@ public class AudioPlayer {
     }
     
     public static void playHonk() {
-        System.out.println(honkSound.play());
+        honkSound.play();
     }
 }
