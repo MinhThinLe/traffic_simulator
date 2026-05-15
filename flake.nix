@@ -18,6 +18,7 @@
                 libXext
                 libXrandr
                 libXxf86vm
+                libpulseaudio
             ];
         in
         {
