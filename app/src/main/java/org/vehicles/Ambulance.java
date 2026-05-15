@@ -19,6 +19,8 @@ public class Ambulance extends Vehicle {
     static final int SPRITE_SIZE = 140;
     static final int RENDERED_SIZE = 50;
 
+    private static final float FLASH_INTERVAL = 0.2f;
+
     private Sprite sprite;
     private Timer timer;
     private boolean side;
@@ -28,7 +30,7 @@ public class Ambulance extends Vehicle {
         super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
         Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));
         sprite = new Sprite(ambulanceTexture);
-        timer = new Timer(0.2f);
+        timer = new Timer(FLASH_INTERVAL);
     }
 
     @Override
