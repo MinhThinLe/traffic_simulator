@@ -1,6 +1,8 @@
-package org.vehicles;
+package org.vehicles.factories;
 
 import org.road.Road;
+import org.vehicles.*;
+import org.vehicles.vehicles.Ambulance;
 
 import java.util.ArrayList;
 

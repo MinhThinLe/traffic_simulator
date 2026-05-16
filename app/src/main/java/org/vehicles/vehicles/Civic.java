@@ -1,4 +1,4 @@
-package org.vehicles;
+package org.vehicles.vehicles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -7,33 +7,34 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
+import org.vehicles.*;
 
 import java.util.List;
 
-public class Bus extends Vehicle {
-    private static final float DEFAULT_BUS_SPEED = 40;
-    private static final float WIDTH = 40;
-    private static final float HEIGHT = 20;
+public class Civic extends Vehicle {
+    private static final float DEFAULT_SPEED = 60;
+    private static final float WIDTH = 30;
+    private static final float HEIGHT = 15;
 
-    private static final int SPRITE_SIZE = 210;
-    private static final int RENDERED_SIZE = 50;
     private static final int SPRITE_COUNT = 48;
+    private static final int SPRITE_SIZE = 100;
     private static final int GRID_WIDTH = 7;
+    private static final int RENDERED_SIZE = 50;
 
-    private static final String TEXTURE_PATH = "org/vehicles/textures/buses/";
+    private static final String TEXTURE_PATH = "org/vehicles/textures/civics/";
 
     private Sprite sprite;
 
-    public Bus(List<Road> path, BusColor colorVariant) {
-        super(path, DrivingMode.NORMAL, DEFAULT_BUS_SPEED);
-        FileHandle file =
+    public Civic(List<Road> path, CivicColor colorVariant) {
+        super(path, DrivingMode.NORMAL, DEFAULT_SPEED);
+        FileHandle textureFile =
                 Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
-        sprite = new Sprite(new Texture(file));
+        sprite = new Sprite(new Texture(textureFile));
     }
 
     @Override
     public String getVehicleName() {
-        return "Bus";
+        return "Civic";
     }
 
     @Override
@@ -71,13 +72,4 @@ public class Bus extends Vehicle {
                         RENDERED_SIZE)
                 .submit();
     }
-}
-
-enum BusColor {
-    BLACK,
-    BLUE,
-    GREEN,
-    WHITE,
-    YELLOW,
-    ;
 }

@@ -1,4 +1,4 @@
-package org.vehicles;
+package org.vehicles.vehicles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
 import org.utils.Timer;
+import org.vehicles.*;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class Ambulance extends Vehicle {
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
 
-    static final int SPRITE_SIZE = 140;
-    static final int RENDERED_SIZE = 50;
+    private static final int SPRITE_SIZE = 140;
+    private static final int RENDERED_SIZE = 50;
 
     private static final float FLASH_INTERVAL = 0.2f;
 
