@@ -45,15 +45,16 @@ public class Hud implements Gui {
         TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
         Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
 
-        drawModeSwitcherComponent.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == button) {
-                    flipDrawMode();
-                    button.setText(Globals.drawMode.toString());
-                }
-            }
-        });
+        drawModeSwitcherComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == button) {
+                            flipDrawMode();
+                            button.setText(Globals.drawMode.toString());
+                        }
+                    }
+                });
 
         drawModeSwitcherComponent.add(label).padRight(5);
         drawModeSwitcherComponent.add(button);
@@ -69,15 +70,16 @@ public class Hud implements Gui {
 
         Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
 
-        spawnDelaySliderComponent.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == slider) {
-                    Globals.vehicleSpawnDelay = slider.getValue();
-                    label.setText(vehicleSpawnDelayAsString());
-                }
-            }
-        });
+        spawnDelaySliderComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            Globals.vehicleSpawnDelay = slider.getValue();
+                            label.setText(vehicleSpawnDelayAsString());
+                        }
+                    }
+                });
 
         spawnDelaySliderComponent.add(slider).row();
         spawnDelaySliderComponent.add(label);

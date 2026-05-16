@@ -26,7 +26,6 @@ public class Ambulance extends Vehicle {
     private Timer timer;
     private boolean side;
 
-
     public Ambulance(List<Road> path) {
         super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
         Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));

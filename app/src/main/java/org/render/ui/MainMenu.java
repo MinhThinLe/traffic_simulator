@@ -19,15 +19,15 @@ public class MainMenu implements Gui {
         table.add(startButton).size(100, 50).pad(10).row();
         table.add(quitButton).size(100, 50).pad(10);
 
-
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == quitButton) {
-                    System.exit(0);
-                }
-            }
-        };
+        ChangeListener changeListener =
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == quitButton) {
+                            System.exit(0);
+                        }
+                    }
+                };
 
         table.addListener(changeListener);
         return table;

@@ -66,25 +66,28 @@ class Game implements ApplicationListener {
     }
 
     private void addListener() {
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor.getName() == "start button") {
-                    state = GameState.LEVEL_SELECTION;
-                    Renderer.resetUI(state);
-                    return;
-                }
-                if (actor.getName() == "level selection button") {
-                    loadMap((String) actor.getUserObject());
-                    state = GameState.NORMAL;
-                    Renderer.resetUI(state);
-                    return;
-                }
-                if (actor.getName() != null) {
-                    System.err.println("Warning: Unhandled event from actor with name: " + actor.getName());
-                }
-            }
-        };
+        ChangeListener changeListener =
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor.getName() == "start button") {
+                            state = GameState.LEVEL_SELECTION;
+                            Renderer.resetUI(state);
+                            return;
+                        }
+                        if (actor.getName() == "level selection button") {
+                            loadMap((String) actor.getUserObject());
+                            state = GameState.NORMAL;
+                            Renderer.resetUI(state);
+                            return;
+                        }
+                        if (actor.getName() != null) {
+                            System.err.println(
+                                    "Warning: Unhandled event from actor with name: "
+                                            + actor.getName());
+                        }
+                    }
+                };
 
         Globals.stage.addListener(changeListener);
     }
