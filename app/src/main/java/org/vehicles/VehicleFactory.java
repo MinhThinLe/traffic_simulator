@@ -2,8 +2,8 @@ package org.vehicles;
 
 import org.road.Road;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface VehicleFactory {
-    public Vehicle createVehicle(ArrayList<Road> path);
+    public Vehicle createVehicle(List<Road> path);
 }

@@ -1,6 +1,6 @@
 package org.vehicles.factories;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.road.Road;
 import org.vehicles.Vehicle;
@@ -9,8 +9,7 @@ import org.vehicles.vehicles.PoliceCar;
 
 public class PoliceCarFactory implements VehicleFactory {
     @Override
-    public Vehicle createVehicle(ArrayList<Road> path) {
+    public Vehicle createVehicle(List<Road> path) {
         return new PoliceCar(path);
     }
-    
 }
