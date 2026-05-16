@@ -2,6 +2,8 @@ package org;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -71,14 +73,20 @@ class Game implements ApplicationListener {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor.getName() == "start button") {
-                            state = GameState.LEVEL_SELECTION;
-                            Renderer.resetUI(state);
+                            setState(GameState.LEVEL_SELECTION);
                             return;
                         }
                         if (actor.getName() == "level selection button") {
                             loadMap((String) actor.getUserObject());
-                            state = GameState.NORMAL;
-                            Renderer.resetUI(state);
+                            setState(GameState.NORMAL);
+                            return;
+                        }
+                        if (actor.getName() == "unpause button") {
+                            setState(GameState.NORMAL);
+                            return;
+                        }
+                        if (actor.getName() == "title screen button") {
+                            setState(GameState.MAIN_MENU);
                             return;
                         }
                         if (actor.getName() != null) {
@@ -90,6 +98,25 @@ class Game implements ApplicationListener {
                 };
 
         Globals.stage.addListener(changeListener);
+
+        InputAdapter inputAdapter =
+                new InputAdapter() {
+                    @Override
+                    public boolean keyDown(int keycode) {
+                        if (keycode == Keys.ESCAPE && state == GameState.NORMAL) {
+                            setState(GameState.PAUSED);
+                            return true;
+                        }
+                        if (keycode == Keys.ESCAPE && state == GameState.PAUSED) {
+                            setState(GameState.NORMAL);
+                            return true;
+                        }
+
+                        return false;
+                    }
+                };
+
+        Globals.inputMultiplexer.addProcessor(inputAdapter);
     }
 
     private void loadMap(String mapName) {
@@ -102,8 +129,13 @@ class Game implements ApplicationListener {
         roadNetwork.addVehicleFactory(new PoliceCarFactory());
     }
 
+    private void setState(GameState state) {
+        this.state = state;
+        Renderer.resetUI(state);
+    }
+
     private void draw() {
-        if (state == GameState.NORMAL) {
+        if (state == GameState.NORMAL || state == GameState.PAUSED) {
             roadNetwork.drawNodes();
             roadNetwork.drawEdges();
         }
