@@ -148,8 +148,7 @@ class Game implements ApplicationListener {
             return;
         }
 
-        // So that the simulation could be easily sped up later;
-        float deltaTime = Gdx.graphics.getDeltaTime();
+        float deltaTime = Gdx.graphics.getDeltaTime() * Globals.simulationSpeed;
         camera.update(deltaTime);
         roadNetwork.circulateTraffic(deltaTime);
 

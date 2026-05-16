@@ -1,5 +1,7 @@
 package org.utils;
 
+import org.Globals;
+
 import com.badlogic.gdx.Gdx;
 
 public class Timer {
@@ -16,7 +18,7 @@ public class Timer {
     }
 
     public void tick() {
-        tick(Gdx.graphics.getDeltaTime());
+        tick(Gdx.graphics.getDeltaTime() * Globals.simulationSpeed);
     }
 
     public boolean hasFinished() {
