@@ -1,12 +1,11 @@
 package org.render.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
@@ -47,18 +46,13 @@ public class Hud implements Gui {
         Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
 
         drawModeSwitcherComponent.addListener(
-                new EventListener() {
+                new ChangeListener() {
                     @Override
-                    public boolean handle(Event event) {
-                        if (!(event instanceof ChangeEvent)) {
-                            return false;
-                        }
-
-                        if (event.getTarget() == button) {
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == button) {
                             flipDrawMode();
                             button.setText(Globals.drawMode.toString());
                         }
-                        return true;
                     }
                 });
 
@@ -77,18 +71,13 @@ public class Hud implements Gui {
         Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
 
         spawnDelaySliderComponent.addListener(
-                new EventListener() {
+                new ChangeListener() {
                     @Override
-                    public boolean handle(Event event) {
-                        if (!(event instanceof ChangeEvent)) {
-                            return false;
-                        }
-
-                        if (event.getTarget() == slider) {
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
                             Globals.vehicleSpawnDelay = slider.getValue();
                             label.setText(vehicleSpawnDelayAsString());
                         }
-                        return true;
                     }
                 });
 

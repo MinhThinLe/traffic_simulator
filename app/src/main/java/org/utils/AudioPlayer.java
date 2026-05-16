@@ -11,7 +11,7 @@ public class AudioPlayer {
     static {
         honkSound = Gdx.audio.newSound(Gdx.files.internal(HORN_SFX_PATH));
     }
-    
+
     public static void playHonk() {
         honkSound.play();
     }

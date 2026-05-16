@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import org.render.*;
 import org.render.ui.GameState;
@@ -21,6 +23,7 @@ public class Main {
 class Game implements ApplicationListener {
     private RoadNetwork roadNetwork;
     private Camera camera;
+    private GameState state;
 
     static Lwjgl3ApplicationConfiguration getApplicationConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
@@ -59,10 +62,38 @@ class Game implements ApplicationListener {
         this.camera = new Camera();
 
         Gdx.input.setInputProcessor(Globals.inputMultiplexer);
+        addListener();
     }
 
-    private void reload() {
-        InputStream resource = Road.class.getResourceAsStream(Globals.mapName);
+    private void addListener() {
+        ChangeListener changeListener =
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor.getName() == "start button") {
+                            state = GameState.LEVEL_SELECTION;
+                            Renderer.resetUI(state);
+                            return;
+                        }
+                        if (actor.getName() == "level selection button") {
+                            loadMap((String) actor.getUserObject());
+                            state = GameState.NORMAL;
+                            Renderer.resetUI(state);
+                            return;
+                        }
+                        if (actor.getName() != null) {
+                            System.err.println(
+                                    "Warning: Unhandled event from actor with name: "
+                                            + actor.getName());
+                        }
+                    }
+                };
+
+        Globals.stage.addListener(changeListener);
+    }
+
+    private void loadMap(String mapName) {
+        InputStream resource = Road.class.getResourceAsStream(mapName);
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
 
         roadNetwork.addVehicleFactory(new AmbulanceFactory());
@@ -72,7 +103,7 @@ class Game implements ApplicationListener {
     }
 
     private void draw() {
-        if (Globals.gameState == GameState.NORMAL) {
+        if (state == GameState.NORMAL) {
             roadNetwork.drawNodes();
             roadNetwork.drawEdges();
         }
@@ -81,11 +112,8 @@ class Game implements ApplicationListener {
     }
 
     private void tick() {
-        if (Globals.gameState != GameState.NORMAL) {
+        if (state != GameState.NORMAL) {
             return;
-        }
-        if (roadNetwork == null) {
-            reload();
         }
 
         // So that the simulation could be easily sped up later;

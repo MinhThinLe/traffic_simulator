@@ -119,10 +119,10 @@ public class Renderer {
         Globals.stage.act(deltaTime);
     }
 
-    public static void resetUI() {
-        Globals.stage.clear();
+    public static void resetUI(GameState currentState) {
+        Globals.stage.getActors().forEach(actor -> actor.remove());
         Globals.stage.addActor(
-                switch (Globals.gameState) {
+                switch (currentState) {
                     case GameState.MAIN_MENU -> new MainMenu().createGUI();
                     case GameState.NORMAL -> new Hud().createGUI();
                     case GameState.LEVEL_SELECTION -> new MapSelection().createGUI();

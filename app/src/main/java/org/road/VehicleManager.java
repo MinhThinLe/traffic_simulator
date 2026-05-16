@@ -3,10 +3,10 @@ package org.road;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
+import org.utils.Timer;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 import org.vehicles.VehiclePacket;
-import org.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.List;
