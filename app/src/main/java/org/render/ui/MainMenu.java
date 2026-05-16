@@ -1,13 +1,9 @@
 package org.render.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-
-import org.Globals;
-import org.render.Renderer;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenu implements Gui {
     @Override
@@ -18,30 +14,22 @@ public class MainMenu implements Gui {
         TextButton quitButton = new TextButton("Thoát", Styles.getButtonStyle());
         TextButton startButton = new TextButton("Bắt đầu", Styles.getButtonStyle());
 
+        startButton.setName("start button");
+
         table.add(startButton).size(100, 50).pad(10).row();
         table.add(quitButton).size(100, 50).pad(10);
 
-        EventListener eventListener =
-                new EventListener() {
-                    @Override
-                    public boolean handle(Event event) {
-                        if (!(event instanceof ChangeEvent)) {
-                            return false;
-                        }
 
-                        if (event.getTarget() == quitButton) {
-                            System.exit(0);
-                        }
-                        if (event.getTarget() == startButton) {
-                            Globals.gameState = GameState.LEVEL_SELECTION;
-                            Renderer.resetUI();
-                        }
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == quitButton) {
+                    System.exit(0);
+                }
+            }
+        };
 
-                        return false;
-                    }
-                };
-
-        table.addListener(eventListener);
+        table.addListener(changeListener);
         return table;
     }
 }
