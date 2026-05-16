@@ -8,9 +8,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import org.render.*;
 import org.render.ui.GameState;
 import org.road.*;
-import org.vehicles.AmbulanceFactory;
-import org.vehicles.BusFactory;
-import org.vehicles.CivicFactory;
+import org.vehicles.factories.*;
 
 import java.io.InputStream;
 
@@ -70,6 +68,7 @@ class Game implements ApplicationListener {
         roadNetwork.addVehicleFactory(new AmbulanceFactory());
         roadNetwork.addVehicleFactory(new BusFactory());
         roadNetwork.addVehicleFactory(new CivicFactory());
+        roadNetwork.addVehicleFactory(new PoliceCarFactory());
     }
 
     private void draw() {

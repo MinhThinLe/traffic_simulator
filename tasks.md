@@ -14,7 +14,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Xe cứu thương 
     - [x] Ô tô
     - [x] Xe buýt
-    - [ ] Xe cảnh sát
+    - [x] Xe cảnh sát
     - [ ] Xe taxi
     - [ ] Siêu xe
     - [ ] Xe mini van

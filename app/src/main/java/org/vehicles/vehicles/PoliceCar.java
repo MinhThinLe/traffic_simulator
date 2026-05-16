@@ -1,23 +1,24 @@
-package org.vehicles;
+package org.vehicles.vehicles;
+
+import java.util.List;
+
+import org.render.drawcalls.TextureDrawCall;
+import org.road.Road;
+import org.utils.Timer;
+import org.vehicles.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import org.render.drawcalls.TextureDrawCall;
-import org.road.Road;
-import org.utils.Timer;
-
-import java.util.List;
-
-public class Ambulance extends Vehicle {
-    private static final String TEXTURE_PATH = "org/vehicles/textures/ambulance/ambulance.png";
-    private static final float DEFAULT_AMBULANCE_SPEED = 100;
+public class PoliceCar extends Vehicle {
+    private static final String TEXTURE_PATH = "org/vehicles/textures/police_car/police_car.png";
+    private static final float DEFAULT_SPEED = 80;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
 
-    static final int SPRITE_SIZE = 140;
-    static final int RENDERED_SIZE = 50;
+    private static final int SPRITE_SIZE = 100;
+    private static final int RENDERED_SIZE = 50;
 
     private static final float FLASH_INTERVAL = 0.2f;
 
@@ -25,24 +26,24 @@ public class Ambulance extends Vehicle {
     private Timer timer;
     private boolean side;
 
+    public PoliceCar(List<Road> path) {
+        super(path, DrivingMode.AGGRESSIVE, DEFAULT_SPEED, 1f, 1f);
 
-    public Ambulance(List<Road> path) {
-        super(path, DrivingMode.AGGRESSIVE, DEFAULT_AMBULANCE_SPEED, 1f, 1f);
-        Texture ambulanceTexture = new Texture(Gdx.files.internal(TEXTURE_PATH));
-        sprite = new Sprite(ambulanceTexture);
+        Texture texture = new Texture(Gdx.files.internal(TEXTURE_PATH));
+        sprite = new Sprite(texture);
         timer = new Timer(FLASH_INTERVAL);
     }
 
     @Override
     public int getVehiclePriority() {
-        return 10;
+        return 8;
     }
 
     @Override
     public float getWidth() {
         return WIDTH;
     }
-
+    
     @Override
     public float getHeight() {
         return HEIGHT;
@@ -50,7 +51,7 @@ public class Ambulance extends Vehicle {
 
     @Override
     public String getVehicleName() {
-        return "Ambulance";
+        return "Police car";
     }
 
     private static final int SPRITE_COUNT = 48;
@@ -62,6 +63,7 @@ public class Ambulance extends Vehicle {
         if (timer.hasFinished()) {
             side = !side;
         }
+
         float direction = getDirection().angleDeg();
         float spriteStep = 360f / (SPRITE_COUNT - 1);
         int spriteNumber = SPRITE_COUNT - (int) (direction / spriteStep) - 1;
@@ -76,12 +78,12 @@ public class Ambulance extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                        sprite,
-                        position.x - RENDERED_SIZE / 2,
-                        position.y - RENDERED_SIZE / 2,
-                        -position.y,
-                        RENDERED_SIZE,
-                        RENDERED_SIZE)
-                .submit();
+                sprite,
+                position.x - RENDERED_SIZE / 2, 
+                position.y - RENDERED_SIZE / 2, 
+                -position.y, 
+                RENDERED_SIZE, 
+                RENDERED_SIZE)
+            .submit();
     }
 }
