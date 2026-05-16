@@ -4,4 +4,5 @@ public enum GameState {
     MAIN_MENU,
     LEVEL_SELECTION,
     NORMAL,
+    PAUSED,
 }
