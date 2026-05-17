@@ -1,5 +1,7 @@
 package org.render.drawcalls;
 
+import org.render.Renderer;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -23,4 +25,8 @@ public abstract class PrimitiveDrawCall {
     }
 
     public abstract void draw(ShapeRenderer shapeRenderer);
+
+    public void submit() {
+        Renderer.addPrimitiveDrawCall(this);
+    }
 }

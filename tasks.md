@@ -27,7 +27,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Chuyển đổi thủ công
     - [x] Chuyển đổi hoàn toàn thủ công 
 
-- [ ] Thêm chế độ hiển thị đồ họa
+- [x] Thêm chế độ hiển thị đồ họa
 
 - [x] Thêm âm thanh
 
