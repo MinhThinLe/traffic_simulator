@@ -15,7 +15,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Ô tô
     - [x] Xe buýt
     - [x] Xe cảnh sát
-    - [ ] Xe taxi
+    - [x] Xe taxi
     - [ ] Siêu xe
     - [ ] Xe mini van
 
