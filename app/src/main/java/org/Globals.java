@@ -13,7 +13,7 @@ public class Globals {
     public static final float DEFAULT_SIMULATION_SPEED = 1;
     public static final float DEFAULT_VEHICLE_SPAWN_DELAY = 10;
 
-    public static DrawMode drawMode = DrawMode.PRIMITIVE;
+    public static DrawMode drawMode = DrawMode.GRAPHICAL;
     public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;
     public static Stage stage = new Stage(new FitViewport(1280, 720));
     public static InputMultiplexer inputMultiplexer = new InputMultiplexer();
