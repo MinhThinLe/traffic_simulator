@@ -1,8 +1,8 @@
 package org.utils;
 
-import org.Globals;
-
 import com.badlogic.gdx.Gdx;
+
+import org.Globals;
 
 public class Timer {
     private float duration;
