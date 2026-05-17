@@ -48,7 +48,7 @@ public class Renderer {
         fontParameter.magFilter = TextureFilter.Linear;
         fontParameter.minFilter = TextureFilter.Linear;
 
-        Globals.stage.addActor(new MainMenu().createGUI());
+        resetUI(GameState.MAIN_MENU);
     }
 
     public static void render(Matrix4 matrix) {
@@ -121,8 +121,9 @@ public class Renderer {
     }
 
     public static void resetUI(GameState currentState) {
-        Globals.stage.getActors().forEach(actor -> actor.remove());
-        Globals.stage.addActor(
+        // Globals.stage.getActors().forEach(actor -> actor.remove());
+        Globals.uiTable.clearChildren();
+        Globals.uiTable.addActor(
                 switch (currentState) {
                     case GameState.MAIN_MENU -> new MainMenu().createGUI();
                     case GameState.NORMAL -> new Hud().createGUI();

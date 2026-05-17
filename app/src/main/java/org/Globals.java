@@ -3,6 +3,7 @@ package org;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import org.render.*;
@@ -17,6 +18,7 @@ public class Globals {
     public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;
     public static Stage stage = new Stage(new FitViewport(1280, 720));
     public static InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    public static Table uiTable = new Table();
 
     public static Vector2 mouseWorldPosition = new Vector2();
     public static float simulationSpeed = DEFAULT_SIMULATION_SPEED;
@@ -44,5 +46,7 @@ public class Globals {
 
     static {
         inputMultiplexer.addProcessor(stage);
+        uiTable.setFillParent(true);
+        stage.addActor(uiTable);
     }
 }

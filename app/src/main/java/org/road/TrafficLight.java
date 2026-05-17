@@ -5,10 +5,17 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
@@ -16,6 +23,7 @@ import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
+import org.render.ui.GameState;
 import org.render.ui.Styles;
 import org.utils.Timer;
 
@@ -25,7 +33,17 @@ enum TrafficLightType {
     FULL_COUNT_DOWN,
     NO_COUNT_DOWN,
     LAST_TEN_SECONDS,
-    FULLY_MANUAL
+    FULLY_MANUAL;
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case FULL_COUNT_DOWN -> "Đếm giờ đầy đủ";
+            case NO_COUNT_DOWN -> "Không đếm giờ";
+            case LAST_TEN_SECONDS -> "Đếm 10 giây cuối";
+            case FULLY_MANUAL -> "Thủ công";
+        };
+    }
 }
 
 public class TrafficLight {
@@ -36,6 +54,7 @@ public class TrafficLight {
     private int permittedNodeIndex;
     private TrafficLightType type;
     private int id;
+    private Table hudTable;
 
     public TrafficLight(int id) {
         this.memberNodes = new ArrayList<>();
@@ -168,10 +187,27 @@ public class TrafficLight {
                 + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
 
+    private boolean clickedOnTable() {
+        Rectangle hudTableBoundingRect = new Rectangle(hudTable.getX(), hudTable.getY(), hudTable.getWidth(), hudTable.getHeight());
+        Vector2 clickedLocation = hudTable.getStage().getViewport().unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+
+        ScrollPane scrollPane = (ScrollPane) hudTable.getUserObject();
+        Rectangle scrollPaneBoundingRect = new Rectangle(scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(), scrollPane.getHeight());
+
+        return hudTableBoundingRect.contains(clickedLocation) || scrollPaneBoundingRect.contains(clickedLocation);
+    }
+
     public void tick(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
             int lightClickedIndex = getJustClickedLight();
             if (lightClickedIndex == -1) {
+                if (hudTable != null && !clickedOnTable()) {
+                    destroyHudTable();
+                }
+                return;
+            }
+            if (hudTable == null) {
+                createHudTable();
                 return;
             }
 
@@ -187,6 +223,73 @@ public class TrafficLight {
         }
 
         permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
+    }
+
+    private static final float PADDING = 5;
+    private void createHudTable() {
+        hudTable = new Table();
+        Table uiTable = (Table) Globals.uiTable.getChild(0);
+        Table firstChild = (Table) uiTable.getChild(0);
+        uiTable.add(hudTable).padTop(PADDING).row();
+
+        hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+
+        hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
+        hudTable.add(createTrafficLightDropDownMenu()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
+    }
+
+    private Table createTrafficLightTimerSlider() {
+        Table trafficLightTimerComponent = new Table();
+        Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
+        slider.setValue(this.timer.getDuration());
+
+        Label label = new Label("Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
+
+        trafficLightTimerComponent.add(slider).left().row();
+        trafficLightTimerComponent.left().add(label);
+
+        trafficLightTimerComponent.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == slider) {
+                    timer.setDuration(slider.getValue());
+                    label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
+                }
+            }
+        });
+
+        return trafficLightTimerComponent;
+    }
+
+    private Table createTrafficLightDropDownMenu() {
+        Table trafficLightDropDownComponent = new Table();
+
+        SelectBox<TrafficLightType> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
+        selectBox.setItems(TrafficLightType.values());
+        selectBox.setSelectedIndex(type.ordinal());
+
+        Label label = new Label("Chế độ đèn đỏ:", Styles.getLabelStyle());
+
+        hudTable.setUserObject(selectBox.getScrollPane());
+
+        trafficLightDropDownComponent.add(label).left().row();
+        trafficLightDropDownComponent.left().add(selectBox).row();
+
+        trafficLightDropDownComponent.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == selectBox) {
+                    type = selectBox.getSelected();
+                }
+            }
+        });
+
+        return trafficLightDropDownComponent;
+    }
+
+    private void destroyHudTable() {
+        hudTable = null;
+        Renderer.resetUI(GameState.NORMAL);
     }
 
     private int getJustClickedLight() {

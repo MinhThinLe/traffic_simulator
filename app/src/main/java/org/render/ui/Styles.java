@@ -1,7 +1,10 @@
 package org.render.ui;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
@@ -25,5 +28,20 @@ public class Styles {
 
     public static LabelStyle getLabelStyle() {
         return new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
+    }
+
+    public static SelectBoxStyle getSelectBoxStyle() {
+        return new SelectBoxStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK, Renderer.uiSkin.getDrawable("selectbox"), getScrollPaneStyle(), getListStyle());
+    }
+
+    public static ScrollPaneStyle getScrollPaneStyle() {
+        return new ScrollPaneStyle(null, Renderer.uiSkin.getDrawable("scrollpane"), Renderer.uiSkin.getDrawable("scrollpane-knob"), Renderer.uiSkin.getDrawable("scrollpane"), Renderer.uiSkin.getDrawable("scrollpane-knob"));
+    }
+
+    public static ListStyle getListStyle() {
+        ListStyle style = new ListStyle(Renderer.getFont(Globals.FONT_SIZE), Color.WHITE, Color.WHITE, Renderer.uiSkin.getDrawable("button-pressed"));
+        style.background = Renderer.uiSkin.getDrawable("list");
+
+        return style;
     }
 }
