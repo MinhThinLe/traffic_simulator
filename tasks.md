@@ -16,7 +16,7 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Xe buýt
     - [x] Xe cảnh sát
     - [x] Xe taxi
-    - [ ] Siêu xe
+    - [x] Siêu xe
     - [ ] Xe mini van
 
 - [x] Hỗ trợ xe có thể vượt nhau
