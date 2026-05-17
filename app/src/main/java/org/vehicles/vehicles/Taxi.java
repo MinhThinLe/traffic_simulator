@@ -1,15 +1,15 @@
 package org.vehicles.vehicles;
 
-import java.util.List;
-
-import org.vehicles.DrivingMode;
-import org.vehicles.Vehicle;
-import org.render.drawcalls.TextureDrawCall;
-import org.road.Road;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import org.render.drawcalls.TextureDrawCall;
+import org.road.Road;
+import org.vehicles.DrivingMode;
+import org.vehicles.Vehicle;
+
+import java.util.List;
 
 public class Taxi extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/taxi/taxi.png";
@@ -64,12 +64,12 @@ public class Taxi extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                sprite, 
-                position.x - RENDERED_SIZE / 2, 
-                position.y - RENDERED_SIZE / 2, 
-                -position.y, 
-                RENDERED_SIZE, 
-                RENDERED_SIZE)
-            .submit();
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE)
+                .submit();
     }
 }

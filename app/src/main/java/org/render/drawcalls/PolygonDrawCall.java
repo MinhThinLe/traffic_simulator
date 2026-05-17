@@ -18,8 +18,20 @@ public class PolygonDrawCall extends PrimitiveDrawCall {
         prepare(shapeRenderer);
         if (shapeType == ShapeType.Filled) {
             float[] verticies = polygon.getTransformedVertices();
-            shapeRenderer.triangle(verticies[0], verticies[1], verticies[2], verticies[3], verticies[4], verticies[5]);
-            shapeRenderer.triangle(verticies[0], verticies[1], verticies[4], verticies[5], verticies[6], verticies[7]);
+            shapeRenderer.triangle(
+                    verticies[0],
+                    verticies[1],
+                    verticies[2],
+                    verticies[3],
+                    verticies[4],
+                    verticies[5]);
+            shapeRenderer.triangle(
+                    verticies[0],
+                    verticies[1],
+                    verticies[4],
+                    verticies[5],
+                    verticies[6],
+                    verticies[7]);
             return;
         }
         shapeRenderer.polygon(polygon.getTransformedVertices());

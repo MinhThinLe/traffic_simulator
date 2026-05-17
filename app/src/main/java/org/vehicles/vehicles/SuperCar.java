@@ -1,16 +1,16 @@
 package org.vehicles.vehicles;
 
-import java.util.List;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
 import org.vehicles.DrivingMode;
 import org.vehicles.Vehicle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.List;
 
 public class SuperCar extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/super_car/";
@@ -18,18 +18,19 @@ public class SuperCar extends Vehicle {
     private static final float DEFAULT_SPEED = 70;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
-    
+
     private static final int SPRITE_SIZE = 100;
     private static final int RENDERED_SIZE = 50;
     private static final int SPRITE_COUNT = 48;
     private static final int COLUMN_COUNT = 7;
 
     private Sprite sprite;
-    
+
     public SuperCar(List<Road> path, SuperCarColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0.4f, 0.5f);
 
-        FileHandle file = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle file =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
@@ -65,12 +66,12 @@ public class SuperCar extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                sprite, 
-                position.x - RENDERED_SIZE / 2, 
-                position.y - RENDERED_SIZE / 2, 
-                -position.y, 
-                RENDERED_SIZE, 
-                RENDERED_SIZE)
-            .submit();
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE)
+                .submit();
     }
 }

@@ -28,7 +28,7 @@ public class Hud implements Gui {
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(7).add(innerTable).row();;
+        table.top().right().pad(7).add(innerTable).row();
 
         return table;
     }
@@ -124,6 +124,8 @@ public class Hud implements Gui {
     }
 
     private static String simulationSpeedAsString() {
-        return SIMULATION_SPEED_MESSAGE_STRING + (Globals.simulationSpeed + "").substring(0, 3) + "x";
+        return SIMULATION_SPEED_MESSAGE_STRING
+                + (Globals.simulationSpeed + "").substring(0, 3)
+                + "x";
     }
 }

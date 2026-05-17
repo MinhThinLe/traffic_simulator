@@ -25,14 +25,15 @@ public class PauseMenu implements Gui {
         table.add(titleScreenButton).size(150, 50).pad(10).row();
         table.add(quitButton).size(150, 50).pad(10).row();
 
-        table.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == quitButton) {
-                    System.exit(0);
-                }
-            }
-        });
+        table.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == quitButton) {
+                            System.exit(0);
+                        }
+                    }
+                });
 
         return table;
     }

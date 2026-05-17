@@ -1,16 +1,16 @@
 package org.vehicles.vehicles;
 
-import java.util.List;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import org.render.drawcalls.TextureDrawCall;
 import org.road.Road;
 import org.vehicles.DrivingMode;
 import org.vehicles.Vehicle;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import java.util.List;
 
 public class Minivan extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/minivans/";
@@ -22,12 +22,13 @@ public class Minivan extends Vehicle {
     private static final int RENDERED_SIZE = 50;
     private static final int SPRITE_COUNT = 48;
     private static final int COLUMN_COUNT = 7;
-    
+
     private Sprite sprite;
 
     public Minivan(List<Road> path, MinivanColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0f, 0f);
-        FileHandle file = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle file =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
@@ -63,12 +64,12 @@ public class Minivan extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                sprite, 
-                position.x - RENDERED_SIZE / 2, 
-                position.y - RENDERED_SIZE / 2, 
-                -position.y, 
-                RENDERED_SIZE, 
-                RENDERED_SIZE)
-            .submit();
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE)
+                .submit();
     }
 }

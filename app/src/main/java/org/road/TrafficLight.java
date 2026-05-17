@@ -10,11 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.common.graph.MutableGraph;
 
@@ -134,7 +134,11 @@ public class TrafficLight {
     private void drawLight(Vector2 location, Road sourceNode) {
         CircleDrawCall drawCall =
                 new CircleDrawCall(
-                        location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, getColor(sourceNode));
+                        location.x,
+                        location.y,
+                        WIDTH * 0.45f,
+                        ShapeType.Filled,
+                        getColor(sourceNode));
         Renderer.addPrimitiveDrawCall(drawCall);
     }
 
@@ -188,13 +192,27 @@ public class TrafficLight {
     }
 
     private boolean clickedOnTable() {
-        Rectangle hudTableBoundingRect = new Rectangle(hudTable.getX(), hudTable.getY(), hudTable.getWidth(), hudTable.getHeight());
-        Vector2 clickedLocation = hudTable.getStage().getViewport().unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        Rectangle hudTableBoundingRect =
+                new Rectangle(
+                        hudTable.getX(),
+                        hudTable.getY(),
+                        hudTable.getWidth(),
+                        hudTable.getHeight());
+        Vector2 clickedLocation =
+                hudTable.getStage()
+                        .getViewport()
+                        .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
         ScrollPane scrollPane = (ScrollPane) hudTable.getUserObject();
-        Rectangle scrollPaneBoundingRect = new Rectangle(scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(), scrollPane.getHeight());
+        Rectangle scrollPaneBoundingRect =
+                new Rectangle(
+                        scrollPane.getX(),
+                        scrollPane.getY(),
+                        scrollPane.getWidth(),
+                        scrollPane.getHeight());
 
-        return hudTableBoundingRect.contains(clickedLocation) || scrollPaneBoundingRect.contains(clickedLocation);
+        return hudTableBoundingRect.contains(clickedLocation)
+                || scrollPaneBoundingRect.contains(clickedLocation);
     }
 
     public void tick(float deltaTime) {
@@ -226,6 +244,7 @@ public class TrafficLight {
     }
 
     private static final float PADDING = 5;
+
     private void createHudTable() {
         hudTable = new Table();
         Table uiTable = (Table) Globals.uiTable.getChild(0);
@@ -234,8 +253,14 @@ public class TrafficLight {
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
-        hudTable.add(createTrafficLightDropDownMenu()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
+        hudTable.add(createTrafficLightTimerSlider())
+                .width(firstChild.getWidth() - PADDING * 3)
+                .pad(PADDING)
+                .row();
+        hudTable.add(createTrafficLightDropDownMenu())
+                .width(firstChild.getWidth() - PADDING * 3)
+                .pad(PADDING)
+                .row();
     }
 
     private Table createTrafficLightTimerSlider() {
@@ -243,20 +268,24 @@ public class TrafficLight {
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(this.timer.getDuration());
 
-        Label label = new Label("Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
+        Label label =
+                new Label(
+                        "Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s",
+                        Styles.getLabelStyle());
 
         trafficLightTimerComponent.add(slider).left().row();
         trafficLightTimerComponent.left().add(label);
 
-        trafficLightTimerComponent.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == slider) {
-                    timer.setDuration(slider.getValue());
-                    label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
-                }
-            }
-        });
+        trafficLightTimerComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            timer.setDuration(slider.getValue());
+                            label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
+                        }
+                    }
+                });
 
         return trafficLightTimerComponent;
     }
@@ -275,14 +304,15 @@ public class TrafficLight {
         trafficLightDropDownComponent.add(label).left().row();
         trafficLightDropDownComponent.left().add(selectBox).row();
 
-        trafficLightDropDownComponent.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == selectBox) {
-                    type = selectBox.getSelected();
-                }
-            }
-        });
+        trafficLightDropDownComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == selectBox) {
+                            type = selectBox.getSelected();
+                        }
+                    }
+                });
 
         return trafficLightDropDownComponent;
     }

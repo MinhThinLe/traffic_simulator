@@ -25,7 +25,6 @@ public class Globals {
     public static Random rng = new Random();
     public static int FONT_SIZE = 18;
 
-
     public static String VIETNAMESE_CHARACTERS =
             """
               à á ả ã ạ
@@ -42,7 +41,8 @@ public class Globals {
             ư ừ ứ ử ữ ự
               ỳ ý ỷ ỹ ỵ
             """
-                    .replace(" ", "").replace("\n", "");
+                    .replace(" ", "")
+                    .replace("\n", "");
 
     static {
         inputMultiplexer.addProcessor(stage);
