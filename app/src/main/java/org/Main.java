@@ -129,6 +129,7 @@ class Game implements ApplicationListener {
         roadNetwork.addVehicleFactory(new BusFactory());
         roadNetwork.addVehicleFactory(new CivicFactory());
         roadNetwork.addVehicleFactory(new PoliceCarFactory());
+        roadNetwork.addVehicleFactory(new TaxiFactory());
     }
 
     private void setState(GameState state) {
