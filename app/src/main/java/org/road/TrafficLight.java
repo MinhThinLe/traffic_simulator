@@ -23,6 +23,7 @@ import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
+import org.render.ui.GameState;
 import org.render.ui.Styles;
 import org.utils.Timer;
 
@@ -32,7 +33,17 @@ enum TrafficLightType {
     FULL_COUNT_DOWN,
     NO_COUNT_DOWN,
     LAST_TEN_SECONDS,
-    FULLY_MANUAL
+    FULLY_MANUAL;
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case FULL_COUNT_DOWN -> "Đếm giờ đầy đủ";
+            case NO_COUNT_DOWN -> "Không đếm giờ";
+            case LAST_TEN_SECONDS -> "Đếm 10 giây cuối";
+            case FULLY_MANUAL -> "Thủ công";
+        };
+    }
 }
 
 public class TrafficLight {
@@ -219,12 +230,12 @@ public class TrafficLight {
         hudTable = new Table();
         Table uiTable = (Table) Globals.uiTable.getChild(0);
         Table firstChild = (Table) uiTable.getChild(0);
-        uiTable.add(hudTable).pad(PADDING).row();
+        uiTable.add(hudTable).padTop(PADDING).row();
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING).row();
-        hudTable.add(createTrafficLightDropDownMenu()).width(firstChild.getWidth() - PADDING).row();
+        hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
+        hudTable.add(createTrafficLightDropDownMenu()).width(firstChild.getWidth() - PADDING * 3).pad(PADDING).row();
     }
 
     private Table createTrafficLightTimerSlider() {
@@ -234,8 +245,8 @@ public class TrafficLight {
 
         Label label = new Label("Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
 
-        trafficLightTimerComponent.add(slider).row();
-        trafficLightTimerComponent.add(label);
+        trafficLightTimerComponent.add(slider).left().row();
+        trafficLightTimerComponent.left().add(label);
 
         trafficLightTimerComponent.addListener(new ChangeListener() {
             @Override
@@ -255,10 +266,15 @@ public class TrafficLight {
 
         SelectBox<TrafficLightType> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
         selectBox.setItems(TrafficLightType.values());
+        selectBox.setSelectedIndex(type.ordinal());
+
+        Label label = new Label("Chế độ đèn đỏ:", Styles.getLabelStyle());
 
         hudTable.setUserObject(selectBox.getScrollPane());
 
-        trafficLightDropDownComponent.add(selectBox);
+        trafficLightDropDownComponent.add(label).left().row();
+        trafficLightDropDownComponent.left().add(selectBox).row();
+
         trafficLightDropDownComponent.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -272,8 +288,8 @@ public class TrafficLight {
     }
 
     private void destroyHudTable() {
-        hudTable.remove();
         hudTable = null;
+        Renderer.resetUI(GameState.NORMAL);
     }
 
     private int getJustClickedLight() {
