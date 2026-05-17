@@ -10,14 +10,14 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [x] Sinh phương tiện vào bản đồ
 
-- [-] Thêm phương tiện
+- [x] Thêm phương tiện
     - [x] Xe cứu thương 
     - [x] Ô tô
     - [x] Xe buýt
     - [x] Xe cảnh sát
     - [x] Xe taxi
     - [x] Siêu xe
-    - [ ] Xe mini van
+    - [x] Xe mini van
 
 - [x] Hỗ trợ xe có thể vượt nhau
 
