@@ -87,6 +87,8 @@ class Game implements ApplicationListener {
                         }
                         if (actor.getName() == "title screen button") {
                             setState(GameState.MAIN_MENU);
+                            Globals.simulationSpeed = Globals.DEFAULT_SIMULATION_SPEED;
+                            Globals.vehicleSpawnDelay = Globals.DEFAULT_VEHICLE_SPAWN_DELAY;
                             return;
                         }
                         if (actor.getName() != null) {
