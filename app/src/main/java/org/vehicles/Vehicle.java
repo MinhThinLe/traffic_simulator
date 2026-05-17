@@ -53,6 +53,7 @@ public abstract class Vehicle {
         this.speed = speed;
         this.impatientness = impatientness;
         this.stinginess = stinginess;
+        this.direction = new Vector2();
 
         this.honkTimer = new Timer(BASE_TIMER_DURATION - impatientness * 4);
     }

@@ -14,6 +14,7 @@ import org.render.Renderer;
 
 public class Hud implements Gui {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
+    private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
 
     @Override
     public Table createGUI() {
@@ -91,10 +92,10 @@ public class Hud implements Gui {
     private static Table makeSimulationSpeedSlider() {
         Table simulationSpeedSliderComponent = new Table();
 
-        Slider slider = new Slider(0f, 50f, 0.1f, false, Styles.getSliderStyle());
+        Slider slider = new Slider(0f, 5f, 0.1f, false, Styles.getSliderStyle());
         slider.setValue(Globals.simulationSpeed);
 
-        Label label = new Label("Tốc độ mô phỏng: 1.0", Styles.getLabelStyle());
+        Label label = new Label(simulationSpeedAsString(), Styles.getLabelStyle());
 
         simulationSpeedSliderComponent.addListener(
                 new ChangeListener() {
@@ -102,7 +103,7 @@ public class Hud implements Gui {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             Globals.simulationSpeed = slider.getValue();
-                            label.setText("Tốc độ mô phỏng: " + (Globals.simulationSpeed + "").substring(0, 3));
+                            label.setText(simulationSpeedAsString());
                         }
                     }
                 });
@@ -120,5 +121,9 @@ public class Hud implements Gui {
             padding = "  ";
         }
         return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
+    }
+
+    private static String simulationSpeedAsString() {
+        return SIMULATION_SPEED_MESSAGE_STRING + (Globals.simulationSpeed + "").substring(0, 3) + "x";
     }
 }
