@@ -82,9 +82,17 @@ public abstract class Vehicle {
     }
 
     public void moveToward(Vector2 newPosition, float deltaTime) {
+        float distance = this.position.dst(newPosition);
+        float speed = this.speed * deltaTime;
+        if (distance < speed) {
+            this.position.set(newPosition);
+            return;
+        }
+
         Vector2 direction = newPosition.sub(this.position);
+
         this.direction = new Vector2(direction);
-        this.position.add(direction.setLength(this.speed).scl(deltaTime));
+        this.position.add(direction.setLength(speed));
     }
 
     public final void draw() {

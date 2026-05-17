@@ -91,7 +91,7 @@ public class Hud implements Gui {
     private static Table makeSimulationSpeedSlider() {
         Table simulationSpeedSliderComponent = new Table();
 
-        Slider slider = new Slider(0f, 5f, 0.1f, false, Styles.getSliderStyle());
+        Slider slider = new Slider(0f, 50f, 0.1f, false, Styles.getSliderStyle());
         slider.setValue(Globals.simulationSpeed);
 
         Label label = new Label("Tốc độ mô phỏng: 1.0", Styles.getLabelStyle());
