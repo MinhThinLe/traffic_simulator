@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
@@ -206,23 +208,37 @@ public class TrafficLight {
         permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
     }
 
+    private static final float PADDING = 5;
     private void createHudTable() {
         hudTable = new Table();
         Table uiTable = (Table) Globals.uiTable.getChild(0);
-        uiTable.add(hudTable).row();
+        Table firstChild = (Table) uiTable.getChild(0);
+        uiTable.add(hudTable).pad(PADDING).row();
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        hudTable.add(createTrafficLightTimerSlider()).row();
+        hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING).row();
     }
 
     private Table createTrafficLightTimerSlider() {
         Table trafficLightTimerComponent = new Table();
-        Slider trafficLightSlider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
-        Label label = new Label("Độ dài đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
+        Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
+        slider.setValue(this.timer.getDuration());
 
-        trafficLightTimerComponent.add(trafficLightSlider).row();
+        Label label = new Label("Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
+
+        trafficLightTimerComponent.add(slider).row();
         trafficLightTimerComponent.add(label);
+
+        trafficLightTimerComponent.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == slider) {
+                    timer.setDuration(slider.getValue());
+                    label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
+                }
+            }
+        });
 
         return trafficLightTimerComponent;
     }
