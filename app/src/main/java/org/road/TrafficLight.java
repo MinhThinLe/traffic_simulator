@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -175,9 +177,13 @@ public class TrafficLight {
     }
 
     private boolean clickedOnTable() {
-        Rectangle boundingRect = new Rectangle(hudTable.getX(), hudTable.getY(), hudTable.getWidth(), hudTable.getHeight());
+        Rectangle hudTableBoundingRect = new Rectangle(hudTable.getX(), hudTable.getY(), hudTable.getWidth(), hudTable.getHeight());
         Vector2 clickedLocation = hudTable.getStage().getViewport().unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-        return boundingRect.contains(clickedLocation);
+
+        ScrollPane scrollPane = (ScrollPane) hudTable.getUserObject();
+        Rectangle scrollPaneBoundingRect = new Rectangle(scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(), scrollPane.getHeight());
+
+        return hudTableBoundingRect.contains(clickedLocation) || scrollPaneBoundingRect.contains(clickedLocation);
     }
 
     public void tick(float deltaTime) {
@@ -218,6 +224,7 @@ public class TrafficLight {
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
         hudTable.add(createTrafficLightTimerSlider()).width(firstChild.getWidth() - PADDING).row();
+        hudTable.add(createTrafficLightDropDownMenu()).width(firstChild.getWidth() - PADDING).row();
     }
 
     private Table createTrafficLightTimerSlider() {
@@ -241,6 +248,27 @@ public class TrafficLight {
         });
 
         return trafficLightTimerComponent;
+    }
+
+    private Table createTrafficLightDropDownMenu() {
+        Table trafficLightDropDownComponent = new Table();
+
+        SelectBox<TrafficLightType> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
+        selectBox.setItems(TrafficLightType.values());
+
+        hudTable.setUserObject(selectBox.getScrollPane());
+
+        trafficLightDropDownComponent.add(selectBox);
+        trafficLightDropDownComponent.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == selectBox) {
+                    type = selectBox.getSelected();
+                }
+            }
+        });
+
+        return trafficLightDropDownComponent;
     }
 
     private void destroyHudTable() {
