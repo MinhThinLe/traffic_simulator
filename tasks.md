@@ -33,9 +33,9 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
 
 - [x] Vẽ đường xe chạy đẹp hơn
 
-- [ ] Chỉnh sửa đèn đỏ
-    - [ ] Chế độ
-    - [ ] Thời gian
+- [x] Chỉnh sửa đèn đỏ
+    - [x] Chế độ
+    - [x] Thời gian
 
 - [x] Thêm menu chính
     - [x] Giao diện chọn bản đồ
