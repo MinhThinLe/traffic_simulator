@@ -16,6 +16,7 @@ import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
+import org.render.ui.Styles;
 import org.utils.Timer;
 
 import java.util.ArrayList;
@@ -60,19 +61,12 @@ public class TrafficLight {
     }
 
     public void draw() {
-        switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE -> primitiveDraw();
-            case DrawMode.GRAPHICAL -> graphicalDraw();
-        }
-    }
-
-    private void primitiveDraw() {
         for (int i = 0; i < ingressNodes.size(); i++) {
-            primitiveDrawEdge(ingressNodes.get(i));
+            drawEdge(ingressNodes.get(i));
         }
     }
 
-    private static final float WIDTH = 15;
+    private static final float WIDTH = 20;
     private static final float HEIGHT = 2 * WIDTH;
     private static final float[] polygonMesh =
             new float[] {
@@ -98,15 +92,14 @@ public class TrafficLight {
         return polygon;
     }
 
-    private void primitiveDrawEdge(RoadEdge edge) {
+    private void drawEdge(RoadEdge edge) {
         drawBody(edge);
         drawContent(edge);
     }
 
     private void drawBody(RoadEdge edge) {
         Polygon polygon = getPolygonBody(edge);
-        PolygonDrawCall drawCall = new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Line);
-        Renderer.addPrimitiveDrawCall(drawCall);
+        new PolygonDrawCall(polygon, Color.BLACK, ShapeType.Filled).submit();
     }
 
     private void drawContent(RoadEdge edge) {
@@ -119,30 +112,26 @@ public class TrafficLight {
         drawCounter(location, edge.source(), polygon.getRotation());
     }
 
-    private void drawLight(Vector2 location, Road sourceEdge) {
-        Color lightColor = Color.RED;
-        if (isPermittedNode(sourceEdge)) {
-            lightColor = Color.GREEN;
-        }
-
+    private void drawLight(Vector2 location, Road sourceNode) {
         CircleDrawCall drawCall =
                 new CircleDrawCall(
-                        location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, lightColor);
+                        location.x, location.y, WIDTH * 0.45f, ShapeType.Filled, getColor(sourceNode));
         Renderer.addPrimitiveDrawCall(drawCall);
     }
 
-    private void drawCounter(Vector2 location, Road sourceEdge, float angle) {
+    private void drawCounter(Vector2 location, Road sourceNode, float angle) {
         if (this.type == TrafficLightType.NO_COUNT_DOWN
                 || this.type == TrafficLightType.FULLY_MANUAL) {
             return;
         }
         if (this.type == TrafficLightType.LAST_TEN_SECONDS
-                && Math.ceil(getRemainingTime(sourceEdge)) > 10) {
+                && Math.ceil(getRemainingTime(sourceNode)) > 10) {
             return;
         }
 
-        LabelStyle labelStyle = new LabelStyle(Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
-        Label label = new Label((int) Math.ceil(getRemainingTime(sourceEdge)) + "", labelStyle);
+        LabelStyle labelStyle = Styles.getLabelStyle();
+        labelStyle.fontColor = getColor(sourceNode);
+        Label label = new Label((int) Math.ceil(getRemainingTime(sourceNode)) + "", labelStyle);
 
         Container<Label> container = new Container<Label>(label);
 
@@ -152,6 +141,15 @@ public class TrafficLight {
 
         WidgetDrawCall drawCall = new WidgetDrawCall(container);
         Renderer.addGraphicalDrawCall(drawCall);
+    }
+
+    private Color getColor(Road soureNode) {
+        Color color = Color.RED;
+        if (isPermittedNode(soureNode)) {
+            color = Color.GREEN;
+        }
+
+        return color;
     }
 
     private float getRemainingTime(Road ingressNode) {
@@ -169,8 +167,6 @@ public class TrafficLight {
         return this.timer.getTimeRemaining()
                 + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
-
-    private void graphicalDraw() {}
 
     public void tick(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
