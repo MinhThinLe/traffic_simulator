@@ -5,9 +5,12 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.google.common.graph.MutableGraph;
 
@@ -36,6 +39,7 @@ public class TrafficLight {
     private int permittedNodeIndex;
     private TrafficLightType type;
     private int id;
+    private Table hudTable;
 
     public TrafficLight(int id) {
         this.memberNodes = new ArrayList<>();
@@ -168,10 +172,23 @@ public class TrafficLight {
                 + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
 
+    private boolean clickedOnTable() {
+        Rectangle boundingRect = new Rectangle(hudTable.getX(), hudTable.getY(), hudTable.getWidth(), hudTable.getHeight());
+        Vector2 clickedLocation = hudTable.getStage().getViewport().unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        return boundingRect.contains(clickedLocation);
+    }
+
     public void tick(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
             int lightClickedIndex = getJustClickedLight();
             if (lightClickedIndex == -1) {
+                if (hudTable != null && !clickedOnTable()) {
+                    destroyHudTable();
+                }
+                return;
+            }
+            if (hudTable == null) {
+                createHudTable();
                 return;
             }
 
@@ -187,6 +204,32 @@ public class TrafficLight {
         }
 
         permittedNodeIndex = (permittedNodeIndex + 1) % ingressNodes.size();
+    }
+
+    private void createHudTable() {
+        hudTable = new Table();
+        Table uiTable = (Table) Globals.uiTable.getChild(0);
+        uiTable.add(hudTable).row();
+
+        hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+
+        hudTable.add(createTrafficLightTimerSlider()).row();
+    }
+
+    private Table createTrafficLightTimerSlider() {
+        Table trafficLightTimerComponent = new Table();
+        Slider trafficLightSlider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
+        Label label = new Label("Độ dài đèn đỏ: " + this.timer.getDuration() + "s", Styles.getLabelStyle());
+
+        trafficLightTimerComponent.add(trafficLightSlider).row();
+        trafficLightTimerComponent.add(label);
+
+        return trafficLightTimerComponent;
+    }
+
+    private void destroyHudTable() {
+        hudTable.remove();
+        hudTable = null;
     }
 
     private int getJustClickedLight() {

@@ -28,7 +28,7 @@ public class Hud implements Gui {
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(7).add(innerTable);
+        table.top().right().pad(7).add(innerTable).row();;
 
         return table;
     }
