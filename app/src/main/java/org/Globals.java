@@ -10,15 +10,19 @@ import org.render.*;
 import java.util.Random;
 
 public class Globals {
+    public static final float DEFAULT_SIMULATION_SPEED = 1;
+    public static final float DEFAULT_VEHICLE_SPAWN_DELAY = 10;
+
     public static DrawMode drawMode = DrawMode.PRIMITIVE;
-    public static float vehicleSpawnDelay = 10;
+    public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;
     public static Stage stage = new Stage(new FitViewport(1280, 720));
     public static InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     public static Vector2 mouseWorldPosition = new Vector2();
+    public static float simulationSpeed = DEFAULT_SIMULATION_SPEED;
     public static Random rng = new Random();
-    public static String mapName = "3-way-intersection.graphml";
     public static int FONT_SIZE = 18;
+
 
     public static String VIETNAMESE_CHARACTERS =
             """
@@ -36,7 +40,7 @@ public class Globals {
             ư ừ ứ ử ữ ự
               ỳ ý ỷ ỹ ỵ
             """
-                    .replace(" ", "");
+                    .replace(" ", "").replace("\n", "");
 
     static {
         inputMultiplexer.addProcessor(stage);

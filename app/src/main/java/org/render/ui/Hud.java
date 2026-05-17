@@ -14,6 +14,7 @@ import org.render.Renderer;
 
 public class Hud implements Gui {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
+    private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
 
     @Override
     public Table createGUI() {
@@ -22,7 +23,8 @@ public class Hud implements Gui {
 
         Table innerTable = new Table();
         innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();
-        innerTable.add(makeSpawnDelaySlider()).pad(5);
+        innerTable.add(makeSpawnDelaySlider()).align(Align.left).pad(5).row();
+        innerTable.add(makeSimulationSpeedSlider()).align(Align.left).pad(5).row();
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
@@ -57,7 +59,7 @@ public class Hud implements Gui {
                 });
 
         drawModeSwitcherComponent.add(label).padRight(5);
-        drawModeSwitcherComponent.add(button);
+        drawModeSwitcherComponent.add(button).align(Align.right);
 
         return drawModeSwitcherComponent;
     }
@@ -81,10 +83,35 @@ public class Hud implements Gui {
                     }
                 });
 
-        spawnDelaySliderComponent.add(slider).row();
+        spawnDelaySliderComponent.add(slider).align(Align.left).row();
         spawnDelaySliderComponent.add(label);
 
         return spawnDelaySliderComponent;
+    }
+
+    private static Table makeSimulationSpeedSlider() {
+        Table simulationSpeedSliderComponent = new Table();
+
+        Slider slider = new Slider(0f, 5f, 0.1f, false, Styles.getSliderStyle());
+        slider.setValue(Globals.simulationSpeed);
+
+        Label label = new Label(simulationSpeedAsString(), Styles.getLabelStyle());
+
+        simulationSpeedSliderComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            Globals.simulationSpeed = slider.getValue();
+                            label.setText(simulationSpeedAsString());
+                        }
+                    }
+                });
+
+        simulationSpeedSliderComponent.add(slider).align(Align.left).row();
+        simulationSpeedSliderComponent.add(label);
+
+        return simulationSpeedSliderComponent;
     }
 
     private static String vehicleSpawnDelayAsString() {
@@ -94,5 +121,9 @@ public class Hud implements Gui {
             padding = "  ";
         }
         return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
+    }
+
+    private static String simulationSpeedAsString() {
+        return SIMULATION_SPEED_MESSAGE_STRING + (Globals.simulationSpeed + "").substring(0, 3) + "x";
     }
 }
