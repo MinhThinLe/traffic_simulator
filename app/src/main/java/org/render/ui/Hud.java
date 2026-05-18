@@ -136,6 +136,7 @@ public class Hud implements Gui {
 
     private static final int COLUMNS = 3;
     private static final float THUMBNAIL_SIZE = 64;
+
     private static Table makeVehicleToggleComponent() {
         Table vehicleToggleTable = new Table();
 

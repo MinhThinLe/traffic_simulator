@@ -62,6 +62,10 @@ public class Styles {
     }
 
     public static CheckBoxStyle getCheckBoxStyle() {
-        return new CheckBoxStyle(Renderer.uiSkin.getDrawable("checkbox-off"), Renderer.uiSkin.getDrawable("checkbox-on"), Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
+        return new CheckBoxStyle(
+                Renderer.uiSkin.getDrawable("checkbox-off"),
+                Renderer.uiSkin.getDrawable("checkbox-on"),
+                Renderer.getFont(Globals.FONT_SIZE),
+                Color.BLACK);
     }
 }

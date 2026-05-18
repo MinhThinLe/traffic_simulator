@@ -18,6 +18,8 @@ theo thứ tự quan trọng nhất ở đầu và độ ưu tiên giảm dần 
     - [x] Xe taxi
     - [x] Siêu xe
     - [x] Xe mini van
+    - [ ] Sedan
+    - [ ] SUV
 
 - [x] Hỗ trợ xe có thể vượt nhau
 
