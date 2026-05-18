@@ -11,7 +11,6 @@ import com.google.common.graph.MutableGraph;
 
 import org.Globals;
 import org.render.*;
-import org.render.drawcalls.CircleDrawCall;
 import org.render.drawcalls.LineDrawCall;
 import org.render.drawcalls.TextureDrawCall;
 import org.vehicles.Vehicle;
@@ -213,14 +212,6 @@ public class RoadNetwork {
             }
             if (node.getCurrentVehicle().isUnderCursor()) {
                 hoverVehicle = node.getCurrentVehicle();
-            }
-        }
-
-        if (hoverVehicle != null) {
-            List<Road> vehiclePath = hoverVehicle.getPath();
-            for (int i = 0; i < vehiclePath.size(); i++) {
-                Vector2 position = vehiclePath.get(i).getPosition();
-                new CircleDrawCall(position.x, position.y, 2, ShapeType.Filled, Color.RED).submit();;
             }
         }
     }
