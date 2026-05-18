@@ -248,6 +248,10 @@ public class Road {
         this.priorityQueue.poll();
     }
 
+    Vehicle getCurrentVehicle() {
+        return this.vehicle;
+    }
+
     private void removeCurrentVehicle() {
         this.vehicle = null;
         this.sentVehicle = false;

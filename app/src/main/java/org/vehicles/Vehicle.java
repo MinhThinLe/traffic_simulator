@@ -149,6 +149,18 @@ public abstract class Vehicle {
         drawText();
     }
 
+    public boolean isUnderCursor() {
+        Polygon polygon = getPolygonMesh();
+        polygon.translate(position.x, position.y);
+        polygon.rotate(getDirection().angleDeg());
+
+        return polygon.contains(Globals.mouseWorldPosition);
+    }
+
+    public List<Road> getPath() {
+        return this.path;
+    }
+
     void drawBody() {
         float angle = getDirection().angleDeg();
         Polygon polygon = getPolygonMesh();
