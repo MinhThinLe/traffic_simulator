@@ -23,8 +23,10 @@ public class Globals {
                     new CivicFactory(),
                     new MinivanFactory(),
                     new PoliceCarFactory(),
+                    new SedanFactory(),
                     new SuperCarFactory(),
-                    new TaxiFactory());
+                    new TaxiFactory()
+                    );
 
     public static DrawMode drawMode = DrawMode.GRAPHICAL;
     public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;
