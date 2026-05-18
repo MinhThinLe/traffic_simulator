@@ -155,7 +155,7 @@ class Game implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime() * Globals.simulationSpeed;
         Renderer.processUI(deltaTime);
-        camera.update(deltaTime);
+        camera.update();
         roadNetwork.circulateTraffic(deltaTime);
     }
 }
