@@ -42,6 +42,10 @@ public class RoadNetwork {
         vehicleManager.addVehicleFactory(vehicleFactory);
     }
 
+    public void removeVehicleFactory(VehicleFactory vehicleFactory) {
+        vehicleManager.removeVehicleFactory(vehicleFactory);
+    }
+
     public void setTrafficLightArray(ArrayList<TrafficLight> trafficLights) {
         this.trafficLights = trafficLights;
     }

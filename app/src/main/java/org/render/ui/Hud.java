@@ -1,6 +1,9 @@
 package org.render.ui;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import org.Globals;
 import org.render.DrawMode;
 import org.render.Renderer;
+import org.vehicles.VehicleFactory;
 
 public class Hud implements Gui {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
@@ -25,6 +29,7 @@ public class Hud implements Gui {
         innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();
         innerTable.add(makeSpawnDelaySlider()).align(Align.left).pad(5).row();
         innerTable.add(makeSimulationSpeedSlider()).align(Align.left).pad(5).row();
+        innerTable.add(makeVehicleToggleComponent()).align(Align.left).pad(5).row();
 
         innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
@@ -127,5 +132,32 @@ public class Hud implements Gui {
         return SIMULATION_SPEED_MESSAGE_STRING
                 + (Globals.simulationSpeed + "").substring(0, 3)
                 + "x";
+    }
+
+    private static final int COLUMNS = 3;
+    private static final float THUMBNAIL_SIZE = 64;
+    private static Table makeVehicleToggleComponent() {
+        Table vehicleToggleTable = new Table();
+
+        for (int i = 0; i < Globals.VEHICLE_FACTORIES.size(); i++) {
+            VehicleFactory vehicleFactory = Globals.VEHICLE_FACTORIES.get(i);
+
+            Sprite thumbnail = vehicleFactory.getThumbnail();
+            Image vehicleThumbnail = new Image(thumbnail);
+
+            CheckBox checkBox = new CheckBox("", Styles.getCheckBoxStyle());
+            checkBox.setChecked(true);
+            checkBox.setUserObject(vehicleFactory);
+            checkBox.setName("vehicle factory checkbox");
+
+            vehicleToggleTable.add(vehicleThumbnail).size(THUMBNAIL_SIZE);
+            vehicleToggleTable.add(checkBox);
+
+            if (i % COLUMNS == COLUMNS - 1) {
+                vehicleToggleTable.row();
+            }
+        }
+
+        return vehicleToggleTable;
     }
 }
