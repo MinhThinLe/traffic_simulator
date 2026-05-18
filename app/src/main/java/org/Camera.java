@@ -33,7 +33,7 @@ public class Camera extends InputAdapter {
         return this.camera.combined;
     }
 
-    private void handleKeyboardMovement(float deltaTime) {
+    private void handleKeyboardMovement() {
         Vector2 translation = new Vector2();
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -53,7 +53,7 @@ public class Camera extends InputAdapter {
             return;
         }
 
-        translation.setLength(CAMERA_SPEED * this.camera.zoom * deltaTime);
+        translation.setLength(CAMERA_SPEED * this.camera.zoom * Gdx.graphics.getDeltaTime());
         camera.translate(translation);
     }
 
@@ -91,8 +91,8 @@ public class Camera extends InputAdapter {
         camera.translate(movementVector);
     }
 
-    private void zoom(float deltaTime) {
-        float zoomAmount = ZOOM_SPEED * this.camera.zoom * deltaTime;
+    private void zoom() {
+        float zoomAmount = ZOOM_SPEED * this.camera.zoom * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             this.camera.zoom += zoomAmount;
         }
@@ -115,10 +115,10 @@ public class Camera extends InputAdapter {
         return true;
     }
 
-    public void update(float deltaTime) {
-        handleKeyboardMovement(deltaTime);
+    public void update() {
+        handleKeyboardMovement();
         // windowBorderMovement(deltaTime);
-        zoom(deltaTime);
+        zoom();
         camera.update();
     }
 
