@@ -7,11 +7,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import org.render.*;
 import org.render.ui.GameState;
 import org.road.*;
+import org.vehicles.VehicleFactory;
 
 import java.io.InputStream;
 
@@ -90,6 +92,17 @@ class Game implements ApplicationListener {
                             Globals.vehicleSpawnDelay = Globals.DEFAULT_VEHICLE_SPAWN_DELAY;
                             return;
                         }
+                        if (actor.getName() == "vehicle factory checkbox") {
+                            CheckBox checkBox = (CheckBox) actor;
+                            VehicleFactory vehicleFactory = (VehicleFactory) checkBox.getUserObject();
+                            if (checkBox.isChecked()) {
+                                roadNetwork.addVehicleFactory(vehicleFactory);
+                                return;
+                            }
+                            roadNetwork.removeVehicleFactory(vehicleFactory);
+                            return;
+                        }
+
                         if (actor.getName() != null) {
                             System.err.println(
                                     "Warning: Unhandled event from actor with name: "
