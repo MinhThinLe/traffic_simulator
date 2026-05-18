@@ -1,0 +1,32 @@
+package org.vehicles.factories;
+
+import java.util.List;
+
+import org.Globals;
+import org.road.Road;
+import org.vehicles.Vehicle;
+import org.vehicles.VehicleFactory;
+import org.vehicles.vehicles.Sedan;
+import org.vehicles.vehicles.SedanColor;
+
+public class SedanFactory implements VehicleFactory {
+    private static final String TEXTURE_PATH = "org/vehicles/textures/sedans/white.png";
+    private static final int SPRITE_SIZE = 100;
+
+    @Override
+    public Vehicle createVehicle(List<Road> path) {
+        int colorVariants = SedanColor.values().length;
+        SedanColor color = SedanColor.values()[Globals.rng.nextInt(colorVariants)];
+        return new Sedan(path, color);
+    }
+
+    @Override
+    public int getSpriteSize() {
+        return SPRITE_SIZE;
+    }
+
+    @Override
+    public String getTexturePath() {
+        return TEXTURE_PATH;
+    }
+}
