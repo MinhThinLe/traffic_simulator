@@ -16,15 +16,15 @@ import java.util.Random;
 public class Globals {
     public static final float DEFAULT_SIMULATION_SPEED = 1;
     public static final float DEFAULT_VEHICLE_SPAWN_DELAY = 10;
-    public static final List<VehicleFactory> VEHICLE_FACTORIES = List.of(
-        new AmbulanceFactory(),
-        new BusFactory(),
-        new CivicFactory(),
-        new MinivanFactory(),
-        new PoliceCarFactory(),
-        new SuperCarFactory(),
-        new TaxiFactory()
-            );
+    public static final List<VehicleFactory> VEHICLE_FACTORIES =
+            List.of(
+                    new AmbulanceFactory(),
+                    new BusFactory(),
+                    new CivicFactory(),
+                    new MinivanFactory(),
+                    new PoliceCarFactory(),
+                    new SuperCarFactory(),
+                    new TaxiFactory());
 
     public static DrawMode drawMode = DrawMode.GRAPHICAL;
     public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;

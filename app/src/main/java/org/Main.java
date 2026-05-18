@@ -94,7 +94,8 @@ class Game implements ApplicationListener {
                         }
                         if (actor.getName() == "vehicle factory checkbox") {
                             CheckBox checkBox = (CheckBox) actor;
-                            VehicleFactory vehicleFactory = (VehicleFactory) checkBox.getUserObject();
+                            VehicleFactory vehicleFactory =
+                                    (VehicleFactory) checkBox.getUserObject();
                             if (checkBox.isChecked()) {
                                 roadNetwork.addVehicleFactory(vehicleFactory);
                                 return;
@@ -137,7 +138,8 @@ class Game implements ApplicationListener {
         InputStream resource = Road.class.getResourceAsStream(mapName);
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
 
-        Globals.VEHICLE_FACTORIES.forEach(vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
+        Globals.VEHICLE_FACTORIES.forEach(
+                vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
     }
 
     private void setState(GameState state) {
