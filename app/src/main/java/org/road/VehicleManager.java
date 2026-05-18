@@ -44,7 +44,19 @@ public class VehicleManager {
     }
 
     public void addVehicleFactory(VehicleFactory vehicleFactory) {
+        if (this.vehicleFactories.contains(vehicleFactory)) {
+            System.err.println("Warning: vehicle factory already exists, skipping");
+            return;
+        }
         this.vehicleFactories.add(vehicleFactory);
+    }
+
+    public void removeVehicleFactory(VehicleFactory vehicleFactory) {
+        if (!this.vehicleFactories.contains(vehicleFactory)) {
+            System.err.println("Warning: vehicle factory doesn't exist, skipping");
+            return;
+        }
+        this.vehicleFactories.remove(vehicleFactory);
     }
 
     private void spawnVehicle() {
