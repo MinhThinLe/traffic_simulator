@@ -1,6 +1,7 @@
 package org.render.ui;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -58,5 +59,9 @@ public class Styles {
         style.background = Renderer.uiSkin.getDrawable("list");
 
         return style;
+    }
+
+    public static CheckBoxStyle getCheckBoxStyle() {
+        return new CheckBoxStyle(Renderer.uiSkin.getDrawable("checkbox-off"), Renderer.uiSkin.getDrawable("checkbox-on"), Renderer.getFont(Globals.FONT_SIZE), Color.BLACK);
     }
 }
