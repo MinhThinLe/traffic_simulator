@@ -13,6 +13,7 @@ import org.Globals;
 import org.render.*;
 import org.render.drawcalls.LineDrawCall;
 import org.render.drawcalls.TextureDrawCall;
+import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class RoadNetwork {
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
     private ArrayList<TrafficLight> trafficLights;
+    private Vehicle hoverVehicle;
 
     public RoadNetwork(
             MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
@@ -127,6 +129,20 @@ public class RoadNetwork {
             Road from = edge.nodeU();
             Road to = edge.nodeV();
 
+            if (hoverVehicle != null) {
+                List<Road> vehiclePath = hoverVehicle.getPath();
+                boolean containsTo = vehiclePath.contains(to);
+                boolean containsFrom = vehiclePath.contains(from);
+                boolean isCurrentNode = from.getCurrentVehicle() == hoverVehicle;
+                if ((!containsTo || !containsFrom) && !isCurrentNode) {
+                    continue;
+                }
+                boolean hasCorrectOrdering = vehiclePath.indexOf(to) > vehiclePath.indexOf(from);
+                if (!hasCorrectOrdering) {
+                    continue;
+                }
+            }
+
             Vector2 position = from.getPosition().lerp(to.getPosition(), 0.5f);
             float direction = to.getPosition().sub(from.getPosition()).angleDeg() - 90;
 
@@ -180,6 +196,7 @@ public class RoadNetwork {
     }
 
     public void circulateTraffic(float deltaTime) {
+        hoverVehicle = null;
         vehicleManager.tick(deltaTime);
 
         for (int i = 0; i < trafficLights.size(); i++) {
@@ -188,7 +205,14 @@ public class RoadNetwork {
 
         var nodes = roadGraph.nodes().iterator();
         while (nodes.hasNext()) {
-            nodes.next().circulate(deltaTime);
+            var node = nodes.next();
+            node.circulate(deltaTime);
+            if (node.getCurrentVehicle() == null) {
+                continue;
+            }
+            if (node.getCurrentVehicle().isUnderCursor()) {
+                hoverVehicle = node.getCurrentVehicle();
+            }
         }
     }
 }
