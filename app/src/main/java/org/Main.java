@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import org.render.*;
 import org.render.ui.GameState;
 import org.road.*;
-import org.vehicles.factories.*;
 
 import java.io.InputStream;
 
@@ -125,13 +124,7 @@ class Game implements ApplicationListener {
         InputStream resource = Road.class.getResourceAsStream(mapName);
         roadNetwork = RoadNetworkLoader.readFromStream(resource);
 
-        roadNetwork.addVehicleFactory(new AmbulanceFactory());
-        roadNetwork.addVehicleFactory(new BusFactory());
-        roadNetwork.addVehicleFactory(new CivicFactory());
-        roadNetwork.addVehicleFactory(new PoliceCarFactory());
-        roadNetwork.addVehicleFactory(new TaxiFactory());
-        roadNetwork.addVehicleFactory(new SuperCarFactory());
-        roadNetwork.addVehicleFactory(new MinivanFactory());
+        Globals.VEHICLE_FACTORIES.forEach(vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
     }
 
     private void setState(GameState state) {
