@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -212,13 +211,10 @@ public class TrafficLight implements Inspectable {
                 .pad(PADDING)
                 .row();
 
-        Table dropDownMenu = createTrafficLightDropDownMenu();
-        groups.add((ScrollPane) dropDownMenu.getUserObject());
-        hudTable.add(dropDownMenu)
+        hudTable.add(createTrafficLightDropDownMenu())
                 .pad(PADDING)
                 .row();
         
-        hudTable.setUserObject(this);
         return hudTable;
     }
 
@@ -306,7 +302,7 @@ public class TrafficLight implements Inspectable {
                     }
                 });
 
-        trafficLightDropDownComponent.setUserObject(selectBox.getScrollPane());
+        groups.add(selectBox.getScrollPane());
 
         return trafficLightDropDownComponent;
     }
