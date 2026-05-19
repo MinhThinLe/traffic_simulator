@@ -1,16 +1,16 @@
 package org.vehicles.vehicles;
 
-import java.util.List;
-
-import org.vehicles.DrivingMode;
-import org.vehicles.Vehicle;
-import org.render.drawcalls.TextureDrawCall;
-import org.road.Road;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import org.render.drawcalls.TextureDrawCall;
+import org.road.Road;
+import org.vehicles.DrivingMode;
+import org.vehicles.Vehicle;
+
+import java.util.List;
 
 public class Sedan extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/sedans/";
@@ -29,7 +29,8 @@ public class Sedan extends Vehicle {
     public Sedan(List<Road> path, SedanColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0f, 0f);
 
-        FileHandle file = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle file =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
@@ -37,7 +38,7 @@ public class Sedan extends Vehicle {
     public String getVehicleName() {
         return "Sedan";
     }
-    
+
     @Override
     public float getWidth() {
         return WIDTH;
@@ -65,12 +66,12 @@ public class Sedan extends Vehicle {
         sprite.setRegion(regionX, regionY, SPRITE_SIZE, SPRITE_SIZE);
 
         new TextureDrawCall(
-                sprite, 
-                position.x - RENDERED_SIZE / 2, 
-                position.y - RENDERED_SIZE / 2, 
-                -position.y, 
-                RENDERED_SIZE, 
-                RENDERED_SIZE)
-            .submit();
+                        sprite,
+                        position.x - RENDERED_SIZE / 2,
+                        position.y - RENDERED_SIZE / 2,
+                        -position.y,
+                        RENDERED_SIZE,
+                        RENDERED_SIZE)
+                .submit();
     }
 }

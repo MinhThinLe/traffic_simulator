@@ -1,13 +1,13 @@
 package org.vehicles.factories;
 
-import java.util.List;
-
 import org.Globals;
 import org.road.Road;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 import org.vehicles.vehicles.Sedan;
 import org.vehicles.vehicles.SedanColor;
+
+import java.util.List;
 
 public class SedanFactory implements VehicleFactory {
     private static final String TEXTURE_PATH = "org/vehicles/textures/sedans/white.png";

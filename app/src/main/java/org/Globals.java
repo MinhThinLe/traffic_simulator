@@ -25,8 +25,7 @@ public class Globals {
                     new PoliceCarFactory(),
                     new SedanFactory(),
                     new SuperCarFactory(),
-                    new TaxiFactory()
-                    );
+                    new TaxiFactory());
 
     public static DrawMode drawMode = DrawMode.GRAPHICAL;
     public static float vehicleSpawnDelay = DEFAULT_VEHICLE_SPAWN_DELAY;
