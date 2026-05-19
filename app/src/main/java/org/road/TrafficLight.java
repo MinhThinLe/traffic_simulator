@@ -233,9 +233,7 @@ public class TrafficLight implements Inspectable {
             if (lightClickedIndex == -1) {
                 return;
             }
-            if (getGroups().isEmpty()) {
-                new Hud().setInspectable(this);
-            }
+            new Hud().setInspectable(this);
 
             permittedNodeIndex = lightClickedIndex;
             timer.reset();
