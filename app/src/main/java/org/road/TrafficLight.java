@@ -8,10 +8,11 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,11 +24,13 @@ import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
-import org.render.ui.GameState;
+import org.render.ui.Hud;
+import org.render.ui.Inspectable;
 import org.render.ui.Styles;
 import org.utils.Timer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 enum TrafficLightType {
     FULL_COUNT_DOWN,
@@ -46,7 +49,7 @@ enum TrafficLightType {
     }
 }
 
-public class TrafficLight {
+public class TrafficLight implements Inspectable {
     private static final float DEFAULT_TIMER_DURATION = 5;
     private ArrayList<Road> memberNodes;
     private ArrayList<RoadEdge> ingressNodes;
@@ -54,13 +57,15 @@ public class TrafficLight {
     private int permittedNodeIndex;
     private TrafficLightType type;
     private int id;
-    private Table hudTable;
+    private List<Group> groups;
 
     public TrafficLight(int id) {
         this.memberNodes = new ArrayList<>();
         this.ingressNodes = new ArrayList<>();
         this.timer = new Timer(DEFAULT_TIMER_DURATION);
         this.id = id;
+
+        this.groups = new ArrayList<>();
     }
 
     public int getId() {
@@ -190,43 +195,46 @@ public class TrafficLight {
         return this.timer.getTimeRemaining()
                 + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
+    
+    @Override
+    public List<Group> getGroups() {
+        return this.groups;
+    }
 
-    private boolean clickedOnTable() {
-        Rectangle hudTableBoundingRect =
-                new Rectangle(
-                        hudTable.getX(),
-                        hudTable.getY(),
-                        hudTable.getWidth(),
-                        hudTable.getHeight());
-        Vector2 clickedLocation =
-                hudTable.getStage()
-                        .getViewport()
-                        .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+    @Override
+    public Table inspect() {
+        Table hudTable = new Table();
 
-        ScrollPane scrollPane = (ScrollPane) hudTable.getUserObject();
-        Rectangle scrollPaneBoundingRect =
-                new Rectangle(
-                        scrollPane.getX(),
-                        scrollPane.getY(),
-                        scrollPane.getWidth(),
-                        scrollPane.getHeight());
+        hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        return hudTableBoundingRect.contains(clickedLocation)
-                || scrollPaneBoundingRect.contains(clickedLocation);
+        // Why the FUCK isn't there tuples in java (NO, I will NOT add another library)
+        hudTable.add(createTrafficLightTimerSlider())
+                .pad(PADDING)
+                .row();
+
+        Table dropDownMenu = createTrafficLightDropDownMenu();
+        groups.add((ScrollPane) dropDownMenu.getUserObject());
+        hudTable.add(dropDownMenu)
+                .pad(PADDING)
+                .row();
+        
+        hudTable.setUserObject(this);
+        return hudTable;
+    }
+
+    @Override
+    public void dropInspect() {
+        groups.clear();
     }
 
     public void tick(float deltaTime) {
         if (Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
             int lightClickedIndex = getJustClickedLight();
             if (lightClickedIndex == -1) {
-                if (hudTable != null && !clickedOnTable()) {
-                    destroyHudTable();
-                }
                 return;
             }
-            if (hudTable == null) {
-                createHudTable();
-                return;
+            if (getGroups().isEmpty()) {
+                new Hud().setInspectable(this);
             }
 
             permittedNodeIndex = lightClickedIndex;
@@ -245,26 +253,8 @@ public class TrafficLight {
 
     private static final float PADDING = 5;
 
-    private void createHudTable() {
-        hudTable = new Table();
-        Table uiTable = (Table) Globals.uiTable.getChild(0);
-        Table firstChild = (Table) uiTable.getChild(0);
-        uiTable.add(hudTable).padTop(PADDING).row();
-
-        hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
-
-        hudTable.add(createTrafficLightTimerSlider())
-                .width(firstChild.getWidth() - PADDING * 3)
-                .pad(PADDING)
-                .row();
-        hudTable.add(createTrafficLightDropDownMenu())
-                .width(firstChild.getWidth() - PADDING * 3)
-                .pad(PADDING)
-                .row();
-    }
-
     private Table createTrafficLightTimerSlider() {
-        Table trafficLightTimerComponent = new Table();
+        Table trafficLightTimer = new Table();
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(this.timer.getDuration());
 
@@ -273,10 +263,10 @@ public class TrafficLight {
                         "Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s",
                         Styles.getLabelStyle());
 
-        trafficLightTimerComponent.add(slider).left().row();
-        trafficLightTimerComponent.left().add(label);
+        trafficLightTimer.add(slider).left().row();
+        trafficLightTimer.left().add(label);
 
-        trafficLightTimerComponent.addListener(
+        trafficLightTimer.addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
@@ -287,7 +277,13 @@ public class TrafficLight {
                     }
                 });
 
-        return trafficLightTimerComponent;
+        trafficLightTimer.setUserObject(new Rectangle(
+                    trafficLightTimer.getX(), 
+                    trafficLightTimer.getY(), 
+                    trafficLightTimer.getWidth(), 
+                    trafficLightTimer.getHeight()));
+
+        return trafficLightTimer;
     }
 
     private Table createTrafficLightDropDownMenu() {
@@ -298,8 +294,6 @@ public class TrafficLight {
         selectBox.setSelectedIndex(type.ordinal());
 
         Label label = new Label("Chế độ đèn đỏ:", Styles.getLabelStyle());
-
-        hudTable.setUserObject(selectBox.getScrollPane());
 
         trafficLightDropDownComponent.add(label).left().row();
         trafficLightDropDownComponent.left().add(selectBox).row();
@@ -314,12 +308,9 @@ public class TrafficLight {
                     }
                 });
 
-        return trafficLightDropDownComponent;
-    }
+        trafficLightDropDownComponent.setUserObject(selectBox.getScrollPane());
 
-    private void destroyHudTable() {
-        hudTable = null;
-        Renderer.resetUI(GameState.NORMAL);
+        return trafficLightDropDownComponent;
     }
 
     private int getJustClickedLight() {

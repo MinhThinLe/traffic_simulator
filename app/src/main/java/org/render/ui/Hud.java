@@ -1,6 +1,11 @@
 package org.render.ui;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -9,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
@@ -16,24 +22,37 @@ import org.render.DrawMode;
 import org.render.Renderer;
 import org.vehicles.VehicleFactory;
 
-public class Hud implements Gui {
+import java.util.List;
+
+public class Hud implements Gui, Inspector {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
     private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
-
+    
+    private static Table inspecteeTable = new Table();
+    private static Table hudTable = new Table();
     @Override
     public Table createGUI() {
         Table table = new Table();
         table.setFillParent(true);
 
-        Table innerTable = new Table();
-        innerTable.add(makeDrawModeSwitcher()).align(Align.left).pad(5).row();
-        innerTable.add(makeSpawnDelaySlider()).align(Align.left).pad(5).row();
-        innerTable.add(makeSimulationSpeedSlider()).align(Align.left).pad(5).row();
-        innerTable.add(makeVehicleToggleComponent()).align(Align.left).pad(5).row();
+        hudTable.clear();
+        hudTable.defaults().pad(5).align(Align.left);
+        hudTable.add(makeDrawModeSwitcher()).row();
+        hudTable.add(makeSpawnDelaySlider()).row();
+        hudTable.add(makeSimulationSpeedSlider()).row();
+        hudTable.add(makeVehicleToggleComponent()).row();
+        hudTable.add(inspecteeTable).align(Align.center).row();
 
-        innerTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+        hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(7).add(innerTable).row();
+        table.top().right().pad(7).add(hudTable).row();
+        table.addAction(new Action() {
+            @Override
+            public boolean act(float delta) {
+                dropInspectable();
+                return false;
+            }
+        });
 
         return table;
     }
@@ -160,5 +179,42 @@ public class Hud implements Gui {
         }
 
         return vehicleToggleTable;
+    }
+
+    @Override
+    public void setInspectable(Inspectable inspectee) {
+        inspecteeTable.add(inspectee.inspect());
+        inspecteeTable.setUserObject(inspectee);
+    }
+
+    @Override
+    public void dropInspectable() {
+        Inspectable inspectee = (Inspectable) inspecteeTable.getUserObject();
+        if (inspectee == null) {
+            return;
+        }
+        if (!Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
+            return;
+        }
+
+        List<Group> groups = inspectee.getGroups();
+        for (int i = 0; i < groups.size(); i++) {
+            if (groups.get(i).isTouchFocusListener()) {
+                return;
+            }
+        }
+
+        Vector2 screenCoordinate = inspecteeTable.getStage().getViewport()
+            .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        Rectangle hudTableBox = new Rectangle(
+                hudTable.getX(), 
+                hudTable.getY(), 
+                hudTable.getWidth(), 
+                hudTable.getHeight());
+        if (!hudTableBox.contains(screenCoordinate)) {
+            inspectee.dropInspect();
+            inspecteeTable.clear();
+            inspecteeTable.setUserObject(null);
+        }
     }
 }

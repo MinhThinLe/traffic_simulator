@@ -1,10 +1,12 @@
 package org.render.ui;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
+import java.util.List;
 
 public interface Inspectable {
     Table inspect();
-    List<Rectangle> getWindows();
+    void dropInspect();
+    List<Group> getGroups();
 }
