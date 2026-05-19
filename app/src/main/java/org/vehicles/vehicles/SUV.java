@@ -12,10 +12,10 @@ import org.vehicles.Vehicle;
 
 import java.util.List;
 
-public class Sedan extends Vehicle {
-    private static final String TEXTURE_PATH = "org/vehicles/textures/sedans/";
+public class SUV extends Vehicle {
+    private static final String TEXTURE_PATH = "org/vehicles/textures/suvs/";
 
-    private static final float DEFAULT_SPEED = 50;
+    private static final float DEFAULT_SPEED = 60;
     private static final float WIDTH = 30;
     private static final float HEIGHT = 15;
 
@@ -26,17 +26,16 @@ public class Sedan extends Vehicle {
 
     private Sprite sprite;
 
-    public Sedan(List<Road> path, SedanColor colorVariant) {
-        super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0f, 0f);
+    public SUV(List<Road> path, SUVColor colorVariant) {
+        super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0.1f, 0f);
 
-        FileHandle file =
-                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle file = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 
     @Override
     public String getVehicleName() {
-        return "Sedan";
+        return "SUV";
     }
 
     @Override
@@ -51,7 +50,7 @@ public class Sedan extends Vehicle {
 
     @Override
     public int getVehiclePriority() {
-        return 0;
+        return 1;
     }
 
     @Override
