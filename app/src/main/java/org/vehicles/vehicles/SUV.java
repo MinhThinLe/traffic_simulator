@@ -29,7 +29,8 @@ public class SUV extends Vehicle {
     public SUV(List<Road> path, SUVColor colorVariant) {
         super(path, DrivingMode.NORMAL, DEFAULT_SPEED, 0.1f, 0f);
 
-        FileHandle file = Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
+        FileHandle file =
+                Gdx.files.internal(TEXTURE_PATH + colorVariant.toString().toLowerCase() + ".png");
         sprite = new Sprite(new Texture(file));
     }
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
@@ -27,9 +27,10 @@ import java.util.List;
 public class Hud implements Gui, Inspector {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
     private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
-    
+
     private static Table inspecteeTable = new Table();
     private static Table hudTable = new Table();
+
     @Override
     public Table createGUI() {
         Table table = new Table();
@@ -46,13 +47,14 @@ public class Hud implements Gui, Inspector {
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
         table.top().right().pad(7).add(hudTable).row();
-        table.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                dropInspectable();
-                return false;
-            }
-        });
+        table.addAction(
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        dropInspectable();
+                        return false;
+                    }
+                });
 
         return table;
     }
@@ -204,13 +206,17 @@ public class Hud implements Gui, Inspector {
             }
         }
 
-        Vector2 screenCoordinate = inspecteeTable.getStage().getViewport()
-            .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-        Rectangle hudTableBox = new Rectangle(
-                hudTable.getX(), 
-                hudTable.getY(), 
-                hudTable.getWidth(), 
-                hudTable.getHeight());
+        Vector2 screenCoordinate =
+                inspecteeTable
+                        .getStage()
+                        .getViewport()
+                        .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        Rectangle hudTableBox =
+                new Rectangle(
+                        hudTable.getX(),
+                        hudTable.getY(),
+                        hudTable.getWidth(),
+                        hudTable.getHeight());
         if (!hudTableBox.contains(screenCoordinate)) {
             inspectee.dropInspect();
             inspecteeTable.clear();

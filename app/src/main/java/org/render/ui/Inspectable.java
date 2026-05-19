@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface Inspectable {
     Table inspect();
+
     void dropInspect();
+
     List<Group> getGroups();
 }

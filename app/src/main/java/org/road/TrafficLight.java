@@ -158,7 +158,10 @@ public class TrafficLight implements Inspectable {
 
         LabelStyle labelStyle = Styles.getLabelStyle();
         labelStyle.fontColor = getColor(sourceNode);
-        Label label = new Label((int) Math.clamp(Math.ceil(getRemainingTime(sourceNode)), 0, 99) + "", labelStyle);
+        Label label =
+                new Label(
+                        (int) Math.clamp(Math.ceil(getRemainingTime(sourceNode)), 0, 99) + "",
+                        labelStyle);
 
         Container<Label> container = new Container<Label>(label);
 
@@ -194,7 +197,7 @@ public class TrafficLight implements Inspectable {
         return this.timer.getTimeRemaining()
                 + this.timer.getDuration() * (nodeIndex + untilLoopAround);
     }
-    
+
     @Override
     public List<Group> getGroups() {
         return this.groups;
@@ -207,14 +210,10 @@ public class TrafficLight implements Inspectable {
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
         // Why the FUCK isn't there tuples in java (NO, I will NOT add another library)
-        hudTable.add(createTrafficLightTimerSlider())
-                .pad(PADDING)
-                .row();
+        hudTable.add(createTrafficLightTimerSlider()).pad(PADDING).row();
 
-        hudTable.add(createTrafficLightDropDownMenu())
-                .pad(PADDING)
-                .row();
-        
+        hudTable.add(createTrafficLightDropDownMenu()).pad(PADDING).row();
+
         return hudTable;
     }
 
@@ -271,11 +270,12 @@ public class TrafficLight implements Inspectable {
                     }
                 });
 
-        trafficLightTimer.setUserObject(new Rectangle(
-                    trafficLightTimer.getX(), 
-                    trafficLightTimer.getY(), 
-                    trafficLightTimer.getWidth(), 
-                    trafficLightTimer.getHeight()));
+        trafficLightTimer.setUserObject(
+                new Rectangle(
+                        trafficLightTimer.getX(),
+                        trafficLightTimer.getY(),
+                        trafficLightTimer.getWidth(),
+                        trafficLightTimer.getHeight()));
 
         return trafficLightTimer;
     }
