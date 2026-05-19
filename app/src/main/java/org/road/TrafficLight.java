@@ -158,7 +158,7 @@ public class TrafficLight implements Inspectable {
 
         LabelStyle labelStyle = Styles.getLabelStyle();
         labelStyle.fontColor = getColor(sourceNode);
-        Label label = new Label((int) Math.ceil(getRemainingTime(sourceNode)) + "", labelStyle);
+        Label label = new Label((int) Math.clamp(Math.ceil(getRemainingTime(sourceNode)), 0, 99) + "", labelStyle);
 
         Container<Label> container = new Container<Label>(label);
 
