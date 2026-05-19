@@ -112,7 +112,7 @@ class Game implements ApplicationListener {
                     }
                 };
 
-        Globals.stage.addListener(changeListener);
+        Renderer.addListener(changeListener);
 
         InputAdapter inputAdapter =
                 new InputAdapter() {
@@ -162,8 +162,8 @@ class Game implements ApplicationListener {
         }
 
         float deltaTime = Gdx.graphics.getDeltaTime() * Globals.simulationSpeed;
-        Renderer.processUI(deltaTime);
         camera.update();
+        Renderer.processUI(deltaTime);
         roadNetwork.circulateTraffic(deltaTime);
     }
 }

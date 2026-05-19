@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 
 import org.Globals;
 import org.render.drawcalls.*;
@@ -39,6 +42,8 @@ public class Renderer {
 
     private static final String UI_SKIN_PATH = "org/render/ui/skin/skin-composer-ui.atlas";
     public static Skin uiSkin = new Skin(new TextureAtlas(Gdx.files.internal(UI_SKIN_PATH)));
+    private static Table uiTable = new Table();
+    private static Stage stage = new Stage(new FitViewport(1280, 720));
 
     static {
         primitiveRenderer.setAutoShapeType(true);
@@ -47,6 +52,9 @@ public class Renderer {
                 Globals.VIETNAMESE_CHARACTERS + Globals.VIETNAMESE_CHARACTERS.toUpperCase();
         fontParameter.magFilter = TextureFilter.Linear;
         fontParameter.minFilter = TextureFilter.Linear;
+
+        uiTable.setFillParent(true);
+        stage.addActor(uiTable);
 
         resetUI(GameState.MAIN_MENU);
     }
@@ -58,7 +66,7 @@ public class Renderer {
         ScreenUtils.clear(Color.WHITE);
         renderShapes();
         renderTextures();
-        Globals.stage.draw();
+        stage.draw();
     }
 
     private static final Comparator<PrimitiveDrawCall> PRIMITIVE_COMPARATOR =
@@ -112,23 +120,31 @@ public class Renderer {
     }
 
     public static void resize(int width, int height) {
-        Viewport viewport = Globals.stage.getViewport();
+        Viewport viewport = stage.getViewport();
         viewport.update(width, height, true);
     }
 
     public static void processUI(float deltaTime) {
-        Globals.stage.act(deltaTime);
+        stage.act(deltaTime);
     }
 
     public static void resetUI(GameState currentState) {
         // Globals.stage.getActors().forEach(actor -> actor.remove());
-        Globals.uiTable.clearChildren();
-        Globals.uiTable.addActor(
+        uiTable.clearChildren();
+        uiTable.addActor(
                 switch (currentState) {
                     case GameState.MAIN_MENU -> new MainMenu().createGUI();
                     case GameState.NORMAL -> new Hud().createGUI();
                     case GameState.LEVEL_SELECTION -> new MapSelection().createGUI();
                     case GameState.PAUSED -> new PauseMenu().createGUI();
                 });
+    }
+
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static void addListener(EventListener listener) {
+        stage.addListener(listener);
     }
 }
