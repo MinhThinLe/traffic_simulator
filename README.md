@@ -91,3 +91,13 @@ Về cơ bản, đặt tên theo quy chuẩn của [Java](https://en.wikipedia.o
 - Tên nên phản ánh đúng mục đích
 - Nên tránh dùng các tên 1 ký tự (a, i, j), trừ khi nó là đối tượng tạm
   thời/không quan trọng
+
+# Cảm ơn
+
+Dự án này không thể được thực hiện nếu thiếu đi các thư viện sau:
+- [LibGDX](https://libgdx.com) một thư viện game/giao diện/toán/đồ họa dành cho JVM
+- [Guava](https://guava.dev) một thư viện tiện ích cơ bản (tập hợp, đồ thị, ...)
+
+Nhóm tác giả cũng chân thành cảm ơn các tác giả sau và gói tài nguyên miễn phí của họ.
+- [MinZinn](https://minzinn.itch.io/) với [gói tài nguyên phương tiện](https://minzinn.itch.io/pixelvehicles)
+- [Czyzby](https://github.com/czyzby) với [gói tài nguyên giao diện người dùng](https://github.com/czyzby/gdx-skins)
