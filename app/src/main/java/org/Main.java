@@ -112,7 +112,7 @@ class Game implements ApplicationListener {
                     }
                 };
 
-        Globals.stage.addListener(changeListener);
+        Renderer.addListener(changeListener);
 
         InputAdapter inputAdapter =
                 new InputAdapter() {
