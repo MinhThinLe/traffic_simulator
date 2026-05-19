@@ -23,6 +23,7 @@ public class Globals {
                     new CivicFactory(),
                     new MinivanFactory(),
                     new PoliceCarFactory(),
+                    new SUVFactory(),
                     new SedanFactory(),
                     new SuperCarFactory(),
                     new TaxiFactory());
