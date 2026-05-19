@@ -28,7 +28,7 @@ public class Road {
     private int id;
 
     public Road(float x, float y, int id) {
-        this.priorityQueue = new PriorityQueue<VehiclePacket>();
+        this.priorityQueue = new PriorityQueue<VehiclePacket>((VehiclePacket packet1, VehiclePacket packet2) -> packet1.compareTo(packet2));
         this.position = new Vector2(x, y);
         this.id = id;
     }
