@@ -3,6 +3,7 @@ package org.vehicles;
 public enum DrivingMode {
     NORMAL,
     AGGRESSIVE;
+
     @Override
     public String toString() {
         return switch (this) {

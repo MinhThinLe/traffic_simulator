@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -25,9 +25,8 @@ import org.render.ui.Styles;
 import org.road.Road;
 import org.utils.Timer;
 
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Vehicle implements Inspectable {
     private static final float BASE_TIMER_DURATION = 5;
@@ -223,6 +222,7 @@ public abstract class Vehicle implements Inspectable {
     protected abstract void graphicalDraw();
 
     private static final float PADDING = 5;
+
     @Override
     public Table inspect() {
         Table inspectTable = new Table();
@@ -251,15 +251,16 @@ public abstract class Vehicle implements Inspectable {
         speedSliderGroup.add(speedLabel).right().row();
         speedSliderGroup.add(slider).colspan(2);
 
-        speedSliderGroup.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == slider) {
-                    speed = slider.getValue();
-                    speedLabel.setText((int) slider.getValue());
-                }
-            }
-        });
+        speedSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            speed = slider.getValue();
+                            speedLabel.setText((int) slider.getValue());
+                        }
+                    }
+                });
         return speedSliderGroup;
     }
 
@@ -268,7 +269,8 @@ public abstract class Vehicle implements Inspectable {
         impatientnessSliderGroup.defaults().growX();
 
         Label textLabel = new Label("Độ nóng vội: ", Styles.getLabelStyle());
-        Label impatientnessLabel = new Label(String.format("%.2f", impatientness), Styles.getLabelStyle());
+        Label impatientnessLabel =
+                new Label(String.format("%.2f", impatientness), Styles.getLabelStyle());
         impatientnessLabel.setAlignment(Align.right);
 
         Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
@@ -278,15 +280,16 @@ public abstract class Vehicle implements Inspectable {
         impatientnessSliderGroup.add(impatientnessLabel).right().row();
         impatientnessSliderGroup.add(slider).colspan(2);
 
-        impatientnessSliderGroup.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == slider) {
-                    impatientness = slider.getValue();
-                    impatientnessLabel.setText(String.format("%.2f", impatientness));
-                }
-            }
-        });
+        impatientnessSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            impatientness = slider.getValue();
+                            impatientnessLabel.setText(String.format("%.2f", impatientness));
+                        }
+                    }
+                });
 
         return impatientnessSliderGroup;
     }
@@ -296,7 +299,8 @@ public abstract class Vehicle implements Inspectable {
         stinginessSliderGroup.defaults().growX();
 
         Label textLabel = new Label("Độ xấu tính", Styles.getLabelStyle());
-        Label stinginessLabel = new Label(String.format("%.2f", stinginess), Styles.getLabelStyle());
+        Label stinginessLabel =
+                new Label(String.format("%.2f", stinginess), Styles.getLabelStyle());
         stinginessLabel.setAlignment(Align.right);
 
         Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
@@ -306,13 +310,14 @@ public abstract class Vehicle implements Inspectable {
         stinginessSliderGroup.add(stinginessLabel).right().row();
         stinginessSliderGroup.add(slider).colspan(2);
 
-        stinginessSliderGroup.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                stinginess = slider.getValue();
-                stinginessLabel.setText(String.format("%.2f", stinginess));
-            }
-        });
+        stinginessSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        stinginess = slider.getValue();
+                        stinginessLabel.setText(String.format("%.2f", stinginess));
+                    }
+                });
 
         return stinginessSliderGroup;
     }
@@ -329,14 +334,15 @@ public abstract class Vehicle implements Inspectable {
         dropDownComponent.add(label).left();
         dropDownComponent.add(selectBox).right().row();
 
-        dropDownComponent.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (actor == selectBox) {
-                    drivingMode = selectBox.getSelected();
-                }
-            }
-        });
+        dropDownComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == selectBox) {
+                            drivingMode = selectBox.getSelected();
+                        }
+                    }
+                });
 
         groups.add(selectBox.getScrollPane());
 
@@ -344,8 +350,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     @Override
-    public void dropInspect() {
-    }
+    public void dropInspect() {}
 
     @Override
     public List<Group> getGroups() {
