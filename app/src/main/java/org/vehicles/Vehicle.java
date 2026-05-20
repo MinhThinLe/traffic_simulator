@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
 import org.render.DrawMode;
@@ -232,19 +233,22 @@ public abstract class Vehicle implements Inspectable {
         Table speedSliderGroup = new Table();
         speedSliderGroup.defaults().growX();
 
-        Label label = new Label("Tốc độ: " + (int) speed, Styles.getLabelStyle());
+        Label textLabel = new Label("Tốc độ: ", Styles.getLabelStyle());
+        Label speedLabel = new Label((int) speed + "", Styles.getLabelStyle());
+        speedLabel.setAlignment(Align.right);
         Slider slider = new Slider(0, 100, 1, false, Styles.getSliderStyle());
         slider.setValue(speed);
 
-        speedSliderGroup.add(label).left().row();
-        speedSliderGroup.add(slider);
+        speedSliderGroup.add(textLabel).left();
+        speedSliderGroup.add(speedLabel).right().row();
+        speedSliderGroup.add(slider).colspan(2);
 
         speedSliderGroup.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (actor == slider) {
                     speed = slider.getValue();
-                    label.setText("Tốc độ: " + (int) slider.getValue());
+                    speedLabel.setText((int) slider.getValue());
                 }
             }
         });
