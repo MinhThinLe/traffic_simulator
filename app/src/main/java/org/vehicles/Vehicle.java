@@ -4,21 +4,29 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import org.Globals;
 import org.render.DrawMode;
 import org.render.Renderer;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
+import org.render.ui.Inspectable;
+import org.render.ui.Styles;
 import org.road.Road;
 import org.utils.Timer;
 
 import java.util.List;
+import java.util.ArrayList;
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Inspectable {
     private static final float BASE_TIMER_DURATION = 5;
     protected List<Road> path;
     protected Vector2 position;
@@ -207,4 +215,48 @@ public abstract class Vehicle {
     public abstract String getVehicleName();
 
     protected abstract void graphicalDraw();
+
+    private static final float PADDING = 5;
+    @Override
+    public Table inspect() {
+        Table inspectTable = new Table();
+        inspectTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+        inspectTable.defaults().pad(PADDING).growX();
+
+        inspectTable.add(createSpeedSlider()).row();
+
+        return inspectTable;
+    }
+
+    private Table createSpeedSlider() {
+        Table speedSliderGroup = new Table();
+        speedSliderGroup.defaults().growX();
+
+        Label label = new Label("Tốc độ: " + (int) speed, Styles.getLabelStyle());
+        Slider slider = new Slider(0, 100, 1, false, Styles.getSliderStyle());
+        slider.setValue(speed);
+
+        speedSliderGroup.add(label).left().row();
+        speedSliderGroup.add(slider);
+
+        speedSliderGroup.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == slider) {
+                    speed = slider.getValue();
+                    label.setText("Tốc độ: " + (int) slider.getValue());
+                }
+            }
+        });
+        return speedSliderGroup;
+    }
+
+    @Override
+    public void dropInspect() {
+    }
+
+    @Override
+    public List<Group> getGroups() {
+        return new ArrayList<Group>();
+    }
 }

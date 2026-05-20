@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -211,7 +210,6 @@ public class TrafficLight implements Inspectable {
 
         // Why the FUCK isn't there tuples in java (NO, I will NOT add another library)
         hudTable.add(createTrafficLightTimerSlider()).pad(PADDING).row();
-
         hudTable.add(createTrafficLightDropDownMenu()).pad(PADDING).row();
 
         return hudTable;
@@ -269,13 +267,6 @@ public class TrafficLight implements Inspectable {
                         }
                     }
                 });
-
-        trafficLightTimer.setUserObject(
-                new Rectangle(
-                        trafficLightTimer.getX(),
-                        trafficLightTimer.getY(),
-                        trafficLightTimer.getWidth(),
-                        trafficLightTimer.getHeight()));
 
         return trafficLightTimer;
     }
