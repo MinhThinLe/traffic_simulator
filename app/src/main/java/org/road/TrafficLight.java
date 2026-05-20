@@ -208,7 +208,6 @@ public class TrafficLight implements Inspectable {
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        // Why the FUCK isn't there tuples in java (NO, I will NOT add another library)
         hudTable.add(createTrafficLightTimerSlider()).pad(PADDING).row();
         hudTable.add(createTrafficLightDropDownMenu()).pad(PADDING).row();
 

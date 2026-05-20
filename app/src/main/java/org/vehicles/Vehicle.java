@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -43,6 +44,8 @@ public abstract class Vehicle implements Inspectable {
     // refuse an overtake request
     protected float stinginess;
 
+    private List<Group> groups;
+
     public Vehicle(List<Road> path) {
         this(path, DrivingMode.NORMAL, 0f);
     }
@@ -66,6 +69,7 @@ public abstract class Vehicle implements Inspectable {
         this.direction = new Vector2();
 
         this.honkTimer = new Timer(BASE_TIMER_DURATION - impatientness * 4);
+        this.groups = new ArrayList<>();
     }
 
     public Road nextDestination() {
@@ -228,6 +232,7 @@ public abstract class Vehicle implements Inspectable {
         inspectTable.add(createSpeedSlider()).row();
         inspectTable.add(createImpatientnessSlider()).row();
         inspectTable.add(createStinginessSlider()).row();
+        inspectTable.add(createDrivingModeDropDown()).row();
 
         return inspectTable;
     }
@@ -312,12 +317,38 @@ public abstract class Vehicle implements Inspectable {
         return stinginessSliderGroup;
     }
 
+    private Table createDrivingModeDropDown() {
+        Table dropDownComponent = new Table();
+
+        SelectBox<DrivingMode> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
+        selectBox.setItems(DrivingMode.values());
+        selectBox.setSelectedIndex(drivingMode.ordinal());
+
+        Label label = new Label("Phong cách lái xe: ", Styles.getLabelStyle());
+
+        dropDownComponent.add(label).left();
+        dropDownComponent.add(selectBox).right().row();
+
+        dropDownComponent.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == selectBox) {
+                    drivingMode = selectBox.getSelected();
+                }
+            }
+        });
+
+        groups.add(selectBox.getScrollPane());
+
+        return dropDownComponent;
+    }
+
     @Override
     public void dropInspect() {
     }
 
     @Override
     public List<Group> getGroups() {
-        return new ArrayList<Group>();
+        return groups;
     }
 }
