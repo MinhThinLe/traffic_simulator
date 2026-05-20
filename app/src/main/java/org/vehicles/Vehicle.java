@@ -4,21 +4,31 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import org.Globals;
 import org.render.DrawMode;
 import org.render.Renderer;
 import org.render.drawcalls.PolygonDrawCall;
 import org.render.drawcalls.WidgetDrawCall;
+import org.render.ui.Inspectable;
+import org.render.ui.Styles;
 import org.road.Road;
 import org.utils.Timer;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Inspectable {
     private static final float BASE_TIMER_DURATION = 5;
     protected List<Road> path;
     protected Vector2 position;
@@ -32,6 +42,8 @@ public abstract class Vehicle {
     // A float ranging from 0 to 1 indicating the chance that this vehicle would
     // refuse an overtake request
     protected float stinginess;
+
+    private List<Group> groups;
 
     public Vehicle(List<Road> path) {
         this(path, DrivingMode.NORMAL, 0f);
@@ -56,6 +68,7 @@ public abstract class Vehicle {
         this.direction = new Vector2();
 
         this.honkTimer = new Timer(BASE_TIMER_DURATION - impatientness * 4);
+        this.groups = new ArrayList<>();
     }
 
     public Road nextDestination() {
@@ -207,4 +220,142 @@ public abstract class Vehicle {
     public abstract String getVehicleName();
 
     protected abstract void graphicalDraw();
+
+    private static final float PADDING = 5;
+
+    @Override
+    public Table inspect() {
+        Table inspectTable = new Table();
+        inspectTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+        inspectTable.defaults().pad(PADDING).growX();
+
+        inspectTable.add(createSpeedSlider()).row();
+        inspectTable.add(createImpatientnessSlider()).row();
+        inspectTable.add(createStinginessSlider()).row();
+        inspectTable.add(createDrivingModeDropDown()).row();
+
+        return inspectTable;
+    }
+
+    private Table createSpeedSlider() {
+        Table speedSliderGroup = new Table();
+        speedSliderGroup.defaults().growX();
+
+        Label textLabel = new Label("Tốc độ: ", Styles.getLabelStyle());
+        Label speedLabel = new Label((int) speed + "", Styles.getLabelStyle());
+        speedLabel.setAlignment(Align.right);
+        Slider slider = new Slider(0, 100, 1, false, Styles.getSliderStyle());
+        slider.setValue(speed);
+
+        speedSliderGroup.add(textLabel).left();
+        speedSliderGroup.add(speedLabel).right().row();
+        speedSliderGroup.add(slider).colspan(2);
+
+        speedSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            speed = slider.getValue();
+                            speedLabel.setText((int) slider.getValue());
+                        }
+                    }
+                });
+        return speedSliderGroup;
+    }
+
+    private Table createImpatientnessSlider() {
+        Table impatientnessSliderGroup = new Table();
+        impatientnessSliderGroup.defaults().growX();
+
+        Label textLabel = new Label("Độ nóng vội: ", Styles.getLabelStyle());
+        Label impatientnessLabel =
+                new Label(String.format("%.2f", impatientness), Styles.getLabelStyle());
+        impatientnessLabel.setAlignment(Align.right);
+
+        Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
+        slider.setValue(impatientness);
+
+        impatientnessSliderGroup.add(textLabel).left();
+        impatientnessSliderGroup.add(impatientnessLabel).right().row();
+        impatientnessSliderGroup.add(slider).colspan(2);
+
+        impatientnessSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == slider) {
+                            impatientness = slider.getValue();
+                            honkTimer.setDuration(BASE_TIMER_DURATION - impatientness * 4);
+                            impatientnessLabel.setText(String.format("%.2f", impatientness));
+                        }
+                    }
+                });
+
+        return impatientnessSliderGroup;
+    }
+
+    private Table createStinginessSlider() {
+        Table stinginessSliderGroup = new Table();
+        stinginessSliderGroup.defaults().growX();
+
+        Label textLabel = new Label("Độ xấu tính", Styles.getLabelStyle());
+        Label stinginessLabel =
+                new Label(String.format("%.2f", stinginess), Styles.getLabelStyle());
+        stinginessLabel.setAlignment(Align.right);
+
+        Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
+        slider.setValue(stinginess);
+
+        stinginessSliderGroup.add(textLabel).left();
+        stinginessSliderGroup.add(stinginessLabel).right().row();
+        stinginessSliderGroup.add(slider).colspan(2);
+
+        stinginessSliderGroup.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        stinginess = slider.getValue();
+                        stinginessLabel.setText(String.format("%.2f", stinginess));
+                    }
+                });
+
+        return stinginessSliderGroup;
+    }
+
+    private Table createDrivingModeDropDown() {
+        Table dropDownComponent = new Table();
+        dropDownComponent.defaults().growX();
+
+        SelectBox<DrivingMode> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
+        selectBox.setItems(DrivingMode.values());
+        selectBox.setSelectedIndex(drivingMode.ordinal());
+
+        Label label = new Label("Phong cách lái xe: ", Styles.getLabelStyle());
+
+        dropDownComponent.add(label).left().row();
+        dropDownComponent.add(selectBox).left().row();
+
+        dropDownComponent.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (actor == selectBox) {
+                            drivingMode = selectBox.getSelected();
+                        }
+                    }
+                });
+
+        groups.add(selectBox.getScrollPane());
+
+        return dropDownComponent;
+    }
+
+    @Override
+    public void dropInspect() {}
+
+    @Override
+    public List<Group> getGroups() {
+        return groups;
+    }
 }

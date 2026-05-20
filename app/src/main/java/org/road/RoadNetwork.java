@@ -1,6 +1,7 @@
 package org.road;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +14,7 @@ import org.Globals;
 import org.render.*;
 import org.render.drawcalls.LineDrawCall;
 import org.render.drawcalls.TextureDrawCall;
+import org.render.ui.Hud;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
 
@@ -214,9 +216,14 @@ public class RoadNetwork {
             if (node.getCurrentVehicle() == null) {
                 continue;
             }
-            if (node.getCurrentVehicle().isUnderCursor()) {
-                hoverVehicle = node.getCurrentVehicle();
+            if (!node.getCurrentVehicle().isUnderCursor()) {
+                continue;
             }
+            hoverVehicle = node.getCurrentVehicle();
+            if (!Gdx.input.isButtonJustPressed(Buttons.LEFT)) {
+                continue;
+            }
+            new Hud().setInspectable(hoverVehicle);
         }
     }
 }

@@ -27,6 +27,7 @@ import java.util.List;
 public class Hud implements Gui, Inspector {
     private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
     private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
+    private static final float PADDING = 5;
 
     private static Table inspecteeTable = new Table();
     private static Table hudTable = new Table();
@@ -37,7 +38,7 @@ public class Hud implements Gui, Inspector {
         table.setFillParent(true);
 
         hudTable.clear();
-        hudTable.defaults().pad(5).align(Align.left);
+        hudTable.defaults().pad(PADDING).align(Align.left);
         hudTable.add(makeDrawModeSwitcher()).row();
         hudTable.add(makeSpawnDelaySlider()).row();
         hudTable.add(makeSimulationSpeedSlider()).row();
@@ -46,7 +47,7 @@ public class Hud implements Gui, Inspector {
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(7).add(hudTable).row();
+        table.top().right().pad(PADDING).add(hudTable).row();
         table.addAction(
                 new Action() {
                     @Override
@@ -84,7 +85,7 @@ public class Hud implements Gui, Inspector {
                     }
                 });
 
-        drawModeSwitcherComponent.add(label).padRight(5);
+        drawModeSwitcherComponent.add(label).padRight(PADDING);
         drawModeSwitcherComponent.add(button).align(Align.right);
 
         return drawModeSwitcherComponent;
@@ -185,7 +186,8 @@ public class Hud implements Gui, Inspector {
 
     @Override
     public void setInspectable(Inspectable inspectee) {
-        inspecteeTable.add(inspectee.inspect());
+        // IDK why specifically 4 but it works ok
+        inspecteeTable.add(inspectee.inspect()).minWidth(hudTable.getWidth() - 2 * PADDING - 4);
         inspecteeTable.setUserObject(inspectee);
     }
 
