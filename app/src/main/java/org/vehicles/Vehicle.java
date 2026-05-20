@@ -225,6 +225,7 @@ public abstract class Vehicle implements Inspectable {
         inspectTable.defaults().pad(PADDING).growX();
 
         inspectTable.add(createSpeedSlider()).row();
+        inspectTable.add(createImpatientnessSlider()).row();
 
         return inspectTable;
     }
@@ -253,6 +254,34 @@ public abstract class Vehicle implements Inspectable {
             }
         });
         return speedSliderGroup;
+    }
+
+    private Table createImpatientnessSlider() {
+        Table impatientnessSliderGroup = new Table();
+        impatientnessSliderGroup.defaults().growX();
+
+        Label textLabel = new Label("Độ nóng vội: ", Styles.getLabelStyle());
+        Label impatientnessLabel = new Label(impatientness + "", Styles.getLabelStyle());
+        impatientnessLabel.setAlignment(Align.right);
+
+        Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
+        slider.setValue(impatientness);
+
+        impatientnessSliderGroup.add(textLabel).left();
+        impatientnessSliderGroup.add(impatientnessLabel).right().row();
+        impatientnessSliderGroup.add(slider).colspan(2);
+
+        impatientnessSliderGroup.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (actor == slider) {
+                    impatientness = slider.getValue();
+                    impatientnessLabel.setText(String.format("%.2f", impatientness));
+                }
+            }
+        });
+
+        return impatientnessSliderGroup;
     }
 
     @Override
