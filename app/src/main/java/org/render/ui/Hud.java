@@ -187,10 +187,7 @@ public class Hud implements Gui, Inspector {
     @Override
     public void setInspectable(Inspectable inspectee) {
         // IDK why specifically 4 but it works ok
-        inspecteeTable
-                .add(inspectee.inspect())
-                .growX()
-                .minWidth(hudTable.getWidth() - 2 * PADDING - 4);
+        inspecteeTable.add(inspectee.inspect()).minWidth(hudTable.getWidth() - 2 * PADDING - 4);
         inspecteeTable.setUserObject(inspectee);
     }
 

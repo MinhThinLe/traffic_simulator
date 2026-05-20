@@ -286,6 +286,7 @@ public abstract class Vehicle implements Inspectable {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             impatientness = slider.getValue();
+                            honkTimer.setDuration(BASE_TIMER_DURATION - impatientness * 4);
                             impatientnessLabel.setText(String.format("%.2f", impatientness));
                         }
                     }
@@ -324,6 +325,7 @@ public abstract class Vehicle implements Inspectable {
 
     private Table createDrivingModeDropDown() {
         Table dropDownComponent = new Table();
+        dropDownComponent.defaults().growX();
 
         SelectBox<DrivingMode> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
         selectBox.setItems(DrivingMode.values());
@@ -331,8 +333,8 @@ public abstract class Vehicle implements Inspectable {
 
         Label label = new Label("Phong cách lái xe: ", Styles.getLabelStyle());
 
-        dropDownComponent.add(label).left();
-        dropDownComponent.add(selectBox).right().row();
+        dropDownComponent.add(label).left().row();
+        dropDownComponent.add(selectBox).left().row();
 
         dropDownComponent.addListener(
                 new ChangeListener() {
