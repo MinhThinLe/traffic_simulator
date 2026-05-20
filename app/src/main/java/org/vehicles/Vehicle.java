@@ -25,6 +25,7 @@ import org.road.Road;
 import org.utils.Timer;
 
 import java.util.List;
+
 import java.util.ArrayList;
 
 public abstract class Vehicle implements Inspectable {
@@ -226,6 +227,7 @@ public abstract class Vehicle implements Inspectable {
 
         inspectTable.add(createSpeedSlider()).row();
         inspectTable.add(createImpatientnessSlider()).row();
+        inspectTable.add(createStinginessSlider()).row();
 
         return inspectTable;
     }
@@ -261,7 +263,7 @@ public abstract class Vehicle implements Inspectable {
         impatientnessSliderGroup.defaults().growX();
 
         Label textLabel = new Label("Độ nóng vội: ", Styles.getLabelStyle());
-        Label impatientnessLabel = new Label(impatientness + "", Styles.getLabelStyle());
+        Label impatientnessLabel = new Label(String.format("%.2f", impatientness), Styles.getLabelStyle());
         impatientnessLabel.setAlignment(Align.right);
 
         Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
@@ -282,6 +284,32 @@ public abstract class Vehicle implements Inspectable {
         });
 
         return impatientnessSliderGroup;
+    }
+
+    private Table createStinginessSlider() {
+        Table stinginessSliderGroup = new Table();
+        stinginessSliderGroup.defaults().growX();
+
+        Label textLabel = new Label("Độ xấu tính", Styles.getLabelStyle());
+        Label stinginessLabel = new Label(String.format("%.2f", stinginess), Styles.getLabelStyle());
+        stinginessLabel.setAlignment(Align.right);
+
+        Slider slider = new Slider(0f, 1f, 0.01f, false, Styles.getSliderStyle());
+        slider.setValue(stinginess);
+
+        stinginessSliderGroup.add(textLabel).left();
+        stinginessSliderGroup.add(stinginessLabel).right().row();
+        stinginessSliderGroup.add(slider).colspan(2);
+
+        stinginessSliderGroup.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                stinginess = slider.getValue();
+                stinginessLabel.setText(String.format("%.2f", stinginess));
+            }
+        });
+
+        return stinginessSliderGroup;
     }
 
     @Override
