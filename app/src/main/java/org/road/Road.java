@@ -68,10 +68,9 @@ public class Road {
     private boolean hasVehicleReachedDestination() {
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
-        Vector2 nodePosition = this.getPosition();
 
         if (moveToCenter) {
-            return nodePosition.dst(vehiclePosition) < TOLERANCE;
+            return vehiclePosition.dst(this.getPosition()) < TOLERANCE;
         }
 
         return vehiclePosition.dst(vehicleDestination) < RADIUS + this.vehicle.getWidth() / 2;
@@ -91,7 +90,7 @@ public class Road {
             return;
         }
 
-        if (!hasVehicleReachedDestination()) {
+        if (!hasVehicleReachedDestination() || moveToCenter) {
             routeVehicle(deltaTime);
             return;
         }
@@ -153,9 +152,9 @@ public class Road {
         this.pullOverVehicle = this.vehicle;
         this.pullOverVehicle.increaseStinginess();
 
-        vehicle.popDestination();
         this.vehicle = vehicle;
         this.vehicle.resetTimer();
+        this.vehicle.popDestination();
 
         // Since the vehicle has been accepted to its destination already, we should
         // remove it from the queue to prevent further problems
@@ -204,7 +203,7 @@ public class Road {
     }
 
     private void routeVehicle(float deltaTime) {
-        if (this.vehicle.getPosition().dst2(this.position) < TOLERANCE) {
+        if (this.vehicle.getPosition().dst2(getPosition()) < TOLERANCE) {
             this.moveToCenter = false;
         }
 
