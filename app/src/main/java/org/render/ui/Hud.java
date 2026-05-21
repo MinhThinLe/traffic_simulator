@@ -152,6 +152,7 @@ public class Hud implements Gui, Inspector {
 
     private static Table makeVehicleToggleComponent() {
         Table vehicleToggleTable = new Table();
+        vehicleToggleTable.defaults().growX();
 
         for (int i = 0; i < Globals.VEHICLE_FACTORIES.size(); i++) {
             VehicleFactory vehicleFactory = Globals.VEHICLE_FACTORIES.get(i);
