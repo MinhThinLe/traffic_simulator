@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
@@ -252,6 +253,7 @@ public class TrafficLight implements Inspectable {
 
         Label textLabel = new Label("Thời gian đèn đỏ:", Styles.getLabelStyle());
         Label timerLabel = new Label(this.timer.getDuration() + "s", Styles.getLabelStyle());
+        timerLabel.setAlignment(Align.right);
 
         trafficLightTimer.add(textLabel);
         trafficLightTimer.add(timerLabel).row();
