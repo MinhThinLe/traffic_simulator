@@ -25,7 +25,6 @@ import org.vehicles.VehicleFactory;
 import java.util.List;
 
 public class Hud implements Gui, Inspector {
-    private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
     private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
     private static final float PADDING = 5;
 
@@ -38,7 +37,7 @@ public class Hud implements Gui, Inspector {
         table.setFillParent(true);
 
         hudTable.clear();
-        hudTable.defaults().pad(PADDING).align(Align.left);
+        hudTable.defaults().pad(PADDING).align(Align.left).growX();
         hudTable.add(makeDrawModeSwitcher()).row();
         hudTable.add(makeSpawnDelaySlider()).row();
         hudTable.add(makeSimulationSpeedSlider()).row();
@@ -47,7 +46,7 @@ public class Hud implements Gui, Inspector {
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(PADDING).add(hudTable).row();
+        table.top().right().pad(PADDING).add(hudTable).width(280).row();
         table.addAction(
                 new Action() {
                     @Override
@@ -70,6 +69,7 @@ public class Hud implements Gui, Inspector {
 
     private static Table makeDrawModeSwitcher() {
         Table drawModeSwitcherComponent = new Table();
+        drawModeSwitcherComponent.defaults().pad(PADDING).growX();
 
         TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
         Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
@@ -85,19 +85,21 @@ public class Hud implements Gui, Inspector {
                     }
                 });
 
-        drawModeSwitcherComponent.add(label).padRight(PADDING);
-        drawModeSwitcherComponent.add(button).align(Align.right);
+        drawModeSwitcherComponent.add(label).left();
+        drawModeSwitcherComponent.add(button).right().row();
 
         return drawModeSwitcherComponent;
     }
 
     private static Table makeSpawnDelaySlider() {
         Table spawnDelaySliderComponent = new Table();
+        spawnDelaySliderComponent.defaults().pad(PADDING).growX();
 
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(Globals.vehicleSpawnDelay);
 
-        Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
+        Label textLabel = new Label("Độ trễ sinh phương tiện:", Styles.getLabelStyle());
+        Label delayLabel = new Label(String.format("%.0fs", Globals.vehicleSpawnDelay), Styles.getLabelStyle());
 
         spawnDelaySliderComponent.addListener(
                 new ChangeListener() {
@@ -105,13 +107,14 @@ public class Hud implements Gui, Inspector {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             Globals.vehicleSpawnDelay = slider.getValue();
-                            label.setText(vehicleSpawnDelayAsString());
+                            delayLabel.setText(String.format("%.0fs", Globals.vehicleSpawnDelay));
                         }
                     }
                 });
 
-        spawnDelaySliderComponent.add(slider).align(Align.left).row();
-        spawnDelaySliderComponent.add(label);
+        spawnDelaySliderComponent.add(textLabel).left();
+        spawnDelaySliderComponent.add(delayLabel).right().row();
+        spawnDelaySliderComponent.add(slider).colspan(2).row();
 
         return spawnDelaySliderComponent;
     }
@@ -139,15 +142,6 @@ public class Hud implements Gui, Inspector {
         simulationSpeedSliderComponent.add(label);
 
         return simulationSpeedSliderComponent;
-    }
-
-    private static String vehicleSpawnDelayAsString() {
-        String padding = "";
-        if (Globals.vehicleSpawnDelay < 10) {
-            // Spaces in noto sans are apparently only half as wide as other characters
-            padding = "  ";
-        }
-        return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
     }
 
     private static String simulationSpeedAsString() {
