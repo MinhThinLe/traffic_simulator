@@ -15,6 +15,8 @@ import org.render.ui.GameState;
 import org.road.*;
 import org.vehicles.VehicleFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class Main {
@@ -136,7 +138,17 @@ class Game implements ApplicationListener {
 
     private void loadMap(String mapName) {
         InputStream resource = Road.class.getResourceAsStream(mapName);
-        roadNetwork = RoadNetworkLoader.readFromStream(resource);
+        if (resource == null) {
+            try {
+                resource = new FileInputStream(mapName);
+            } catch (FileNotFoundException exception) {} // How can you pick a file that doesn't exist lol
+        }
+        
+        try {
+            roadNetwork = RoadNetworkLoader.readFromStream(resource);
+        } catch (NullPointerException e) {
+            System.out.println("Invalid file lol");
+        }
 
         Globals.VEHICLE_FACTORIES.forEach(
                 vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
