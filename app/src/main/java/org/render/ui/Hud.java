@@ -25,8 +25,6 @@ import org.vehicles.VehicleFactory;
 import java.util.List;
 
 public class Hud implements Gui, Inspector {
-    private static final String VEHICLE_SPAWN_DELAY = "Độ trễ sinh phương tiện: ";
-    private static final String SIMULATION_SPEED_MESSAGE_STRING = "Tốc độ mô phỏng: ";
     private static final float PADDING = 5;
 
     private static Table inspecteeTable = new Table();
@@ -38,7 +36,7 @@ public class Hud implements Gui, Inspector {
         table.setFillParent(true);
 
         hudTable.clear();
-        hudTable.defaults().pad(PADDING).align(Align.left);
+        hudTable.defaults().pad(PADDING).growX();
         hudTable.add(makeDrawModeSwitcher()).row();
         hudTable.add(makeSpawnDelaySlider()).row();
         hudTable.add(makeSimulationSpeedSlider()).row();
@@ -47,7 +45,7 @@ public class Hud implements Gui, Inspector {
 
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
 
-        table.top().right().pad(PADDING).add(hudTable).row();
+        table.top().right().pad(PADDING).add(hudTable).width(280).row();
         table.addAction(
                 new Action() {
                     @Override
@@ -70,6 +68,7 @@ public class Hud implements Gui, Inspector {
 
     private static Table makeDrawModeSwitcher() {
         Table drawModeSwitcherComponent = new Table();
+        drawModeSwitcherComponent.defaults().growX();
 
         TextButton button = new TextButton(Globals.drawMode.toString(), Styles.getButtonStyle());
         Label label = new Label("Chế độ hiển thị:", Styles.getLabelStyle());
@@ -85,19 +84,22 @@ public class Hud implements Gui, Inspector {
                     }
                 });
 
-        drawModeSwitcherComponent.add(label).padRight(PADDING);
-        drawModeSwitcherComponent.add(button).align(Align.right);
+        drawModeSwitcherComponent.add(label).left();
+        drawModeSwitcherComponent.add(button).right().row();
 
         return drawModeSwitcherComponent;
     }
 
     private static Table makeSpawnDelaySlider() {
         Table spawnDelaySliderComponent = new Table();
+        spawnDelaySliderComponent.defaults().growX();
 
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(Globals.vehicleSpawnDelay);
 
-        Label label = new Label(vehicleSpawnDelayAsString(), Styles.getLabelStyle());
+        Label textLabel = new Label("Độ trễ sinh phương tiện:", Styles.getLabelStyle());
+        Label delayLabel = new Label(String.format("%.0fs", Globals.vehicleSpawnDelay), Styles.getLabelStyle());
+        delayLabel.setAlignment(Align.right);
 
         spawnDelaySliderComponent.addListener(
                 new ChangeListener() {
@@ -105,24 +107,27 @@ public class Hud implements Gui, Inspector {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             Globals.vehicleSpawnDelay = slider.getValue();
-                            label.setText(vehicleSpawnDelayAsString());
+                            delayLabel.setText(String.format("%.0fs", Globals.vehicleSpawnDelay));
                         }
                     }
                 });
 
-        spawnDelaySliderComponent.add(slider).align(Align.left).row();
-        spawnDelaySliderComponent.add(label);
+        spawnDelaySliderComponent.add(textLabel).left();
+        spawnDelaySliderComponent.add(delayLabel).right().row();
+        spawnDelaySliderComponent.add(slider).colspan(2).row();
 
         return spawnDelaySliderComponent;
     }
 
     private static Table makeSimulationSpeedSlider() {
         Table simulationSpeedSliderComponent = new Table();
+        simulationSpeedSliderComponent.defaults().growX();
 
         Slider slider = new Slider(0f, 5f, 0.1f, false, Styles.getSliderStyle());
         slider.setValue(Globals.simulationSpeed);
-
-        Label label = new Label(simulationSpeedAsString(), Styles.getLabelStyle());
+        Label textLabel = new Label("Tốc độ mô phỏng:", Styles.getLabelStyle());
+        Label speedLabel = new Label(String.format("%.1fx", Globals.simulationSpeed), Styles.getLabelStyle());
+        speedLabel.setAlignment(Align.right);
 
         simulationSpeedSliderComponent.addListener(
                 new ChangeListener() {
@@ -130,30 +135,16 @@ public class Hud implements Gui, Inspector {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             Globals.simulationSpeed = slider.getValue();
-                            label.setText(simulationSpeedAsString());
+                            speedLabel.setText(String.format("%.1fx", Globals.simulationSpeed));
                         }
                     }
                 });
 
-        simulationSpeedSliderComponent.add(slider).align(Align.left).row();
-        simulationSpeedSliderComponent.add(label);
+        simulationSpeedSliderComponent.add(textLabel).left();
+        simulationSpeedSliderComponent.add(speedLabel).right().row();
+        simulationSpeedSliderComponent.add(slider).colspan(2).row();
 
         return simulationSpeedSliderComponent;
-    }
-
-    private static String vehicleSpawnDelayAsString() {
-        String padding = "";
-        if (Globals.vehicleSpawnDelay < 10) {
-            // Spaces in noto sans are apparently only half as wide as other characters
-            padding = "  ";
-        }
-        return VEHICLE_SPAWN_DELAY + padding + (int) Globals.vehicleSpawnDelay + "s";
-    }
-
-    private static String simulationSpeedAsString() {
-        return SIMULATION_SPEED_MESSAGE_STRING
-                + (Globals.simulationSpeed + "").substring(0, 3)
-                + "x";
     }
 
     private static final int COLUMNS = 3;
@@ -161,6 +152,7 @@ public class Hud implements Gui, Inspector {
 
     private static Table makeVehicleToggleComponent() {
         Table vehicleToggleTable = new Table();
+        vehicleToggleTable.defaults().growX();
 
         for (int i = 0; i < Globals.VEHICLE_FACTORIES.size(); i++) {
             VehicleFactory vehicleFactory = Globals.VEHICLE_FACTORIES.get(i);

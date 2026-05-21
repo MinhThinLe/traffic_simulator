@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.google.common.graph.MutableGraph;
 
 import org.Globals;
@@ -205,11 +206,11 @@ public class TrafficLight implements Inspectable {
     @Override
     public Table inspect() {
         Table hudTable = new Table();
-
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+        hudTable.defaults().pad(PADDING).growX();
 
-        hudTable.add(createTrafficLightTimerSlider()).pad(PADDING).row();
-        hudTable.add(createTrafficLightDropDownMenu()).pad(PADDING).row();
+        hudTable.add(createTrafficLightTimerSlider()).row();
+        hudTable.add(createTrafficLightDropDownMenu()).row();
 
         return hudTable;
     }
@@ -245,16 +246,18 @@ public class TrafficLight implements Inspectable {
 
     private Table createTrafficLightTimerSlider() {
         Table trafficLightTimer = new Table();
+        trafficLightTimer.defaults().growX();
+
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(this.timer.getDuration());
 
-        Label label =
-                new Label(
-                        "Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s",
-                        Styles.getLabelStyle());
+        Label textLabel = new Label("Thời gian đèn đỏ:", Styles.getLabelStyle());
+        Label timerLabel = new Label(this.timer.getDuration() + "s", Styles.getLabelStyle());
+        timerLabel.setAlignment(Align.right);
 
-        trafficLightTimer.add(slider).left().row();
-        trafficLightTimer.left().add(label);
+        trafficLightTimer.add(textLabel);
+        trafficLightTimer.add(timerLabel).row();
+        trafficLightTimer.add(slider).colspan(2).row();
 
         trafficLightTimer.addListener(
                 new ChangeListener() {
@@ -262,7 +265,7 @@ public class TrafficLight implements Inspectable {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             timer.setDuration(slider.getValue());
-                            label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
+                            timerLabel.setText(timer.getDuration() + "s");
                         }
                     }
                 });
@@ -272,6 +275,7 @@ public class TrafficLight implements Inspectable {
 
     private Table createTrafficLightDropDownMenu() {
         Table trafficLightDropDownComponent = new Table();
+        trafficLightDropDownComponent.defaults().growX();
 
         SelectBox<TrafficLightType> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
         selectBox.setItems(TrafficLightType.values());

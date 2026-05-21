@@ -352,7 +352,9 @@ public abstract class Vehicle implements Inspectable {
     }
 
     @Override
-    public void dropInspect() {}
+    public void dropInspect() {
+        groups.clear();
+    }
 
     @Override
     public List<Group> getGroups() {
