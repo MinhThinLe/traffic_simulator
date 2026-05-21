@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 
 public class Road {
     public static final float RADIUS = 20;
-    private static final float TOLERANCE = 5;
+    private static final float TOLERANCE = 0.01f;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
     private Vehicle vehicle;
@@ -58,21 +58,28 @@ public class Road {
     }
 
     public void primitiveDraw() {
-        CircleDrawCall body =
-                new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK);
-        Renderer.addPrimitiveDrawCall(body);
+        new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK).submit();
     }
 
     public Vector2 getPosition() {
         return new Vector2(position);
     }
 
+    private boolean hasVehicleReachedDestination() {
+        Vector2 vehiclePosition = this.vehicle.getPosition();
+        Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
+        Vector2 nodePosition = this.getPosition();
+
+        if (moveToCenter) {
+            return nodePosition.dst(vehiclePosition) < TOLERANCE;
+        }
+
+        return vehiclePosition.dst(vehicleDestination) < RADIUS + this.vehicle.getWidth() / 2;
+    }
+
     public void circulate(float deltaTime) {
         if (vehicle == null) {
             acceptVehicle();
-        }
-        // Because vehicle could still be null after calling acceptVehicle
-        if (vehicle == null) {
             return;
         }
         if (pullOverVehicle != null) {
@@ -84,11 +91,8 @@ public class Road {
             return;
         }
 
-        Vector2 vehiclePosition = this.vehicle.getPosition();
-        Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
-        // This means that the vehicle hasn't reached its destination
-        if (vehiclePosition.dst(vehicleDestination) > RADIUS + vehicle.getWidth() / 2) {
-            routeVehicle(deltaTime, vehicleDestination);
+        if (!hasVehicleReachedDestination()) {
+            routeVehicle(deltaTime);
             return;
         }
 
@@ -118,7 +122,7 @@ public class Road {
         sentVehicle = true;
     }
 
-    private static final float MINIMUM_OVERTAKE_DISTANCE = 30;
+    private static final float MINIMUM_OVERTAKE_DISTANCE = 40;
 
     private boolean negotiateOvertake(Vehicle vehicle) {
         if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
@@ -159,34 +163,33 @@ public class Road {
         return true;
     }
 
-    private static final float MINIMUM_DISTANCE = 15;
+    private static final float MINIMUM_DISTANCE = 20;
     private static final float STRAFE_LENGTH = 40;
     private static final float STRAFE_ANGLE = -45;
 
     private void setupPulloverPosition() {
         Vector2 relativeVehiclePosition = this.vehicle.getPosition().sub(this.getPosition());
-        Vector2 destinationRelativePosition = this.vehicle.getPosition().sub(this.getPosition());
+        Vector2 relativeDestinationPosition = this.vehicle.nextDestination().getPosition().sub(this.getPosition());
 
         float distanceFromMainTrack =
                 relativeVehiclePosition.len()
                         * (float)
                                 Math.sin(
                                         relativeVehiclePosition.angleDeg(
-                                                destinationRelativePosition));
+                                                relativeDestinationPosition));
 
         if (Math.abs(distanceFromMainTrack) > MINIMUM_DISTANCE) {
             Vector2 pullOverOffset =
-                    new Vector2(relativeVehiclePosition)
+                    new Vector2(relativeDestinationPosition)
                             .rotateDeg(STRAFE_ANGLE)
-                            .setLength(30 - distanceFromMainTrack);
+                            .setLength(STRAFE_LENGTH - distanceFromMainTrack);
             pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
             return;
         }
 
         Vector2 pullOverOffset =
                 this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
-        Vector2 pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
-        this.pullOverPosition = pullOverPosition;
+        this.pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
     }
 
     private void removeFromQueue() {
@@ -200,13 +203,13 @@ public class Road {
         }
     }
 
-    private void routeVehicle(float deltaTime, Vector2 vehicleDestination) {
+    private void routeVehicle(float deltaTime) {
         if (this.vehicle.getPosition().dst2(this.position) < TOLERANCE) {
             this.moveToCenter = false;
         }
 
         if (!this.moveToCenter) {
-            this.vehicle.moveToward(vehicleDestination, deltaTime);
+            this.vehicle.moveToward(vehicle.nextDestination().getPosition(), deltaTime);
             return;
         }
 
@@ -244,8 +247,8 @@ public class Road {
             vehiclePacket.packetSender.removeCurrentVehicle();
         }
 
-        vehiclePacket.vehicle.popDestination();
         this.vehicle = vehiclePacket.vehicle;
+        this.vehicle.popDestination();
         this.moveToCenter = true;
 
         this.priorityQueue.poll();

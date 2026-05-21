@@ -16,7 +16,7 @@ public class Sedan extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/sedans/";
 
     private static final float DEFAULT_SPEED = 50;
-    private static final float WIDTH = 30;
+    private static final float WIDTH = 40;
     private static final float HEIGHT = 15;
 
     private static final int SPRITE_SIZE = 100;

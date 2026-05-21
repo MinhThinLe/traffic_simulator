@@ -14,7 +14,7 @@ import java.util.List;
 public class Ambulance extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/ambulance/ambulance.png";
     private static final float DEFAULT_AMBULANCE_SPEED = 100;
-    private static final float WIDTH = 30;
+    private static final float WIDTH = 35;
     private static final float HEIGHT = 15;
 
     private static final int SPRITE_SIZE = 140;

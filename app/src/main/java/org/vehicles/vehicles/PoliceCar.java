@@ -36,7 +36,7 @@ public class PoliceCar extends Vehicle {
 
     @Override
     public int getVehiclePriority() {
-        return 8;
+        return 80;
     }
 
     @Override

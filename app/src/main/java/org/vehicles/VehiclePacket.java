@@ -10,19 +10,20 @@ public class VehiclePacket implements Comparable<VehiclePacket> {
     public Vehicle vehicle;
     public Road packetSender;
 
-    private static final float TURN_ANGLE_SCALAR = 0.01f;
-
     @Override
     public int compareTo(VehiclePacket o) {
         int vehicle1Priority = this.vehicle.getVehiclePriority();
         int vehicle2Priority = o.vehicle.getVehiclePriority();
 
-        float vehicle1TurnAngle = this.getTurnAngle() * TURN_ANGLE_SCALAR;
-        float vehicle2TurnAngle = o.getTurnAngle() * TURN_ANGLE_SCALAR;
+        if (vehicle1Priority != vehicle2Priority) {
+            return Integer.compare(vehicle2Priority, vehicle1Priority);
+        }
+
+        float vehicle1TurnAngle = this.getTurnAngle();
+        float vehicle2TurnAngle = o.getTurnAngle();
 
         // Because the vehicle with the lower turn angle gets precedent
-        return Float.compare(
-                vehicle1Priority - vehicle1TurnAngle, vehicle2Priority - vehicle2TurnAngle);
+        return Float.compare(vehicle1TurnAngle, vehicle2TurnAngle);
     }
 
     public VehiclePacket(Vehicle vehicle, Road sender) {
