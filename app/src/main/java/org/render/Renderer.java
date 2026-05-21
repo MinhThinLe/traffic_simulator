@@ -120,8 +120,8 @@ public class Renderer {
         viewport.update(width, height, true);
     }
 
-    public static void processUI(float deltaTime) {
-        stage.act(deltaTime);
+    public static void processUI() {
+        stage.act();
     }
 
     public static void resetUI(GameState currentState) {
