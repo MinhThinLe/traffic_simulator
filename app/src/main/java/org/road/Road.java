@@ -121,8 +121,6 @@ public class Road {
         sentVehicle = true;
     }
 
-    private static final float MINIMUM_OVERTAKE_DISTANCE = 40;
-
     private boolean negotiateOvertake(Vehicle vehicle) {
         if (this.vehicle.getVehiclePriority() >= vehicle.getVehiclePriority()) {
             return false;
@@ -136,14 +134,14 @@ public class Road {
         if (this.pullOverVehicle != null) {
             return false;
         }
-        if (this.getPosition().dst(this.vehicle.getPosition()) < MINIMUM_OVERTAKE_DISTANCE) {
+        if (this.getPosition().dst(this.vehicle.getPosition()) < STRAFE_LENGTH) {
             return false;
         }
 
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         float distanceToCover = this.vehicle.getPosition().dst(vehicleDestination);
 
-        if (distanceToCover < MINIMUM_OVERTAKE_DISTANCE) {
+        if (distanceToCover < STRAFE_LENGTH) {
             return false;
         }
 
@@ -174,20 +172,14 @@ public class Road {
                 relativeVehiclePosition.len()
                         * (float)
                                 Math.sin(
-                                        relativeVehiclePosition.angleDeg(
+                                        relativeVehiclePosition.angleRad(
                                                 relativeDestinationPosition));
 
+        Vector2 pullOverOffset = new Vector2(relativeDestinationPosition).rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
         if (Math.abs(distanceFromMainTrack) > MINIMUM_DISTANCE) {
-            Vector2 pullOverOffset =
-                    new Vector2(relativeDestinationPosition)
-                            .rotateDeg(STRAFE_ANGLE)
-                            .setLength(STRAFE_LENGTH - distanceFromMainTrack);
-            pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
-            return;
+            pullOverOffset.setLength(STRAFE_LENGTH - distanceFromMainTrack);
         }
 
-        Vector2 pullOverOffset =
-                this.vehicle.getDirection().rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
         this.pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
     }
 
