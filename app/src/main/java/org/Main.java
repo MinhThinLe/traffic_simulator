@@ -149,14 +149,18 @@ class Game implements ApplicationListener {
 
         return null;
     }
-
+    
     private void loadMap(String mapName) {
         InputStream fileStream = getInputStream(mapName);
 
         try {
             roadNetwork = RoadNetworkLoader.readFromStream(fileStream);
         } catch (NullPointerException e) {
-            LoadErrorMenu.setErrorMessage("WRONG FILE TYPE");
+            if (!mapName.endsWith("graphml")) {
+                LoadErrorMenu.setErrorMessage("File vừa chọn không phải một file graphml");
+            } else {
+                LoadErrorMenu.setErrorMessage("File vừa chọn có vẻ không được xuất ra từ Gephi. (chứa cấu trúc chưa được hỗ trợ)");
+            }
             setState(GameState.LOAD_ERROR);
             return;
         }

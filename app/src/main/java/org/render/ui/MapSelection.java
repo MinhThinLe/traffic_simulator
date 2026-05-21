@@ -52,7 +52,6 @@ public class MapSelection implements Gui {
             public void changed(ChangeEvent event, Actor actor) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.showOpenDialog(null);
-                System.out.println(chooser.getSelectedFile().toString());
                 customMapButton.setUserObject(chooser.getSelectedFile().toString());
             }
         });
