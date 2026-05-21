@@ -13,11 +13,11 @@ import java.util.List;
 
 public class Bus extends Vehicle {
     private static final float DEFAULT_BUS_SPEED = 40;
-    private static final float WIDTH = 40;
-    private static final float HEIGHT = 20;
+    private static final float WIDTH = 50;
+    private static final float HEIGHT = 25;
 
     private static final int SPRITE_SIZE = 210;
-    private static final int RENDERED_SIZE = 50;
+    private static final int RENDERED_SIZE = 70;
     private static final int SPRITE_COUNT = 48;
     private static final int GRID_WIDTH = 7;
 
