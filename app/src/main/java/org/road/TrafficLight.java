@@ -205,11 +205,11 @@ public class TrafficLight implements Inspectable {
     @Override
     public Table inspect() {
         Table hudTable = new Table();
-
         hudTable.setBackground(Renderer.uiSkin.getDrawable("window2"));
+        hudTable.defaults().pad(PADDING).growX();
 
-        hudTable.add(createTrafficLightTimerSlider()).pad(PADDING).row();
-        hudTable.add(createTrafficLightDropDownMenu()).pad(PADDING).row();
+        hudTable.add(createTrafficLightTimerSlider()).row();
+        hudTable.add(createTrafficLightDropDownMenu()).row();
 
         return hudTable;
     }
@@ -245,6 +245,8 @@ public class TrafficLight implements Inspectable {
 
     private Table createTrafficLightTimerSlider() {
         Table trafficLightTimer = new Table();
+        trafficLightTimer.defaults().growX();
+
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(this.timer.getDuration());
 
@@ -272,6 +274,7 @@ public class TrafficLight implements Inspectable {
 
     private Table createTrafficLightDropDownMenu() {
         Table trafficLightDropDownComponent = new Table();
+        trafficLightDropDownComponent.defaults().growX();
 
         SelectBox<TrafficLightType> selectBox = new SelectBox<>(Styles.getSelectBoxStyle());
         selectBox.setItems(TrafficLightType.values());
