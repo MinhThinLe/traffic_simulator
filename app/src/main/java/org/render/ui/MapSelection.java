@@ -1,11 +1,15 @@
 package org.render.ui;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFileChooser;
 
 public class MapSelection implements Gui {
     private static final String[] MAPS = {
@@ -39,6 +43,18 @@ public class MapSelection implements Gui {
         for (int i = 0; i < MAPS.length; i++) {
             table.add(buttons.get(i)).size(300, 50).pad(10).row();
         }
+
+        TextButton customMapButton = new TextButton("Nạp từ file", Styles.getButtonStyle());
+        customMapButton.setName("level selection button");
+        table.add(customMapButton).size(300, 50).pad(10).row();
+        customMapButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.showOpenDialog(null);
+                customMapButton.setUserObject(chooser.getSelectedFile().toString());
+            }
+        });
 
         return table;
     }

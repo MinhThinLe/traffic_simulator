@@ -11,10 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import org.render.*;
-import org.render.ui.GameState;
+import org.render.ui.*;
 import org.road.*;
 import org.vehicles.VehicleFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class Main {
@@ -79,7 +81,6 @@ class Game implements ApplicationListener {
                         }
                         if (actor.getName() == "level selection button") {
                             loadMap((String) actor.getUserObject());
-                            setState(GameState.NORMAL);
                             return;
                         }
                         if (actor.getName() == "unpause button") {
@@ -134,12 +135,39 @@ class Game implements ApplicationListener {
         Globals.inputMultiplexer.addProcessor(inputAdapter);
     }
 
+    private InputStream getInputStream(String fileName) {
+        InputStream stream = Road.class.getResourceAsStream(fileName);
+        if (stream != null) {
+            return stream;
+        }
+
+        try {
+            return new FileInputStream(fileName);
+        } catch (FileNotFoundException exception) {
+            // Should not happen
+        }
+
+        return null;
+    }
+    
     private void loadMap(String mapName) {
-        InputStream resource = Road.class.getResourceAsStream(mapName);
-        roadNetwork = RoadNetworkLoader.readFromStream(resource);
+        InputStream fileStream = getInputStream(mapName);
+
+        try {
+            roadNetwork = RoadNetworkLoader.readFromStream(fileStream);
+        } catch (NullPointerException e) {
+            if (!mapName.endsWith("graphml")) {
+                LoadErrorMenu.setErrorMessage("File vừa chọn không phải một file graphml");
+            } else {
+                LoadErrorMenu.setErrorMessage("File vừa chọn có vẻ không được xuất ra từ Gephi. (chứa cấu trúc chưa được hỗ trợ)");
+            }
+            setState(GameState.LOAD_ERROR);
+            return;
+        }
 
         Globals.VEHICLE_FACTORIES.forEach(
                 vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
+        setState(GameState.NORMAL);
     }
 
     private void setState(GameState state) {

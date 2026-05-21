@@ -19,11 +19,7 @@ import com.badlogic.gdx.utils.viewport.*;
 
 import org.Globals;
 import org.render.drawcalls.*;
-import org.render.ui.GameState;
-import org.render.ui.Hud;
-import org.render.ui.MainMenu;
-import org.render.ui.MapSelection;
-import org.render.ui.PauseMenu;
+import org.render.ui.*;
 
 import java.util.*;
 
@@ -137,6 +133,7 @@ public class Renderer {
                     case GameState.NORMAL -> new Hud().createGUI();
                     case GameState.LEVEL_SELECTION -> new MapSelection().createGUI();
                     case GameState.PAUSED -> new PauseMenu().createGUI();
+                    case GameState.LOAD_ERROR -> new LoadErrorMenu().createGUI();
                 });
     }
 
