@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import org.render.*;
-import org.render.ui.GameState;
+import org.render.ui.*;
 import org.road.*;
 import org.vehicles.VehicleFactory;
 
@@ -81,7 +81,6 @@ class Game implements ApplicationListener {
                         }
                         if (actor.getName() == "level selection button") {
                             loadMap((String) actor.getUserObject());
-                            setState(GameState.NORMAL);
                             return;
                         }
                         if (actor.getName() == "unpause button") {
@@ -136,22 +135,35 @@ class Game implements ApplicationListener {
         Globals.inputMultiplexer.addProcessor(inputAdapter);
     }
 
-    private void loadMap(String mapName) {
-        InputStream resource = Road.class.getResourceAsStream(mapName);
-        if (resource == null) {
-            try {
-                resource = new FileInputStream(mapName);
-            } catch (FileNotFoundException exception) {} // How can you pick a file that doesn't exist lol
+    private InputStream getInputStream(String fileName) {
+        InputStream stream = Road.class.getResourceAsStream(fileName);
+        if (stream != null) {
+            return stream;
         }
-        
+
         try {
-            roadNetwork = RoadNetworkLoader.readFromStream(resource);
+            return new FileInputStream(fileName);
+        } catch (FileNotFoundException exception) {
+            // Should not happen
+        }
+
+        return null;
+    }
+
+    private void loadMap(String mapName) {
+        InputStream fileStream = getInputStream(mapName);
+
+        try {
+            roadNetwork = RoadNetworkLoader.readFromStream(fileStream);
         } catch (NullPointerException e) {
-            System.out.println("Invalid file lol");
+            LoadErrorMenu.setErrorMessage("WRONG FILE TYPE");
+            setState(GameState.LOAD_ERROR);
+            return;
         }
 
         Globals.VEHICLE_FACTORIES.forEach(
                 vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
+        setState(GameState.NORMAL);
     }
 
     private void setState(GameState state) {
