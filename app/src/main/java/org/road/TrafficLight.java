@@ -250,13 +250,12 @@ public class TrafficLight implements Inspectable {
         Slider slider = new Slider(1, 60, 1, false, Styles.getSliderStyle());
         slider.setValue(this.timer.getDuration());
 
-        Label label =
-                new Label(
-                        "Thời gian chờ đèn đỏ: " + this.timer.getDuration() + "s",
-                        Styles.getLabelStyle());
+        Label textLabel = new Label("Thời gian đèn đỏ:", Styles.getLabelStyle());
+        Label timerLabel = new Label(this.timer.getDuration() + "s", Styles.getLabelStyle());
 
-        trafficLightTimer.add(slider).left().row();
-        trafficLightTimer.left().add(label);
+        trafficLightTimer.add(textLabel);
+        trafficLightTimer.add(timerLabel).row();
+        trafficLightTimer.add(slider).colspan(2).row();
 
         trafficLightTimer.addListener(
                 new ChangeListener() {
@@ -264,7 +263,7 @@ public class TrafficLight implements Inspectable {
                     public void changed(ChangeEvent event, Actor actor) {
                         if (actor == slider) {
                             timer.setDuration(slider.getValue());
-                            label.setText("Thời gian chờ đèn đỏ: " + timer.getDuration() + "s");
+                            timerLabel.setText(timer.getDuration() + "s");
                         }
                     }
                 });
