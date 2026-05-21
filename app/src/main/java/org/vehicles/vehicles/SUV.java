@@ -16,7 +16,7 @@ public class SUV extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/suvs/";
 
     private static final float DEFAULT_SPEED = 60;
-    private static final float WIDTH = 30;
+    private static final float WIDTH = 35;
     private static final float HEIGHT = 15;
 
     private static final int SPRITE_SIZE = 100;

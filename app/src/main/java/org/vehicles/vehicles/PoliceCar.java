@@ -14,7 +14,7 @@ import java.util.List;
 public class PoliceCar extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/police_car/police_car.png";
     private static final float DEFAULT_SPEED = 80;
-    private static final float WIDTH = 30;
+    private static final float WIDTH = 40;
     private static final float HEIGHT = 15;
 
     private static final int SPRITE_SIZE = 100;
@@ -36,7 +36,7 @@ public class PoliceCar extends Vehicle {
 
     @Override
     public int getVehiclePriority() {
-        return 8;
+        return 80;
     }
 
     @Override

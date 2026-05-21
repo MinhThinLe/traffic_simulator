@@ -14,8 +14,8 @@ import java.util.List;
 public class Taxi extends Vehicle {
     private static final String TEXTURE_PATH = "org/vehicles/textures/taxi/taxi.png";
     private static final float DEFAULT_SPEED = 60;
-    private static final float WIDTH = 30;
-    private static final float HEIGHT = 30;
+    private static final float WIDTH = 35;
+    private static final float HEIGHT = 20;
 
     private static final int SPRITE_SIZE = 100;
     private static final int RENDERED_SIZE = 50;

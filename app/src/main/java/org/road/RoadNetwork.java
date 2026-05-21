@@ -80,7 +80,7 @@ public class RoadNetwork {
             Vector2 from = currentEdge.nodeU().getPosition();
             Vector2 to = currentEdge.nodeV().getPosition();
 
-            Vector2 direction = new Vector2(to).sub(from).nor().setLength(20);
+            Vector2 direction = new Vector2(to).sub(from).nor().setLength(Road.RADIUS);
 
             from.add(direction);
             to.sub(direction);
