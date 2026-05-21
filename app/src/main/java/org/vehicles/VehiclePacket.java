@@ -22,8 +22,7 @@ public class VehiclePacket implements Comparable<VehiclePacket> {
         float vehicle1TurnAngle = this.getTurnAngle();
         float vehicle2TurnAngle = o.getTurnAngle();
 
-        // Because the vehicle with the lower turn angle gets precedent
-        return Float.compare(vehicle1TurnAngle, vehicle2TurnAngle);
+        return Float.compare(vehicle2TurnAngle, vehicle1TurnAngle);
     }
 
     public VehiclePacket(Vehicle vehicle, Road sender) {
