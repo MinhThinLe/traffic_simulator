@@ -7,20 +7,21 @@ import com.badlogic.gdx.math.Vector2;
 import org.Globals;
 import org.render.*;
 import org.render.drawcalls.CircleDrawCall;
-import org.utils.AudioPlayer;
+import org.utils.*;
 import org.vehicles.*;
 
 import java.util.PriorityQueue;
+import java.util.List;
 
 public class Road {
-    public static final float RADIUS = 20;
+    public static final float RADIUS = 40;
     private static final float TOLERANCE = 0.01f;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
     private Vehicle vehicle;
     private Vector2 position;
     private boolean sentVehicle;
-    private boolean moveToCenter;
+    private BezierPath bezierPath;
     private TrafficLight trafficLight;
     private Vehicle pullOverVehicle;
     private Vector2 pullOverPosition;
@@ -69,8 +70,8 @@ public class Road {
         Vector2 vehiclePosition = this.vehicle.getPosition();
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
 
-        if (moveToCenter) {
-            return vehiclePosition.dst(this.getPosition()) < TOLERANCE;
+        if (bezierPath != null) {
+            return bezierPath.hasFinished();
         }
 
         return vehiclePosition.dst(vehicleDestination) < RADIUS + this.vehicle.getWidth() / 2;
@@ -90,7 +91,7 @@ public class Road {
             return;
         }
 
-        if (!hasVehicleReachedDestination() || moveToCenter) {
+        if (!hasVehicleReachedDestination() || bezierPath != null) {
             routeVehicle(deltaTime);
             return;
         }
@@ -195,16 +196,16 @@ public class Road {
     }
 
     private void routeVehicle(float deltaTime) {
-        if (this.vehicle.getPosition().dst2(getPosition()) < TOLERANCE) {
-            this.moveToCenter = false;
-        }
-
-        if (!this.moveToCenter) {
-            this.vehicle.moveToward(vehicle.nextDestination().getPosition(), deltaTime);
+        if (bezierPath != null) {
+            this.vehicle.moveToward(bezierPath.nextPoint(deltaTime), deltaTime);
+            if (bezierPath.hasFinished()) {
+                this.bezierPath = null;
+            }
             return;
         }
 
-        this.vehicle.moveToward(getPosition(), deltaTime);
+        this.vehicle.moveToward(vehicle.nextDestination().getPosition(), deltaTime);
+
     }
 
     private void routePulledOverVehicle(float deltaTime) {
@@ -240,7 +241,7 @@ public class Road {
 
         this.vehicle = vehiclePacket.vehicle;
         this.vehicle.popDestination();
-        this.moveToCenter = true;
+        this.bezierPath = new BezierPath(this, vehicle.getSpeed());
 
         this.priorityQueue.poll();
     }
@@ -256,5 +257,38 @@ public class Road {
 
     private boolean isOccupied() {
         return this.vehicle != null;
+    }
+}
+
+class BezierPath {
+    private QuadraticBezier path;
+    private float pathDuration;
+    private float elapsed;
+
+    BezierPath(Road node, float vehicleSpeed) {
+        Vector2 controlPoint1 = node.getCurrentVehicle().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
+        Vector2 controlPoint2 = node.getPosition();
+        Vector2 controlPoint3 = node.getPosition().sub(new Vector2(controlPoint1).sub(controlPoint2));
+        if (node.getCurrentVehicle().nextDestination() != null) {
+            controlPoint3 = node.getCurrentVehicle().nextDestination().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
+        }
+
+        float pathLength = controlPoint1.dst(controlPoint2) + controlPoint2.dst(controlPoint3);
+
+        pathDuration = pathLength / vehicleSpeed;
+        this.path = new QuadraticBezier(List.of(controlPoint1, controlPoint2, controlPoint3));
+    }
+
+    boolean hasFinished() {
+        return elapsed >= pathDuration;
+    }
+
+    Vector2 nextPoint(float deltaTime) {
+        this.elapsed += deltaTime;
+        if (this.elapsed >= this.pathDuration) {
+            this.elapsed = this.pathDuration;
+        }
+
+        return path.interpolate(elapsed / pathDuration);
     }
 }

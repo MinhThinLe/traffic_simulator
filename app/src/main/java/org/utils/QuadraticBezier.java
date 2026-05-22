@@ -1,13 +1,13 @@
-package org.render;
+package org.utils;
 
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
 
-public class QuadraticBerzier {
+public class QuadraticBezier {
     private List<Vector2> controlPoints;
 
-    public QuadraticBerzier(List<Vector2> controlPoints) {
+    public QuadraticBezier(List<Vector2> controlPoints) {
         this.controlPoints = controlPoints;
     }
 

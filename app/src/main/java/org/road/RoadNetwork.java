@@ -17,6 +17,7 @@ import org.render.drawcalls.TextureDrawCall;
 import org.render.ui.Hud;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
+import org.utils.QuadraticBezier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,7 +190,7 @@ public class RoadNetwork {
         Renderer.addPrimitiveDrawCall(startLineDrawCall);
         Renderer.addPrimitiveDrawCall(endLineDrawCall);
 
-        QuadraticBerzier berzier = new QuadraticBerzier(List.of(start, middle, end));
+        QuadraticBezier berzier = new QuadraticBezier(List.of(start, middle, end));
 
         for (int i = 0; i < POINTS; i++) {
             Vector2 current = berzier.interpolate((float) i / POINTS);
