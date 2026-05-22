@@ -35,7 +35,9 @@ public class Hud implements Gui, Inspector {
         Table table = new Table();
         table.setFillParent(true);
 
-        hudTable.clear();
+        inspecteeTable = new Table();
+        hudTable = new Table();
+
         hudTable.defaults().pad(PADDING).growX();
         hudTable.add(makeDrawModeSwitcher()).row();
         hudTable.add(makeSpawnDelaySlider()).row();
