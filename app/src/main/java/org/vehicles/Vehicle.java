@@ -95,6 +95,10 @@ public abstract class Vehicle implements Inspectable {
         return new Vector2(this.direction);
     }
 
+    public float getSpeed() {
+        return this.speed;
+    }
+
     public void moveToward(Vector2 newPosition, float deltaTime) {
         float distance = this.position.dst(newPosition);
         float speed = this.speed * deltaTime;
