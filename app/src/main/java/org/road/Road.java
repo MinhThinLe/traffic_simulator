@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 import java.util.List;
 
 public class Road {
-    public static final float RADIUS = 40;
+    public static final float RADIUS = 25;
     private static final float TOLERANCE = 0.01f;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
@@ -154,6 +154,7 @@ public class Road {
         this.vehicle = vehicle;
         this.vehicle.resetTimer();
         this.vehicle.popDestination();
+        this.bezierPath = new BezierPath(this, vehicle.getSpeed());
 
         // Since the vehicle has been accepted to its destination already, we should
         // remove it from the queue to prevent further problems
@@ -266,7 +267,7 @@ class BezierPath {
     private float elapsed;
 
     BezierPath(Road node, float vehicleSpeed) {
-        Vector2 controlPoint1 = node.getCurrentVehicle().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
+        Vector2 controlPoint1 = node.getCurrentVehicle().getPosition();
         Vector2 controlPoint2 = node.getPosition();
         Vector2 controlPoint3 = node.getPosition().sub(new Vector2(controlPoint1).sub(controlPoint2));
         if (node.getCurrentVehicle().nextDestination() != null) {
