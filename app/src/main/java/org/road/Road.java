@@ -14,8 +14,7 @@ import java.util.PriorityQueue;
 import java.util.List;
 
 public class Road {
-    public static final float RADIUS = 40;
-    private static final float TOLERANCE = 0.01f;
+    public static final float RADIUS = 25;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
     private Vehicle vehicle;
@@ -24,7 +23,7 @@ public class Road {
     private BezierPath bezierPath;
     private TrafficLight trafficLight;
     private Vehicle pullOverVehicle;
-    private Vector2 pullOverPosition;
+    private BezierPath pullOverPath;
 
     private int id;
 
@@ -135,18 +134,17 @@ public class Road {
         if (this.pullOverVehicle != null) {
             return false;
         }
-        if (this.getPosition().dst(this.vehicle.getPosition()) < STRAFE_LENGTH) {
+        if (this.getPosition().dst(this.vehicle.getPosition()) < STRAFE_DISTANCE) {
             return false;
         }
 
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
-        float distanceToCover = this.vehicle.getPosition().dst(vehicleDestination);
-
-        if (distanceToCover < STRAFE_LENGTH) {
+        float distantToCover = vehicleDestination.dst(this.vehicle.getPosition());
+        if (distantToCover < STRAFE_DISTANCE * 2) {
             return false;
         }
 
-        setupPulloverPosition();
+        setupPulloverPath();
 
         this.pullOverVehicle = this.vehicle;
         this.pullOverVehicle.increaseStinginess();
@@ -154,6 +152,7 @@ public class Road {
         this.vehicle = vehicle;
         this.vehicle.resetTimer();
         this.vehicle.popDestination();
+        this.bezierPath = new BezierPath(this, vehicle.getSpeed());
 
         // Since the vehicle has been accepted to its destination already, we should
         // remove it from the queue to prevent further problems
@@ -161,27 +160,49 @@ public class Road {
         return true;
     }
 
-    private static final float MINIMUM_DISTANCE = 20;
-    private static final float STRAFE_LENGTH = 40;
-    private static final float STRAFE_ANGLE = -45;
-
-    private void setupPulloverPosition() {
+    private float getDistanceFromMainTrack() {
         Vector2 relativeVehiclePosition = this.vehicle.getPosition().sub(this.getPosition());
         Vector2 relativeDestinationPosition = this.vehicle.nextDestination().getPosition().sub(this.getPosition());
 
-        float distanceFromMainTrack =
-                relativeVehiclePosition.len()
+        return
+                Math.abs(relativeVehiclePosition.len()
                         * (float)
                                 Math.sin(
                                         relativeVehiclePosition.angleRad(
-                                                relativeDestinationPosition));
+                                                relativeDestinationPosition)));
 
-        Vector2 pullOverOffset = new Vector2(relativeDestinationPosition).rotateDeg(STRAFE_ANGLE).setLength(STRAFE_LENGTH);
-        if (Math.abs(distanceFromMainTrack) > MINIMUM_DISTANCE) {
-            pullOverOffset.setLength(STRAFE_LENGTH - distanceFromMainTrack);
+    }
+
+    private static final float STRAFE_DISTANCE = 20;
+    private List<Vector2> getPullOverPath() {
+        List<Vector2> controlPoints = List.of(
+                new Vector2(),
+                new Vector2(STRAFE_DISTANCE, 0),
+                new Vector2(STRAFE_DISTANCE, STRAFE_DISTANCE),
+                new Vector2(STRAFE_DISTANCE * 2, STRAFE_DISTANCE)
+        );
+        float distanceFromMainTrack = getDistanceFromMainTrack();
+        List<Vector2> offsets = List.of(
+                new Vector2(),
+                new Vector2(),
+                new Vector2(0, distanceFromMainTrack),
+                new Vector2(0, distanceFromMainTrack)
+        );
+
+        float vehicleDirection = this.vehicle.getDirection().angleDeg();
+        for (int i = 0; i < controlPoints.size(); i++) {
+            offsets.get(i).rotateDeg(vehicleDirection);
+            controlPoints.get(i).rotateDeg(vehicleDirection);
+            controlPoints.get(i).sub(offsets.get(i));
+            controlPoints.get(i).add(this.vehicle.getPosition());
         }
 
-        this.pullOverPosition = this.vehicle.getPosition().add(pullOverOffset);
+        return controlPoints;
+
+    }
+
+    private void setupPulloverPath() {
+        this.pullOverPath = new BezierPath(getPullOverPath(), this.vehicle.getSpeed());
     }
 
     private void removeFromQueue() {
@@ -197,7 +218,7 @@ public class Road {
 
     private void routeVehicle(float deltaTime) {
         if (bezierPath != null) {
-            this.vehicle.moveToward(bezierPath.nextPoint(deltaTime), deltaTime);
+            this.vehicle.moveToward(bezierPath.nextPoint(vehicle.getSpeed() * deltaTime), deltaTime);
             if (bezierPath.hasFinished()) {
                 this.bezierPath = null;
             }
@@ -208,9 +229,10 @@ public class Road {
 
     }
 
+    private static final float PULLOVER_SCALAR = 1.3f;
     private void routePulledOverVehicle(float deltaTime) {
-        if (this.pullOverVehicle.getPosition().dst(pullOverPosition) > TOLERANCE) {
-            this.pullOverVehicle.moveToward(new Vector2(pullOverPosition), deltaTime);
+        if (!this.pullOverPath.hasFinished()) {
+            this.pullOverVehicle.moveToward(pullOverPath.nextPoint(this.pullOverVehicle.getSpeed() * deltaTime * PULLOVER_SCALAR), deltaTime * PULLOVER_SCALAR);
         }
     }
 
@@ -222,7 +244,7 @@ public class Road {
         if (this.pullOverVehicle != null) {
             this.vehicle = this.pullOverVehicle;
             this.pullOverVehicle = null;
-            this.pullOverPosition = null;
+            this.pullOverPath = null;
             return;
         }
         VehiclePacket vehiclePacket = this.priorityQueue.peek();
@@ -261,34 +283,42 @@ public class Road {
 }
 
 class BezierPath {
-    private QuadraticBezier path;
-    private float pathDuration;
-    private float elapsed;
+    private NDegreeBezier path;
+    private float pathLength;
+    private float travelled;
+
+    BezierPath(List<Vector2> controlPoints, float vehicleSpeed) {
+        for (int i = 0; i < controlPoints.size() - 1; i++) {
+            pathLength += controlPoints.get(i).dst(controlPoints.get(i + 1));
+        }
+        this.path = new NDegreeBezier(controlPoints);
+    }
 
     BezierPath(Road node, float vehicleSpeed) {
-        Vector2 controlPoint1 = node.getCurrentVehicle().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
+        this(extractPath(node), vehicleSpeed);
+    }
+
+    private static List<Vector2> extractPath(Road node) {
+        Vector2 controlPoint1 = node.getCurrentVehicle().getPosition();
         Vector2 controlPoint2 = node.getPosition();
         Vector2 controlPoint3 = node.getPosition().sub(new Vector2(controlPoint1).sub(controlPoint2));
         if (node.getCurrentVehicle().nextDestination() != null) {
             controlPoint3 = node.getCurrentVehicle().nextDestination().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
         }
 
-        float pathLength = controlPoint1.dst(controlPoint2) + controlPoint2.dst(controlPoint3);
-
-        pathDuration = pathLength / vehicleSpeed;
-        this.path = new QuadraticBezier(List.of(controlPoint1, controlPoint2, controlPoint3));
+        return List.of(controlPoint1, controlPoint2, controlPoint3);
     }
 
     boolean hasFinished() {
-        return elapsed >= pathDuration;
+        return travelled >= pathLength;
     }
 
-    Vector2 nextPoint(float deltaTime) {
-        this.elapsed += deltaTime;
-        if (this.elapsed >= this.pathDuration) {
-            this.elapsed = this.pathDuration;
+    Vector2 nextPoint(float vehicleSpeed) {
+        this.travelled += vehicleSpeed;
+        if (this.travelled >= this.pathLength) {
+            this.travelled = this.pathLength;
         }
 
-        return path.interpolate(elapsed / pathDuration);
+        return path.interpolate(travelled / pathLength);
     }
 }
