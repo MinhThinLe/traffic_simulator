@@ -198,7 +198,7 @@ public class Road {
 
     private void routeVehicle(float deltaTime) {
         if (bezierPath != null) {
-            this.vehicle.moveToward(bezierPath.nextPoint(deltaTime), deltaTime);
+            this.vehicle.moveToward(bezierPath.nextPoint(vehicle.getSpeed() * deltaTime), deltaTime);
             if (bezierPath.hasFinished()) {
                 this.bezierPath = null;
             }
@@ -263,8 +263,8 @@ public class Road {
 
 class BezierPath {
     private QuadraticBezier path;
-    private float pathDuration;
-    private float elapsed;
+    private float pathLength;
+    private float travelled;
 
     BezierPath(Road node, float vehicleSpeed) {
         Vector2 controlPoint1 = node.getCurrentVehicle().getPosition();
@@ -274,22 +274,20 @@ class BezierPath {
             controlPoint3 = node.getCurrentVehicle().nextDestination().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
         }
 
-        float pathLength = controlPoint1.dst(controlPoint2) + controlPoint2.dst(controlPoint3);
-
-        pathDuration = pathLength / vehicleSpeed;
+        pathLength = controlPoint1.dst(controlPoint2) + controlPoint2.dst(controlPoint3);
         this.path = new QuadraticBezier(List.of(controlPoint1, controlPoint2, controlPoint3));
     }
 
     boolean hasFinished() {
-        return elapsed >= pathDuration;
+        return travelled >= pathLength;
     }
 
-    Vector2 nextPoint(float deltaTime) {
-        this.elapsed += deltaTime;
-        if (this.elapsed >= this.pathDuration) {
-            this.elapsed = this.pathDuration;
+    Vector2 nextPoint(float vehicleSpeed) {
+        this.travelled += vehicleSpeed;
+        if (this.travelled >= this.pathLength) {
+            this.travelled = this.pathLength;
         }
 
-        return path.interpolate(elapsed / pathDuration);
+        return path.interpolate(travelled / pathLength);
     }
 }
