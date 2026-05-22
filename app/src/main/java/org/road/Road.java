@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 import java.util.List;
 
 public class Road {
-    public static final float RADIUS = 20;
+    public static final float RADIUS = 40;
     private static final float TOLERANCE = 0.01f;
 
     private PriorityQueue<VehiclePacket> priorityQueue;
@@ -285,6 +285,9 @@ class BezierPath {
 
     Vector2 nextPoint(float deltaTime) {
         this.elapsed += deltaTime;
+        if (this.elapsed >= this.pathDuration) {
+            this.elapsed = this.pathDuration;
+        }
 
         return path.interpolate(elapsed / pathDuration);
     }
