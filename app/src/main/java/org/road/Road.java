@@ -262,7 +262,7 @@ public class Road {
 }
 
 class BezierPath {
-    private QuadraticBezier path;
+    private NDegreeBezier path;
     private float pathLength;
     private float travelled;
 
@@ -275,7 +275,7 @@ class BezierPath {
         }
 
         pathLength = controlPoint1.dst(controlPoint2) + controlPoint2.dst(controlPoint3);
-        this.path = new QuadraticBezier(List.of(controlPoint1, controlPoint2, controlPoint3));
+        this.path = new NDegreeBezier(List.of(controlPoint1, controlPoint2, controlPoint3));
     }
 
     boolean hasFinished() {
