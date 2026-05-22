@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class Camera extends InputAdapter {
@@ -124,5 +125,10 @@ public class Camera extends InputAdapter {
 
     public void resize(int width, int height) {
         this.viewport.update(width, height);
+    }
+
+    public void reset() {
+        this.camera.zoom = DEFAULT_ZOOM;
+        this.camera.position.set(Vector3.Zero);
     }
 }

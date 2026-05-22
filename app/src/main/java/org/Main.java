@@ -168,6 +168,7 @@ class Game implements ApplicationListener {
         Globals.VEHICLE_FACTORIES.forEach(
                 vehicleFactory -> roadNetwork.addVehicleFactory(vehicleFactory));
         setState(GameState.NORMAL);
+        this.camera.reset();
     }
 
     private void setState(GameState state) {
