@@ -140,7 +140,7 @@ public class Road {
 
         Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
         float distantToCover = vehicleDestination.dst(this.vehicle.getPosition());
-        if (distantToCover < STRAFE_DISTANCE * 2) {
+        if (distantToCover < STRAFE_DISTANCE * 2.5) {
             return false;
         }
 
@@ -178,8 +178,8 @@ public class Road {
         List<Vector2> controlPoints = List.of(
                 new Vector2(),
                 new Vector2(STRAFE_DISTANCE, 0),
-                new Vector2(STRAFE_DISTANCE, STRAFE_DISTANCE),
-                new Vector2(STRAFE_DISTANCE * 2, STRAFE_DISTANCE)
+                new Vector2(STRAFE_DISTANCE, -STRAFE_DISTANCE),
+                new Vector2(STRAFE_DISTANCE * 2, -STRAFE_DISTANCE)
         );
         float distanceFromMainTrack = getDistanceFromMainTrack();
         List<Vector2> offsets = List.of(
@@ -229,11 +229,12 @@ public class Road {
 
     }
 
-    private static final float PULLOVER_SCALAR = 1.3f;
+    private static final float PULLOVER_SCALAR = 1.5f;
     private void routePulledOverVehicle(float deltaTime) {
-        if (!this.pullOverPath.hasFinished()) {
-            this.pullOverVehicle.moveToward(pullOverPath.nextPoint(this.pullOverVehicle.getSpeed() * deltaTime * PULLOVER_SCALAR), deltaTime * PULLOVER_SCALAR);
+        if (this.pullOverPath.hasFinished()) {
+            return;
         }
+        this.pullOverVehicle.moveToward(pullOverPath.nextPoint(this.pullOverVehicle.getSpeed() * deltaTime * PULLOVER_SCALAR), deltaTime * PULLOVER_SCALAR);
     }
 
     public void addVehicle(VehiclePacket vehiclePacket) {
