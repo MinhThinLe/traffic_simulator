@@ -10,8 +10,8 @@ import org.render.drawcalls.CircleDrawCall;
 import org.utils.*;
 import org.vehicles.*;
 
-import java.util.PriorityQueue;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class Road {
     public static final float RADIUS = 25;
@@ -162,32 +162,33 @@ public class Road {
 
     private float getDistanceFromMainTrack() {
         Vector2 relativeVehiclePosition = this.vehicle.getPosition().sub(this.getPosition());
-        Vector2 relativeDestinationPosition = this.vehicle.nextDestination().getPosition().sub(this.getPosition());
+        Vector2 relativeDestinationPosition =
+                this.vehicle.nextDestination().getPosition().sub(this.getPosition());
 
-        return
-                Math.abs(relativeVehiclePosition.len()
+        return Math.abs(
+                relativeVehiclePosition.len()
                         * (float)
                                 Math.sin(
                                         relativeVehiclePosition.angleRad(
                                                 relativeDestinationPosition)));
-
     }
 
     private static final float STRAFE_DISTANCE = 20;
+
     private List<Vector2> getPullOverPath() {
-        List<Vector2> controlPoints = List.of(
-                new Vector2(),
-                new Vector2(STRAFE_DISTANCE, 0),
-                new Vector2(STRAFE_DISTANCE, -STRAFE_DISTANCE),
-                new Vector2(STRAFE_DISTANCE * 2, -STRAFE_DISTANCE)
-        );
+        List<Vector2> controlPoints =
+                List.of(
+                        new Vector2(),
+                        new Vector2(STRAFE_DISTANCE, 0),
+                        new Vector2(STRAFE_DISTANCE, -STRAFE_DISTANCE),
+                        new Vector2(STRAFE_DISTANCE * 2, -STRAFE_DISTANCE));
         float distanceFromMainTrack = getDistanceFromMainTrack();
-        List<Vector2> offsets = List.of(
-                new Vector2(),
-                new Vector2(),
-                new Vector2(0, distanceFromMainTrack),
-                new Vector2(0, distanceFromMainTrack)
-        );
+        List<Vector2> offsets =
+                List.of(
+                        new Vector2(),
+                        new Vector2(),
+                        new Vector2(0, distanceFromMainTrack),
+                        new Vector2(0, distanceFromMainTrack));
 
         float vehicleDirection = this.vehicle.getDirection().angleDeg();
         for (int i = 0; i < controlPoints.size(); i++) {
@@ -198,7 +199,6 @@ public class Road {
         }
 
         return controlPoints;
-
     }
 
     private void setupPulloverPath() {
@@ -218,7 +218,8 @@ public class Road {
 
     private void routeVehicle(float deltaTime) {
         if (bezierPath != null) {
-            this.vehicle.moveToward(bezierPath.nextPoint(vehicle.getSpeed() * deltaTime), deltaTime);
+            this.vehicle.moveToward(
+                    bezierPath.nextPoint(vehicle.getSpeed() * deltaTime), deltaTime);
             if (bezierPath.hasFinished()) {
                 this.bezierPath = null;
             }
@@ -226,15 +227,18 @@ public class Road {
         }
 
         this.vehicle.moveToward(vehicle.nextDestination().getPosition(), deltaTime);
-
     }
 
     private static final float PULLOVER_SCALAR = 1.5f;
+
     private void routePulledOverVehicle(float deltaTime) {
         if (this.pullOverPath.hasFinished()) {
             return;
         }
-        this.pullOverVehicle.moveToward(pullOverPath.nextPoint(this.pullOverVehicle.getSpeed() * deltaTime * PULLOVER_SCALAR), deltaTime * PULLOVER_SCALAR);
+        this.pullOverVehicle.moveToward(
+                pullOverPath.nextPoint(
+                        this.pullOverVehicle.getSpeed() * deltaTime * PULLOVER_SCALAR),
+                deltaTime * PULLOVER_SCALAR);
     }
 
     public void addVehicle(VehiclePacket vehiclePacket) {
@@ -302,9 +306,16 @@ class BezierPath {
     private static List<Vector2> extractPath(Road node) {
         Vector2 controlPoint1 = node.getCurrentVehicle().getPosition();
         Vector2 controlPoint2 = node.getPosition();
-        Vector2 controlPoint3 = node.getPosition().sub(new Vector2(controlPoint1).sub(controlPoint2));
+        Vector2 controlPoint3 =
+                node.getPosition().sub(new Vector2(controlPoint1).sub(controlPoint2));
         if (node.getCurrentVehicle().nextDestination() != null) {
-            controlPoint3 = node.getCurrentVehicle().nextDestination().getPosition().sub(node.getPosition()).setLength(Road.RADIUS).add(node.getPosition());
+            controlPoint3 =
+                    node.getCurrentVehicle()
+                            .nextDestination()
+                            .getPosition()
+                            .sub(node.getPosition())
+                            .setLength(Road.RADIUS)
+                            .add(node.getPosition());
         }
 
         return List.of(controlPoint1, controlPoint2, controlPoint3);

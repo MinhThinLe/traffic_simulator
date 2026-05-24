@@ -15,9 +15,9 @@ import org.render.*;
 import org.render.drawcalls.LineDrawCall;
 import org.render.drawcalls.TextureDrawCall;
 import org.render.ui.Hud;
+import org.utils.NDegreeBezier;
 import org.vehicles.Vehicle;
 import org.vehicles.VehicleFactory;
-import org.utils.NDegreeBezier;
 
 import java.util.ArrayList;
 import java.util.List;

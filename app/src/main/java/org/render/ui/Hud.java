@@ -100,7 +100,9 @@ public class Hud implements Gui, Inspector {
         slider.setValue(Globals.vehicleSpawnDelay);
 
         Label textLabel = new Label("Độ trễ sinh phương tiện:", Styles.getLabelStyle());
-        Label delayLabel = new Label(String.format("%.0fs", Globals.vehicleSpawnDelay), Styles.getLabelStyle());
+        Label delayLabel =
+                new Label(
+                        String.format("%.0fs", Globals.vehicleSpawnDelay), Styles.getLabelStyle());
         delayLabel.setAlignment(Align.right);
 
         spawnDelaySliderComponent.addListener(
@@ -128,7 +130,8 @@ public class Hud implements Gui, Inspector {
         Slider slider = new Slider(0f, 5f, 0.1f, false, Styles.getSliderStyle());
         slider.setValue(Globals.simulationSpeed);
         Label textLabel = new Label("Tốc độ mô phỏng:", Styles.getLabelStyle());
-        Label speedLabel = new Label(String.format("%.1fx", Globals.simulationSpeed), Styles.getLabelStyle());
+        Label speedLabel =
+                new Label(String.format("%.1fx", Globals.simulationSpeed), Styles.getLabelStyle());
         speedLabel.setAlignment(Align.right);
 
         simulationSpeedSliderComponent.addListener(
