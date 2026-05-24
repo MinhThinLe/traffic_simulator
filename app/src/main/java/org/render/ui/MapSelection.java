@@ -47,14 +47,15 @@ public class MapSelection implements Gui {
         TextButton customMapButton = new TextButton("Nạp từ file", Styles.getButtonStyle());
         customMapButton.setName("level selection button");
         table.add(customMapButton).size(300, 50).pad(10).row();
-        customMapButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.showOpenDialog(null);
-                customMapButton.setUserObject(chooser.getSelectedFile().toString());
-            }
-        });
+        customMapButton.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.showOpenDialog(null);
+                        customMapButton.setUserObject(chooser.getSelectedFile().toString());
+                    }
+                });
 
         return table;
     }

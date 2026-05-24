@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class LoadErrorMenu implements Gui {
     private static String errorMessage;
+
     @Override
     public Table createGUI() {
         Table table = new Table();

@@ -149,7 +149,7 @@ class Game implements ApplicationListener {
 
         return null;
     }
-    
+
     private void loadMap(String mapName) {
         InputStream fileStream = getInputStream(mapName);
 
@@ -159,7 +159,9 @@ class Game implements ApplicationListener {
             if (!mapName.endsWith("graphml")) {
                 LoadErrorMenu.setErrorMessage("File vừa chọn không phải một file graphml");
             } else {
-                LoadErrorMenu.setErrorMessage("File vừa chọn có vẻ không được xuất ra từ Gephi. (chứa cấu trúc chưa được hỗ trợ)");
+                LoadErrorMenu.setErrorMessage(
+                        "File vừa chọn có vẻ không được xuất ra từ Gephi. (chứa cấu trúc chưa được"
+                            + " hỗ trợ)");
             }
             setState(GameState.LOAD_ERROR);
             return;
