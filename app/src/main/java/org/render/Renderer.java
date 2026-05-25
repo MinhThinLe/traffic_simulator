@@ -126,17 +126,15 @@ public class Renderer {
 
     public static void resetUI(GameState currentState) {
         // This list has to match with the ordinality of GameState
-        List<Gui> menus = List.of(
-            new MainMenu(),
-            new MapSelection(),
-            new LoadErrorMenu(),
-            new Hud(),
-            new PauseMenu()
-                );
+        List<Gui> menus =
+                List.of(
+                        new MainMenu(), // The corresponding GUI of MAIN_MENU
+                        new MapSelection(),
+                        new LoadErrorMenu(),
+                        new Hud(),
+                        new PauseMenu());
         uiTable.clearChildren();
-        uiTable.addActor(
-                menus.get(currentState.ordinal()).createGUI()
-                );
+        uiTable.addActor(menus.get(currentState.ordinal()).createGUI());
     }
 
     public static Stage getStage() {

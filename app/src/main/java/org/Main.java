@@ -161,7 +161,7 @@ class Game implements ApplicationListener {
             } else {
                 LoadErrorMenu.setErrorMessage(
                         "File vừa chọn có vẻ không được xuất ra từ Gephi. (chứa cấu trúc chưa được"
-                            + " hỗ trợ)");
+                                + " hỗ trợ)");
             }
             setState(GameState.LOAD_ERROR);
             return;

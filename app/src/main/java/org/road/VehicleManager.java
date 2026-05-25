@@ -20,10 +20,7 @@ public class VehicleManager {
     private Timer timer;
 
     public VehicleManager(
-            MutableGraph<Road> roadGraph,
-            List<Road> sources,
-            List<Road> sinks,
-            float timer) {
+            MutableGraph<Road> roadGraph, List<Road> sources, List<Road> sinks, float timer) {
         this.roadNetwork = roadGraph;
         this.sources = sources;
         this.sinks = sinks;

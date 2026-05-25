@@ -34,8 +34,7 @@ public class RoadNetwork {
     private List<TrafficLight> trafficLights;
     private Vehicle hoverVehicle;
 
-    public RoadNetwork(
-            MutableGraph<Road> roadGraph, List<Road> sources, List<Road> sinks) {
+    public RoadNetwork(MutableGraph<Road> roadGraph, List<Road> sources, List<Road> sinks) {
         this.roadGraph = roadGraph;
         this.vehicleManager = new VehicleManager(roadGraph, sources, sinks, DEFAULT_TIMER);
         this.trafficLights = new ArrayList<>();
