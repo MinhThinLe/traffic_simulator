@@ -13,16 +13,16 @@ import java.util.List;
 
 public class VehicleManager {
     private MutableGraph<Road> roadNetwork;
-    private ArrayList<Road> sources;
-    private ArrayList<Road> sinks;
-    private ArrayList<VehicleFactory> vehicleFactories;
+    private List<Road> sources;
+    private List<Road> sinks;
+    private List<VehicleFactory> vehicleFactories;
 
     private Timer timer;
 
     public VehicleManager(
             MutableGraph<Road> roadGraph,
-            ArrayList<Road> sources,
-            ArrayList<Road> sinks,
+            List<Road> sources,
+            List<Road> sinks,
             float timer) {
         this.roadNetwork = roadGraph;
         this.sources = sources;

@@ -31,11 +31,11 @@ public class RoadNetwork {
 
     private MutableGraph<Road> roadGraph;
     private VehicleManager vehicleManager;
-    private ArrayList<TrafficLight> trafficLights;
+    private List<TrafficLight> trafficLights;
     private Vehicle hoverVehicle;
 
     public RoadNetwork(
-            MutableGraph<Road> roadGraph, ArrayList<Road> sources, ArrayList<Road> sinks) {
+            MutableGraph<Road> roadGraph, List<Road> sources, List<Road> sinks) {
         this.roadGraph = roadGraph;
         this.vehicleManager = new VehicleManager(roadGraph, sources, sinks, DEFAULT_TIMER);
         this.trafficLights = new ArrayList<>();
@@ -49,7 +49,7 @@ public class RoadNetwork {
         vehicleManager.removeVehicleFactory(vehicleFactory);
     }
 
-    public void setTrafficLightArray(ArrayList<TrafficLight> trafficLights) {
+    public void setTrafficLightArray(List<TrafficLight> trafficLights) {
         this.trafficLights = trafficLights;
     }
 

@@ -2,16 +2,13 @@ package org.road;
 
 import com.google.common.graph.MutableGraph;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PathFinder {
     public static List<Road> breathFirstSearch(MutableGraph<Road> roadGraph, Road start, Road end) {
-        HashSet<Road> visitedNodes = new HashSet<>();
-        ArrayList<Road> queue = new ArrayList<>();
-        ArrayList<RoadEdge> edges = new ArrayList<>();
+        Set<Road> visitedNodes = new HashSet<>();
+        List<Road> queue = new ArrayList<>();
+        List<RoadEdge> edges = new ArrayList<>();
         queue.add(start);
 
         while (!queue.isEmpty()) {
@@ -43,8 +40,8 @@ public class PathFinder {
         return null;
     }
 
-    private static ArrayList<Road> recoverPath(ArrayList<RoadEdge> edges) {
-        ArrayList<Road> path = new ArrayList<>();
+    private static List<Road> recoverPath(List<RoadEdge> edges) {
+        List<Road> path = new ArrayList<>();
         path.add(edges.getLast().target());
         while (true) {
             RoadEdge currentEdge = findEdgeWithTarget(edges, path.getLast());
@@ -57,7 +54,7 @@ public class PathFinder {
         return path;
     }
 
-    private static RoadEdge findEdgeWithTarget(ArrayList<RoadEdge> edges, Road target) {
+    private static RoadEdge findEdgeWithTarget(List<RoadEdge> edges, Road target) {
         for (int i = 0; i < edges.size(); i++) {
             RoadEdge currentEdge = edges.get(i);
             if (currentEdge.target() == target) {
