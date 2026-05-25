@@ -99,25 +99,8 @@ public abstract class Vehicle implements Inspectable {
         return this.speed;
     }
 
-    public void moveToward(Vector2 newPosition, float deltaTime) {
-        float distance = this.position.dst(newPosition);
-        float speed = this.speed * deltaTime;
-        Vector2 direction = new Vector2(newPosition).sub(this.position);
-
-        this.direction.set(direction);
-        if (distance < speed) {
-            this.position.set(newPosition);
-            return;
-        }
-
-        this.position.add(direction.setLength(speed));
-    }
-
-    public final void draw() {
-        switch (Globals.drawMode) {
-            case DrawMode.PRIMITIVE -> primitiveDraw();
-            case DrawMode.GRAPHICAL -> graphicalDraw();
-        }
+    public List<Road> getPath() {
+        return this.path;
     }
 
     public void increaseStinginess() {
@@ -131,6 +114,14 @@ public abstract class Vehicle implements Inspectable {
     public void resetTimer() {
         this.honkTimer.reset();
     }
+
+    public abstract int getVehiclePriority();
+
+    public abstract float getWidth();
+
+    public abstract float getHeight();
+
+    public abstract String getVehicleName();
 
     public boolean shouldSendOvertakeRequest() {
         honkTimer.tick();
@@ -161,6 +152,27 @@ public abstract class Vehicle implements Inspectable {
                 });
     }
 
+    public void moveToward(Vector2 newPosition, float deltaTime) {
+        float distance = this.position.dst(newPosition);
+        float speed = this.speed * deltaTime;
+        Vector2 direction = new Vector2(newPosition).sub(this.position);
+        this.direction.set(direction);
+
+        if (distance < speed) {
+            this.position.set(newPosition);
+            return;
+        }
+
+        this.position.add(direction.setLength(speed));
+    }
+
+    public final void draw() {
+        switch (Globals.drawMode) {
+            case DrawMode.PRIMITIVE -> primitiveDraw();
+            case DrawMode.GRAPHICAL -> graphicalDraw();
+        }
+    }
+
     public void primitiveDraw() {
         drawBody();
         drawText();
@@ -172,10 +184,6 @@ public abstract class Vehicle implements Inspectable {
         polygon.rotate(getDirection().angleDeg());
 
         return polygon.contains(Globals.mouseWorldPosition);
-    }
-
-    public List<Road> getPath() {
-        return this.path;
     }
 
     void drawBody() {
@@ -214,14 +222,6 @@ public abstract class Vehicle implements Inspectable {
         WidgetDrawCall drawCall = new WidgetDrawCall(container);
         Renderer.addGraphicalDrawCall(drawCall);
     }
-
-    public abstract int getVehiclePriority();
-
-    public abstract float getWidth();
-
-    public abstract float getHeight();
-
-    public abstract String getVehicleName();
 
     protected abstract void graphicalDraw();
 

@@ -50,8 +50,8 @@ enum TrafficLightType {
 
 public class TrafficLight implements Inspectable {
     private static final float DEFAULT_TIMER_DURATION = 5;
-    private ArrayList<Road> memberNodes;
-    private ArrayList<RoadEdge> ingressNodes;
+    private List<Road> memberNodes;
+    private List<RoadEdge> ingressNodes;
     private Timer timer;
     private int permittedNodeIndex;
     private TrafficLightType type;

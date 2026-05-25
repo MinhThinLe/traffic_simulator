@@ -125,16 +125,16 @@ public class Renderer {
     }
 
     public static void resetUI(GameState currentState) {
-        // Globals.stage.getActors().forEach(actor -> actor.remove());
+        // This list has to match with the ordinality of GameState
+        List<Gui> menus =
+                List.of(
+                        new MainMenu(), // The corresponding GUI of MAIN_MENU
+                        new MapSelection(),
+                        new LoadErrorMenu(),
+                        new Hud(),
+                        new PauseMenu());
         uiTable.clearChildren();
-        uiTable.addActor(
-                switch (currentState) {
-                    case GameState.MAIN_MENU -> new MainMenu().createGUI();
-                    case GameState.NORMAL -> new Hud().createGUI();
-                    case GameState.LEVEL_SELECTION -> new MapSelection().createGUI();
-                    case GameState.PAUSED -> new PauseMenu().createGUI();
-                    case GameState.LOAD_ERROR -> new LoadErrorMenu().createGUI();
-                });
+        uiTable.addActor(menus.get(currentState.ordinal()).createGUI());
     }
 
     public static Stage getStage() {

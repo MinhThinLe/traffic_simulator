@@ -6,16 +6,15 @@ import com.google.common.graph.MutableGraph;
 import org.w3c.dom.*;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RoadNetworkLoader {
-    private static ArrayList<Road> sources;
-    private static ArrayList<Road> sinks;
-    private static ArrayList<TrafficLight> trafficLights;
+    private static List<Road> sources;
+    private static List<Road> sinks;
+    private static List<TrafficLight> trafficLights;
 
     public static RoadNetwork readFromStream(InputStream XMLStream) {
         // Because muh state-less
@@ -28,7 +27,7 @@ public class RoadNetworkLoader {
 
         // Read nodes from the file
         NodeList nodes = document.getElementsByTagName("node");
-        HashMap<Integer, Road> roadMap = new HashMap<>();
+        Map<Integer, Road> roadMap = new HashMap<>();
 
         for (int i = 0; i < nodes.getLength(); i++) {
             Node currentNode = nodes.item(i);
@@ -41,13 +40,13 @@ public class RoadNetworkLoader {
 
         // Read edges from the file
         NodeList edges = document.getElementsByTagName("edge");
-        ArrayList<ParserEdge> edgeList = readEdgeList(edges);
+        List<ParserEdge> edgeList = readEdgeList(edges);
 
         for (int i = 0; i < edgeList.size(); i++) {
             ParserEdge currentEdge = edgeList.get(i);
 
-            Road from = roadMap.get(currentEdge.source);
-            Road to = roadMap.get(currentEdge.target);
+            Road from = roadMap.get(currentEdge.source());
+            Road to = roadMap.get(currentEdge.target());
 
             roadGraph.putEdge(from, to);
         }
@@ -80,7 +79,7 @@ public class RoadNetworkLoader {
     }
 
     private static Road readRoadNode(Node node) {
-        HashMap<String, String> attributes = readChildrenAttributeMap(node);
+        Map<String, String> attributes = readChildrenAttributeMap(node);
 
         int id = getNodeId(node);
         float scalar = Road.RADIUS / Float.parseFloat(attributes.get("size"));
@@ -134,7 +133,7 @@ public class RoadNetworkLoader {
     private static final int SOURCE_NODE = 1;
     private static final int SINK_NODE = -1;
 
-    private static NodeType extractNodeType(HashMap<String, String> attributes) {
+    private static NodeType extractNodeType(Map<String, String> attributes) {
         NodeType nodeType = NodeType.NORMAL_NODE;
         if (attributes.containsKey("node_type")) {
             int type = Integer.parseInt(attributes.get("node_type"));
@@ -162,8 +161,8 @@ public class RoadNetworkLoader {
         return -1;
     }
 
-    private static HashMap<String, String> readChildrenAttributeMap(Node node) {
-        HashMap<String, String> attributeMap = new HashMap<>();
+    private static Map<String, String> readChildrenAttributeMap(Node node) {
+        Map<String, String> attributeMap = new HashMap<>();
         NodeList childNodes = node.getChildNodes();
 
         for (int i = 0; i < childNodes.getLength(); i++) {
@@ -183,8 +182,8 @@ public class RoadNetworkLoader {
         return attributeMap;
     }
 
-    private static ArrayList<ParserEdge> readEdgeList(NodeList edges) {
-        ArrayList<ParserEdge> edgeList = new ArrayList<>();
+    private static List<ParserEdge> readEdgeList(NodeList edges) {
+        List<ParserEdge> edgeList = new ArrayList<>();
         for (int i = 0; i < edges.getLength(); i++) {
             Node currentEdge = edges.item(i);
 
@@ -215,12 +214,4 @@ public class RoadNetworkLoader {
     }
 }
 
-class ParserEdge {
-    int source;
-    int target;
-
-    ParserEdge(int source, int target) {
-        this.source = source;
-        this.target = target;
-    }
-}
+record ParserEdge(int source, int target) {}
