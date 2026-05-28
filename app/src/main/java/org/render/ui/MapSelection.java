@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,10 @@ public class MapSelection implements Gui {
     public Table createGUI() {
         Table table = new Table();
         table.setFillParent(true);
+        table.defaults().size(300, 50).pad(10);
 
         Label mapSelection = new Label("Hãy chọn một bản đồ", Styles.getLabelStyle());
+        mapSelection.setAlignment(Align.center);
         table.add(mapSelection).pad(10).row();
 
         List<TextButton> buttons = new ArrayList<>();
@@ -41,12 +44,12 @@ public class MapSelection implements Gui {
         }
 
         for (int i = 0; i < MAPS.length; i++) {
-            table.add(buttons.get(i)).size(300, 50).pad(10).row();
+            table.add(buttons.get(i)).row();
         }
 
         TextButton customMapButton = new TextButton("Nạp từ file", Styles.getButtonStyle());
         customMapButton.setName("level selection button");
-        table.add(customMapButton).size(300, 50).pad(10).row();
+        table.add(customMapButton).row();;
         customMapButton.addListener(
                 new ChangeListener() {
                     @Override
@@ -56,6 +59,10 @@ public class MapSelection implements Gui {
                         customMapButton.setUserObject(chooser.getSelectedFile().toString());
                     }
                 });
+
+        TextButton mainMenuButton = new TextButton("Quay lại", Styles.getButtonStyle());
+        mainMenuButton.setName("title screen button");
+        table.add(mainMenuButton).row();
 
         return table;
     }
