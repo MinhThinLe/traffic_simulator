@@ -11,7 +11,9 @@ import java.util.List;
 public interface VehicleFactory {
     public Vehicle createVehicle(List<Road> path);
 
-    int getSpriteSize();
+    default int getSpriteSize() {
+        return 100; // Most common sprite size
+    }
 
     String getTexturePath();
 

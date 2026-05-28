@@ -11,7 +11,6 @@ import java.util.List;
 
 public class SUVFactory implements VehicleFactory {
     private static final String TEXTURE_PATH = "org/vehicles/textures/suvs/black.png";
-    private static final int SPRITE_SIZE = 100;
 
     @Override
     public Vehicle createVehicle(List<Road> path) {
@@ -23,10 +22,5 @@ public class SUVFactory implements VehicleFactory {
     @Override
     public String getTexturePath() {
         return TEXTURE_PATH;
-    }
-
-    @Override
-    public int getSpriteSize() {
-        return SPRITE_SIZE;
     }
 }
