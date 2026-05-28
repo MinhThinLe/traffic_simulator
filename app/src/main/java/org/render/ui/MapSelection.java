@@ -49,7 +49,8 @@ public class MapSelection implements Gui {
 
         TextButton customMapButton = new TextButton("Nạp từ file", Styles.getButtonStyle());
         customMapButton.setName("level selection button");
-        table.add(customMapButton).row();;
+        table.add(customMapButton).row();
+        ;
         customMapButton.addListener(
                 new ChangeListener() {
                     @Override
