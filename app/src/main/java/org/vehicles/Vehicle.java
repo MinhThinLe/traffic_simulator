@@ -136,10 +136,7 @@ public abstract class Vehicle implements Inspectable {
     }
 
     public boolean shouldRunRedLight() {
-        return switch (this.drivingMode) {
-            case DrivingMode.AGGRESSIVE -> shouldSendOvertakeRequest();
-            default -> false;
-        };
+        return this.drivingMode == DrivingMode.AGGRESSIVE;
     }
 
     private Polygon getPolygonMesh() {

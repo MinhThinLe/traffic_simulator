@@ -214,4 +214,10 @@ public class RoadNetworkLoader {
     }
 }
 
+enum NodeType {
+    SOURCE_NODE,
+    NORMAL_NODE,
+    SINK_NODE
+}
+
 record ParserEdge(int source, int target) {}

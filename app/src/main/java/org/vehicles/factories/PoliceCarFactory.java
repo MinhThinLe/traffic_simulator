@@ -9,16 +9,10 @@ import java.util.List;
 
 public class PoliceCarFactory implements VehicleFactory {
     private static final String TEXTURE_PATH = "org/vehicles/textures/police_car/thumbnail.png";
-    private static final int SPRITE_SIZE = 100;
 
     @Override
     public Vehicle createVehicle(List<Road> path) {
         return new PoliceCar(path);
-    }
-
-    @Override
-    public int getSpriteSize() {
-        return SPRITE_SIZE;
     }
 
     @Override
