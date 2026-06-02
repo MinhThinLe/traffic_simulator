@@ -131,16 +131,16 @@ public class Road {
         if (sentVehicle) {
             return false;
         }
-        if (this.pullOverVehicle != null) {
+        if (pullOverVehicle != null) {
             return false;
         }
-        if (this.getPosition().dst(this.vehicle.getPosition()) < STRAFE_DISTANCE) {
-            return false;
-        }
+        // if (getPosition().dst(vehicle.getPosition()) < STRAFE_DISTANCE) {
+        //     return false;
+        // }
 
-        Vector2 vehicleDestination = this.vehicle.nextDestination().getPosition();
-        float distantToCover = vehicleDestination.dst(this.vehicle.getPosition());
-        if (distantToCover < STRAFE_DISTANCE * 2.5) {
+        Vector2 vehicleDestination = vehicle.nextDestination().getPosition();
+        float distantToCover = vehicleDestination.dst(vehicle.getPosition());
+        if (distantToCover < STRAFE_HORIZONTAL_DISTANCE * 2.5) {
             return false;
         }
 
@@ -173,15 +173,16 @@ public class Road {
                                                 relativeDestinationPosition)));
     }
 
-    private static final float STRAFE_DISTANCE = 20;
+    private static final float STRAFE_HORIZONTAL_DISTANCE = 15;
+    private static final float STRAFE_VERTICAL_DISTANCE = 20;
 
     private List<Vector2> getPullOverPath() {
         List<Vector2> controlPoints =
                 List.of(
                         new Vector2(),
-                        new Vector2(STRAFE_DISTANCE, 0),
-                        new Vector2(STRAFE_DISTANCE, -STRAFE_DISTANCE),
-                        new Vector2(STRAFE_DISTANCE * 2, -STRAFE_DISTANCE));
+                        new Vector2(STRAFE_HORIZONTAL_DISTANCE, 0),
+                        new Vector2(STRAFE_HORIZONTAL_DISTANCE, -STRAFE_VERTICAL_DISTANCE),
+                        new Vector2(STRAFE_HORIZONTAL_DISTANCE * 2, -STRAFE_VERTICAL_DISTANCE));
         float distanceFromMainTrack = getDistanceFromMainTrack();
         List<Vector2> offsets =
                 List.of(
