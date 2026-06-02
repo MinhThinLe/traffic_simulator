@@ -173,8 +173,8 @@ public class RoadNetwork {
     private static final int POINTS = 50;
 
     private void drawRoad(Vector2 start, Vector2 middle, Vector2 end) {
-        start.lerp(middle, 0.5f);
-        end.lerp(middle, 0.5f);
+        start.lerp(middle, 0.49f);
+        end.lerp(middle, 0.49f);
 
         Vector2 firstSegmentEnd =
                 new Vector2(middle).add(new Vector2(start).sub(middle).setLength(Road.RADIUS));
@@ -189,15 +189,13 @@ public class RoadNetwork {
         Renderer.addPrimitiveDrawCall(startLineDrawCall);
         Renderer.addPrimitiveDrawCall(endLineDrawCall);
 
-        NDegreeBezier berzier = new NDegreeBezier(List.of(start, middle, end));
+        NDegreeBezier berzier = new NDegreeBezier(List.of(firstSegmentEnd, middle, lastSegmentStart));
 
         for (int i = 0; i < POINTS; i++) {
-            Vector2 current = berzier.interpolate((float) i / POINTS);
+            Vector2 current = berzier.interpolate((float) (i - 1) / POINTS);
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
-            LineDrawCall curvedLineDrawCall =
-                    new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled);
-            Renderer.addPrimitiveDrawCall(curvedLineDrawCall);
+            new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled).submit();;
         }
     }
 
