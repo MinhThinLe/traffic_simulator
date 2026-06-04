@@ -91,7 +91,7 @@ public class TrafficLight implements Inspectable {
 
     private static final float WIDTH = 20;
     private static final float HEIGHT = 2 * WIDTH;
-    private static final float[] polygonMesh =
+    private static final float[] POLYGON_MESH =
             new float[] {
                 -WIDTH / 2, -HEIGHT / 2,
                 WIDTH / 2, -HEIGHT / 2,
@@ -108,7 +108,7 @@ public class TrafficLight implements Inspectable {
         Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
         Vector2 location = edge.target().getPosition().add(direction).add(offset);
 
-        Polygon polygon = new Polygon(polygonMesh);
+        Polygon polygon = new Polygon(POLYGON_MESH);
         polygon.rotate(offset.angleDeg());
         polygon.translate(location.x, location.y);
 

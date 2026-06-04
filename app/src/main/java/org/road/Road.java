@@ -57,7 +57,7 @@ public class Road {
         }
     }
 
-    public void primitiveDraw() {
+    private void primitiveDraw() {
         new CircleDrawCall(position.x, position.y, RADIUS, ShapeType.Line, Color.BLACK).submit();
     }
 
@@ -140,7 +140,7 @@ public class Road {
 
         Vector2 vehicleDestination = vehicle.nextDestination().getPosition();
         float distantToCover = vehicleDestination.dst(vehicle.getPosition());
-        if (distantToCover < STRAFE_HORIZONTAL_DISTANCE * 2.5) {
+        if (distantToCover < HORIZONTAL_STRAFE_DISTANCE * 2.5) {
             return false;
         }
 
@@ -173,16 +173,16 @@ public class Road {
                                                 relativeDestinationPosition)));
     }
 
-    private static final float STRAFE_HORIZONTAL_DISTANCE = 15;
-    private static final float STRAFE_VERTICAL_DISTANCE = 20;
+    private static final float HORIZONTAL_STRAFE_DISTANCE = 15;
+    private static final float VERTICAL_STRAFE_DISTANCE = 20;
 
     private List<Vector2> getPullOverPath() {
         List<Vector2> controlPoints =
                 List.of(
                         new Vector2(),
-                        new Vector2(STRAFE_HORIZONTAL_DISTANCE, 0),
-                        new Vector2(STRAFE_HORIZONTAL_DISTANCE, -STRAFE_VERTICAL_DISTANCE),
-                        new Vector2(STRAFE_HORIZONTAL_DISTANCE * 2, -STRAFE_VERTICAL_DISTANCE));
+                        new Vector2(HORIZONTAL_STRAFE_DISTANCE, 0),
+                        new Vector2(HORIZONTAL_STRAFE_DISTANCE, -VERTICAL_STRAFE_DISTANCE),
+                        new Vector2(HORIZONTAL_STRAFE_DISTANCE * 2, -VERTICAL_STRAFE_DISTANCE));
         float distanceFromMainTrack = getDistanceFromMainTrack();
         List<Vector2> offsets =
                 List.of(

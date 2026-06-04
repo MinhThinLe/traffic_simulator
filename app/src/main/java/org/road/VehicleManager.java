@@ -16,7 +16,6 @@ public class VehicleManager {
     private List<Road> sources;
     private List<Road> sinks;
     private List<VehicleFactory> vehicleFactories;
-
     private Timer timer;
 
     public VehicleManager(
