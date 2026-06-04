@@ -189,13 +189,15 @@ public class RoadNetwork {
         Renderer.addPrimitiveDrawCall(startLineDrawCall);
         Renderer.addPrimitiveDrawCall(endLineDrawCall);
 
-        NDegreeBezier berzier = new NDegreeBezier(List.of(firstSegmentEnd, middle, lastSegmentStart));
+        NDegreeBezier berzier =
+                new NDegreeBezier(List.of(firstSegmentEnd, middle, lastSegmentStart));
 
         for (int i = 0; i < POINTS; i++) {
             Vector2 current = berzier.interpolate((float) (i - 1) / POINTS);
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
-            new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled).submit();;
+            new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled).submit();
+            ;
         }
     }
 
