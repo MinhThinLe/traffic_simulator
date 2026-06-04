@@ -105,7 +105,7 @@ public class TrafficLight implements Inspectable {
                         .getPosition()
                         .sub(edge.target().getPosition())
                         .setLength(Road.RADIUS + HEIGHT / 2);
-        Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH / 2);
+        Vector2 offset = new Vector2(direction).rotate90(1).setLength(Road.RADIUS + WIDTH);
         Vector2 location = edge.target().getPosition().add(direction).add(offset);
 
         Polygon polygon = new Polygon(POLYGON_MESH);
