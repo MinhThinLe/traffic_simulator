@@ -170,7 +170,7 @@ public abstract class Vehicle implements Inspectable {
         }
     }
 
-    public void primitiveDraw() {
+    private void primitiveDraw() {
         drawBody();
         drawText();
     }
@@ -183,7 +183,7 @@ public abstract class Vehicle implements Inspectable {
         return polygon.contains(Globals.mouseWorldPosition);
     }
 
-    void drawBody() {
+    private void drawBody() {
         float angle = getDirection().angleDeg();
         Polygon polygon = getPolygonMesh();
 
