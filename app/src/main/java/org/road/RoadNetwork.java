@@ -197,7 +197,6 @@ public class RoadNetwork {
             Vector2 next = berzier.interpolate((float) (i + 2) / POINTS);
 
             new LineDrawCall(current, next, ROAD_WIDTH, Color.GRAY, ShapeType.Filled).submit();
-            ;
         }
     }
 

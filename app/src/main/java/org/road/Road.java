@@ -262,6 +262,10 @@ public class Road {
             if (this.trafficLight != null
                     && !this.trafficLight.isPermittedNode(vehiclePacket.packetSender)
                     && !vehiclePacket.vehicle.shouldRunRedLight()) {
+                // Process the next vehicle before giving up
+                VehiclePacket topVehicle = priorityQueue.poll();
+                acceptVehicle();
+                priorityQueue.add(topVehicle);
                 return;
             }
             vehiclePacket.packetSender.removeCurrentVehicle();
